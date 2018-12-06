@@ -28,34 +28,46 @@ class Game extends Phaser.Scene {
 		this.anims.create({key: 'walkLeft', frames: this.anims.generateFrameNumbers('playerLeft'), frameRate: framerate, yoyo: false, repeat: -1});
 		this.anims.create({key: 'walkUp', frames: this.anims.generateFrameNumbers('playerUp'), frameRate: framerate, yoyo: false, repeat: -1});
 		this.playerSprite = this.add.sprite(400, 200, 'playerDown');
-
-		this.cursors = this.input.keyboard.createCursorKeys();
-
-		//this.keys = this.input.keyboard.addKeys('W,S,A,D');
+		this.keys = this.input.keyboard.addKeys('W,S,A,D');
+		this.playerSprite.velX=0;
+		this.playerSprite.velY=0;
 	};
 	update(){
-		//player.setVelocity(0);
-		//this.playerSprite.anims.stop();
-		if (this.cursors.left.isDown)
+		this.playerSprite.x+=this.playerSprite.velX;
+		this.playerSprite.y+=this.playerSprite.velY;
+		if (this.keys.A.isDown && this.playerSprite.isMoving==0)
 		{
-			//player.setVelocityX(-300);
+			//this.playerSprite.setVelocityX(-300);
 			this.playerSprite.anims.play('walkLeft');
+			this.playerSprite.isMoving=1;
+			this.playerSprite.velX=-4;
 		}
-		else if (this.cursors.right.isDown)
+		else if (this.keys.D.isDown && this.playerSprite.isMoving==0)
 		{
 			//player.setVelocityX(300);
 			this.playerSprite.anims.play('walkRight');
+			this.playerSprite.isMoving=1;
+			this.playerSprite.velX=4;
 		}
-
-		if (this.cursors.up.isDown)
+		if (this.keys.W.isDown && this.playerSprite.isMoving==0)
 		{
 			//player.setVelocityY(-300);
 			this.playerSprite.anims.play('walkUp');
+			this.playerSprite.isMoving=1;
+			this.playerSprite.velY=-4;
 		}
-		else if (this.cursors.down.isDown)
+		else if (this.keys.S.isDown && this.playerSprite.isMoving==0)
 		{
 			//player.setVelocityY(300);
 			this.playerSprite.anims.play('walkDown');
+			this.playerSprite.isMoving=1;
+			this.playerSprite.velY=4;
+		}
+		if(this.keys.W.isUp && this.keys.S.isUp && this.keys.A.isUp && this.keys.D.isUp){
+			this.playerSprite.anims.stop();
+			this.playerSprite.isMoving=0;
+			this.playerSprite.velX=0;
+			this.playerSprite.velY=0;
 		}
 	}
 }
