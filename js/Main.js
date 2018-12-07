@@ -5,7 +5,7 @@ let config = {
 	parent: 'game',
 	physics: {
 		default: 'arcade',
-		arcade: { system: 'impact', gravity: 0, cellSize: 32 }
+		arcade: { gravity: 0 }
 	},
 	scene: [
 		Game

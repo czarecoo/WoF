@@ -16,13 +16,11 @@ class Game extends Phaser.Scene {
 	create() {
 		this.map = this.make.tilemap({ key: "map" });
 		const tileset = this.map.addTilesetImage("tilesheet", "tileset");
-		const sandLayer = this.map.createStaticLayer("sand", tileset, 0, 0);
-		const grassLayer = this.map.createStaticLayer("grass", tileset, 0, 0);
-		const riverLayer = this.map.createStaticLayer("river", tileset, 0, 0);
-		const housesLayer = this.map.createStaticLayer("houses", tileset, 0, 0);
-		const treesLayer = this.map.createStaticLayer("trees", tileset, 0, 0);
-		//const colliders = this.map.createStaticLayer("colliders", tileset, 0, 0);
-		//this.physics.add.collider(player, colliders);
+		const sandLayer = this.map.createStaticLayer("sand", tileset, 0, 0).setCollisionByProperty({ collides: true });
+		const grassLayer = this.map.createStaticLayer("grass", tileset, 0, 0).setCollisionByProperty({ collides: true });
+		const riverLayer = this.map.createStaticLayer("river", tileset, 0, 0).setCollisionByProperty({ collides: true });
+		const housesLayer = this.map.createStaticLayer("houses", tileset, 0, 0).setCollisionByProperty({ collides: true });
+		const treesLayer = this.map.createStaticLayer("trees", tileset, 0, 0).setCollisionByProperty({ collides: true });
 
 		const framerate = 6;
 		this.anims.create({ key: 'walkRight', frames: this.anims.generateFrameNumbers('playerRight'), frameRate: framerate, yoyo: false, repeat: -1 });
@@ -35,9 +33,16 @@ class Game extends Phaser.Scene {
 		this.anims.create({ key: 'idleUp', frames: [{ key: 'playerUp', frame: 0 }], frameRate: 20 });
 		this.playerSprite = this.physics.add.sprite(400, 200, 'idle');
 		this.playerSprite.setCollideWorldBounds(true);
+
 		this.keys = this.input.keyboard.addKeys('W,S,A,D');
-		this.playerSprite.Speed = 100;
+		this.playerSprite.Speed = 300;
 		this.playerSprite.diagonalSpeedModifier = 0.65;
+
+		this.physics.add.collider(this.playerSprite, sandLayer);
+		this.physics.add.collider(this.playerSprite, grassLayer);
+		this.physics.add.collider(this.playerSprite, riverLayer);
+		this.physics.add.collider(this.playerSprite, housesLayer);
+		this.physics.add.collider(this.playerSprite, treesLayer);
 	};
 	update() {
 		this.playerSprite.setVelocityX(0);
