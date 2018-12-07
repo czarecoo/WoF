@@ -36,13 +36,16 @@ class Game extends Phaser.Scene {
 
 		this.keys = this.input.keyboard.addKeys('W,S,A,D');
 		this.playerSprite.Speed = 300;
-		this.playerSprite.diagonalSpeedModifier = 0.65;
+		this.playerSprite.diagonalSpeedModifier = 0.6;
 
 		this.physics.add.collider(this.playerSprite, sandLayer);
 		this.physics.add.collider(this.playerSprite, grassLayer);
 		this.physics.add.collider(this.playerSprite, riverLayer);
 		this.physics.add.collider(this.playerSprite, housesLayer);
 		this.physics.add.collider(this.playerSprite, treesLayer);
+
+		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+		this.cameras.main.startFollow(this.playerSprite, true, 1, 1);
 	};
 	update() {
 		this.playerSprite.setVelocityX(0);
