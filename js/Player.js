@@ -1,5 +1,6 @@
 class Player {
 	constructor(config) {
+		this.id = config.id;
 		this.scene = config.scene;
 		this.animationKey = config.key;
 		const framerate = 6;

@@ -11,13 +11,44 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
+server.lastPlayderID = 0;
+
 server.listen(process.env.PORT || port, function () {
 	console.log('Listening on ' + server.address().port);
 });
 
 io.on('connection', function (socket) {
 	console.log("Player with socketid: " + socket.id + " connected.")
+	socket.emit('addPlayers', getAllPlayers());
+	socket.player = {
+		id: server.lastPlayderID++,
+		x: randomInt(300, 400),
+		y: randomInt(200, 300)
+	};
+	socket.emit('addMainPlayer', socket.player);
+
+	socket.broadcast.emit('addPlayer', socket.player);
+
+	socket.on('move', function (data) {
+		socket.player.x = data.x;
+		socket.player.y = data.y;
+		io.emit('movePlayer', socket.player);
+	});
+
 	socket.on('disconnect', function () {
-		console.log("Player with socketid: " + socket.id + " disconnected.")
+		console.log("Player with socketid: " + socket.id + " disconnected.");
+		io.emit('removePlayer', socket.player.id);
 	});
 });
+function getAllPlayers() {
+	var players = [];
+	Object.keys(io.sockets.connected).forEach(function (socketID) {
+		var player = io.sockets.connected[socketID].player;
+		if (player) players.push(player);
+	});
+	return players;
+}
+
+function randomInt(low, high) {
+	return Math.floor(Math.random() * (high - low) + low);
+}
