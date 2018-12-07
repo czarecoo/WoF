@@ -15,6 +15,7 @@ class Game extends Phaser.Scene {
 
 	create() {
 		this.map = this.make.tilemap({ key: "map" });
+		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels, true, true, true, true);
 		const tileset = this.map.addTilesetImage("tilesheet", "tileset");
 		const sandLayer = this.map.createStaticLayer("sand", tileset, 0, 0).setCollisionByProperty({ collides: true });
 		const grassLayer = this.map.createStaticLayer("grass", tileset, 0, 0).setCollisionByProperty({ collides: true });
