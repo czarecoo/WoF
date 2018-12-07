@@ -7,10 +7,10 @@ class Player {
 		this.scene.anims.create({ key: 'walkDown', frames: this.scene.anims.generateFrameNumbers(this.animationKey, { start: 6, end: 8 }), frameRate: framerate, yoyo: false, repeat: -1 });
 		this.scene.anims.create({ key: 'walkLeft', frames: this.scene.anims.generateFrameNumbers(this.animationKey, { start: 9, end: 11 }), frameRate: framerate, yoyo: false, repeat: -1 });
 		this.scene.anims.create({ key: 'walkUp', frames: this.scene.anims.generateFrameNumbers(this.animationKey, { start: 0, end: 2 }), frameRate: framerate, yoyo: false, repeat: -1 });
-		this.scene.anims.create({ key: 'idleRight', frames: [{ key: this.animationKey, frame: 4 }], frameRate: 20 });
-		this.scene.anims.create({ key: 'idleDown', frames: [{ key: this.animationKey, frame: 7 }], frameRate: 20 });
-		this.scene.anims.create({ key: 'idleLeft', frames: [{ key: this.animationKey, frame: 10 }], frameRate: 20 });
-		this.scene.anims.create({ key: 'idleUp', frames: [{ key: this.animationKey, frame: 1 }], frameRate: 20 });
+		this.scene.anims.create({ key: 'idleRight', frames: [{ key: this.animationKey, frame: 4 }], frameRate: 0 });
+		this.scene.anims.create({ key: 'idleDown', frames: [{ key: this.animationKey, frame: 7 }], frameRate: 0 });
+		this.scene.anims.create({ key: 'idleLeft', frames: [{ key: this.animationKey, frame: 10 }], frameRate: 0 });
+		this.scene.anims.create({ key: 'idleUp', frames: [{ key: this.animationKey, frame: 1 }], frameRate: 0 });
 
 		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, 'idleDown');
 
