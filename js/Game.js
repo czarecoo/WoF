@@ -10,7 +10,7 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('playerRight', 'assets/player/Warrior/WalkingRight.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('playerDown', 'assets/player/Warrior/WalkingDown.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('playerLeft', 'assets/player/Warrior/WalkingLeft.png', { frameWidth: 32, frameHeight: 36 });
-		this.load.spritesheet('playerUp', 'assets/player/Warrior/WalkingUp.png', { frameWidth: 32, frameHeight: 36 });	
+		this.load.spritesheet('playerUp', 'assets/player/Warrior/WalkingUp.png', { frameWidth: 32, frameHeight: 36 });
 	};
 
 	create() {
@@ -21,53 +21,75 @@ class Game extends Phaser.Scene {
 		const riverLayer = this.map.createStaticLayer("river", tileset, 0, 0);
 		const housesLayer = this.map.createStaticLayer("houses", tileset, 0, 0);
 		const treesLayer = this.map.createStaticLayer("trees", tileset, 0, 0);
+		//const colliders = this.map.createStaticLayer("colliders", tileset, 0, 0);
+		//this.physics.add.collider(player, colliders);
 
 		const framerate = 6;
-		this.anims.create({key: 'walkRight', frames: this.anims.generateFrameNumbers('playerRight'), frameRate: framerate, yoyo: false, repeat: -1});
-		this.anims.create({key: 'walkDown', frames: this.anims.generateFrameNumbers('playerDown'), frameRate: framerate, yoyo: false, repeat: -1});
-		this.anims.create({key: 'walkLeft', frames: this.anims.generateFrameNumbers('playerLeft'), frameRate: framerate, yoyo: false, repeat: -1});
-		this.anims.create({key: 'walkUp', frames: this.anims.generateFrameNumbers('playerUp'), frameRate: framerate, yoyo: false, repeat: -1});
-		this.playerSprite = this.add.sprite(400, 200, 'playerDown');
+		this.anims.create({ key: 'walkRight', frames: this.anims.generateFrameNumbers('playerRight'), frameRate: framerate, yoyo: false, repeat: -1 });
+		this.anims.create({ key: 'walkDown', frames: this.anims.generateFrameNumbers('playerDown'), frameRate: framerate, yoyo: false, repeat: -1 });
+		this.anims.create({ key: 'walkLeft', frames: this.anims.generateFrameNumbers('playerLeft'), frameRate: framerate, yoyo: false, repeat: -1 });
+		this.anims.create({ key: 'walkUp', frames: this.anims.generateFrameNumbers('playerUp'), frameRate: framerate, yoyo: false, repeat: -1 });
+		this.anims.create({ key: 'idleRight', frames: [{ key: 'playerRight', frame: 0 }], frameRate: 20 });
+		this.anims.create({ key: 'idleDown', frames: [{ key: 'playerDown', frame: 0 }], frameRate: 20 });
+		this.anims.create({ key: 'idleLeft', frames: [{ key: 'playerLeft', frame: 0 }], frameRate: 20 });
+		this.anims.create({ key: 'idleUp', frames: [{ key: 'playerUp', frame: 0 }], frameRate: 20 });
+		this.playerSprite = this.physics.add.sprite(400, 200, 'idle');
+		this.playerSprite.setCollideWorldBounds(true);
 		this.keys = this.input.keyboard.addKeys('W,S,A,D');
-		this.playerSprite.velX=0;
-		this.playerSprite.velY=0;
+		this.playerSprite.Speed = 100;
+		this.playerSprite.diagonalSpeedModifier = 0.65;
 	};
-	update(){
-		this.playerSprite.x+=this.playerSprite.velX;
-		this.playerSprite.y+=this.playerSprite.velY;
-		if (this.keys.A.isDown && this.playerSprite.isMoving==0)
-		{
-			//this.playerSprite.setVelocityX(-300);
-			this.playerSprite.anims.play('walkLeft');
-			this.playerSprite.isMoving=1;
-			this.playerSprite.velX=-4;
-		}
-		else if (this.keys.D.isDown && this.playerSprite.isMoving==0)
-		{
-			//player.setVelocityX(300);
-			this.playerSprite.anims.play('walkRight');
-			this.playerSprite.isMoving=1;
-			this.playerSprite.velX=4;
-		}
-		if (this.keys.W.isDown && this.playerSprite.isMoving==0)
-		{
-			//player.setVelocityY(-300);
-			this.playerSprite.anims.play('walkUp');
-			this.playerSprite.isMoving=1;
-			this.playerSprite.velY=-4;
-		}
-		else if (this.keys.S.isDown && this.playerSprite.isMoving==0)
-		{
-			//player.setVelocityY(300);
-			this.playerSprite.anims.play('walkDown');
-			this.playerSprite.isMoving=1;
-			this.playerSprite.velY=4;
-		}
-		if(this.keys.W.isUp && this.keys.S.isUp && this.keys.A.isUp && this.keys.D.isUp){
-			this.playerSprite.anims.stop();
-			this.playerSprite.isMoving=0;
-			this.playerSprite.velX=0;
-			this.playerSprite.velY=0;
+	update() {
+		this.playerSprite.setVelocityX(0);
+		this.playerSprite.setVelocityY(0);
+		if (this.keys.D.isDown && this.keys.S.isDown) { //down right
+			this.playerSprite.setVelocityX(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityY(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.anims.play('walkDown', true);
+			this.playerSprite.lastDir = 2;
+		} else if (this.keys.S.isDown && this.keys.A.isDown) {//down left
+			this.playerSprite.setVelocityX(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityY(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.anims.play('walkDown', true);
+			this.playerSprite.lastDir = 2;
+		} else if (this.keys.A.isDown && this.keys.W.isDown) { //up left
+			this.playerSprite.setVelocityX(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityY(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.anims.play('walkUp', true);
+			this.playerSprite.lastDir = 4;
+		} else if (this.keys.W.isDown && this.keys.D.isDown) { //up right
+			this.playerSprite.setVelocityX(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityY(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.anims.play('walkUp', true);
+			this.playerSprite.lastDir = 4;
+		} else if (this.keys.A.isDown) {
+			this.playerSprite.setVelocityX(-this.playerSprite.Speed);
+			this.playerSprite.anims.play('walkLeft', true);
+			this.playerSprite.lastDir = 3;
+		} else if (this.keys.D.isDown) {
+			this.playerSprite.setVelocityX(this.playerSprite.Speed);
+			this.playerSprite.anims.play('walkRight', true);
+			this.playerSprite.lastDir = 1;
+		} else if (this.keys.W.isDown) {
+			this.playerSprite.anims.play('walkUp', true);
+			this.playerSprite.setVelocityY(-this.playerSprite.Speed);
+			this.playerSprite.lastDir = 4;
+		} else if (this.keys.S.isDown) {
+			this.playerSprite.anims.play('walkDown', true);
+			this.playerSprite.setVelocityY(this.playerSprite.Speed);
+			this.playerSprite.lastDir = 2;
+		} else {
+			if (this.playerSprite.lastDir == 1) {
+				this.playerSprite.anims.play('idleRight');
+			} else if (this.playerSprite.lastDir == 2) {
+				this.playerSprite.anims.play('idleDown');
+			} else if (this.playerSprite.lastDir == 3) {
+				this.playerSprite.anims.play('idleLeft');
+			} else if (this.playerSprite.lastDir == 4) {
+				this.playerSprite.anims.play('idleUp');
+			} else {
+				this.playerSprite.anims.play('idleDown');
+			}
 		}
 	}
 }
