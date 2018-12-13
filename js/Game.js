@@ -15,18 +15,20 @@ class Game extends Phaser.Scene {
 	create() {
 		this.mapClass = new Map(this);
 		this.client = new Client(this);
+		this.players = {};
 		AnimationCreator.create(this, "warrior");
 		AnimationCreator.create(this, "mage");
 		AnimationCreator.create(this, "ranger");
 	};
 	update() {
-		if (this.playerClass != undefined) {
-			this.playerClass.update();
-			this.client.move(this.playerClass.playerSprite.x, this.playerClass.playerSprite.y);
-		}
+		Object.keys(this.players).forEach(id => {
+			this.players[id].update();
+			this.client.move(this.players[id].playerSprite.x, this.players[id].playerSprite.y);
+		});
 	}
 	addMainPlayer(id, x, y) {
 		this.playerClass = new Player({ id: id, scene: this, x: x, y: y, key: this.randomClass() });
+		this.players[id] = this.playerClass;
 		this.map[id] = this.playerClass.playerSprite;
 		this.mapClass.setColliders(this.playerClass.playerSprite);
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -43,6 +45,7 @@ class Game extends Phaser.Scene {
 	removePlayer(id) {
 		this.map[id].destroy();
 		delete this.map[id];
+		delete this.players[id];
 	}
 	randomClass() {
 		var randomClass = Math.floor((Math.random() * 3) + 1);
