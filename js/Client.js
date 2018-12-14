@@ -3,14 +3,14 @@ class Client {
 		this.socket = io.connect('http://localhost:8081');
 
 		this.socket.on('addMainPlayer', function (data) {
-			Game.addMainPlayer(data.id, data.x, data.y);
+			Game.addMainPlayer(data.id, data.x, data.y, data.class);
 		});
 		this.socket.on('addPlayer', function (data) {
-			Game.addPlayer(data.id, data.x, data.y);
+			Game.addPlayer(data.id, data.x, data.y, data.class);
 		});
 		this.socket.on('addPlayers', function (data) {
 			for (var i = 0; i < data.length; i++) {
-				Game.addPlayer(data[i].id, data[i].x, data[i].y);
+				Game.addPlayer(data[i].id, data[i].x, data[i].y, data[i].class);
 			}
 		});
 

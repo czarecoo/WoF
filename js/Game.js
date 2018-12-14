@@ -27,28 +27,18 @@ class Game extends Phaser.Scene {
 			}
 		});
 	}
-	addMainPlayer(id, x, y) {
-		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: this.randomClass() });
+	addMainPlayer(id, x, y, randomClass) {
+		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: randomClass });
 		this.mainPlayer = this.players[id];
 		this.map[id] = this.players[id].playerSprite;
 		this.mapClass.setColliders(this.players[id].playerSprite);
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
-
-		Object.keys(this.players).forEach(pid => {
-			if (pid != id) {
-				this.physics.add.collider(this.mainPlayer.playerSprite, this.players[pid].playerSprite);
-			}
-		});
-
 	}
-	addPlayer(id, x, y) {
-		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: this.randomClass() });
+	addPlayer(id, x, y, randomClass) {
+		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: randomClass });
 		this.map[id] = this.players[id].playerSprite;
 		this.mapClass.setColliders(this.players[id].playerSprite);
-		if (this.mainPlayer != undefined) {
-			this.physics.add.collider(this.mainPlayer.playerSprite, this.players[id].playerSprite);
-		}
 	}
 	movePlayer(id, x, y) {
 		var player = this.players[id];
@@ -63,15 +53,5 @@ class Game extends Phaser.Scene {
 		this.map[id].destroy();
 		delete this.map[id];
 		delete this.players[id];
-	}
-	randomClass() {
-		var randomClass = Math.floor((Math.random() * 3) + 1);
-		if (randomClass == 1) {
-			return 'warrior';
-		} else if (randomClass == 2) {
-			return 'mage';
-		} else {
-			return 'ranger';
-		}
 	}
 }
