@@ -34,14 +34,18 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('move', function (data) {
-		socket.player.x = data.x;
-		socket.player.y = data.y;
-		io.emit('movePlayer', socket.player);
+		if (socket.player != undefined) {
+			socket.player.x = data.x;
+			socket.player.y = data.y;
+			io.emit('movePlayer', socket.player);
+		}
 	});
 
 	socket.on('disconnect', function () {
 		console.log("Player with socketid: " + socket.id + " disconnected.");
-		io.emit('removePlayer', socket.player.id);
+		if (socket.player != undefined) {
+			io.emit('removePlayer', socket.player.id);
+		}
 	});
 });
 function getAllPlayers() {
