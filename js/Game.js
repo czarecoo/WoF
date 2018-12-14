@@ -11,6 +11,7 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('warrior', 'assets/player/warrior.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('mage', 'assets/player/mage.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('ranger', 'assets/player/ranger.png', { frameWidth: 32, frameHeight: 36 });
+		this.load.image('greenBar', 'assets/player/greenBar.png');
 	};
 
 	create() {
