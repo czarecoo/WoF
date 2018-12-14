@@ -9,7 +9,6 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('warrior', 'assets/player/warrior.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('mage', 'assets/player/mage.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('ranger', 'assets/player/ranger.png', { frameWidth: 32, frameHeight: 36 });
-		this.load.image('otherPlayer', 'assets/player/otherPlayer.png');
 	};
 
 	create() {
@@ -23,24 +22,31 @@ class Game extends Phaser.Scene {
 	update() {
 		Object.keys(this.players).forEach(id => {
 			this.players[id].update();
-			this.client.move(this.players[id].playerSprite.x, this.players[id].playerSprite.y);
+			if (this.players[id] instanceof Player) {
+				this.client.move(this.players[id].playerSprite.x, this.players[id].playerSprite.y);
+			}
 		});
 	}
 	addMainPlayer(id, x, y) {
-		this.playerClass = new Player({ id: id, scene: this, x: x, y: y, key: this.randomClass() });
-		this.players[id] = this.playerClass;
-		this.map[id] = this.playerClass.playerSprite;
-		this.mapClass.setColliders(this.playerClass.playerSprite);
+		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: this.randomClass() });
+		this.map[id] = this.players[id].playerSprite;
+		this.mapClass.setColliders(this.players[id].playerSprite);
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-		this.cameras.main.startFollow(this.playerClass.playerSprite, true, 1, 1);
+		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
 	}
 	addPlayer(id, x, y) {
-		this.map[id] = this.add.sprite(x, y, 'otherPlayer');
+		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: this.randomClass() });
+		this.map[id] = this.players[id].playerSprite;
+		this.mapClass.setColliders(this.players[id].playerSprite);
 	}
 	movePlayer(id, x, y) {
-		var player = this.map[id];
-		player.x = x;
-		player.y = y;
+		var player = this.players[id];
+		player.newX = x;
+		player.newY = y;
+		if (player instanceof OtherPlayer) {
+			player.playerSprite.x = x;
+			player.playerSprite.y = y;
+		}
 	}
 	removePlayer(id) {
 		this.map[id].destroy();
