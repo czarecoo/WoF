@@ -24,7 +24,7 @@ io.on('connection', function (socket) {
 		socket.emit('addPlayers', getAllPlayers());
 		socket.player = {
 			id: server.lastPlayderID++,
-			x: randomInt(400, 900),
+			x: randomInt(600, 900),
 			y: randomInt(900, 1000),
 			class: chosenClass
 		};

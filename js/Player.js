@@ -8,8 +8,11 @@ class Player {
 		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D');
 		this.playerSprite.Speed = 300;
 		this.playerSprite.diagonalSpeedModifier = 0.6;
+		this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 	};
 	update() {
+		this.nameText.x = this.playerSprite.x;
+		this.nameText.y = this.playerSprite.y - 35;
 		this.playerSprite.setVelocityX(0);
 		this.playerSprite.setVelocityY(0);
 		if (this.keys.D.isDown && this.keys.S.isDown) { //down right

@@ -5,8 +5,11 @@ class OtherPlayer {
 		this.animationKey = config.key;
 		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown');
 		this.playerSprite.setCollideWorldBounds(true);
+		this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '12px Arial', fill: 'green' }).setOrigin(0.5, 0.5);
 	};
 	update() {
+		this.nameText.x = this.playerSprite.x;
+		this.nameText.y = this.playerSprite.y - 35;
 		if (this.newX > this.lastX && this.newY > this.lastY) { //right down
 			this.playerSprite.anims.play(this.animationKey + 'walkDown', true);
 			this.playerSprite.lastDir = 2;
