@@ -1,8 +1,10 @@
 class Game extends Phaser.Scene {
 	constructor() {
-		super();
+		super({ key: 'Game', active: false });
 	};
-
+	init(data) {
+		this.chosenClass = data.class;
+	}
 	preload() {
 		this.load.tilemapTiledJSON('map', 'assets/map/example_map.json');
 		this.load.image('tileset', 'assets/map/tilesheet.png', { frameWidth: 32, frameHeight: 32 });

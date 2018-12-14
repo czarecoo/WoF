@@ -19,16 +19,19 @@ server.listen(process.env.PORT || port, function () {
 
 io.on('connection', function (socket) {
 	console.log("Player with socketid: " + socket.id + " connected.")
-	socket.emit('addPlayers', getAllPlayers());
-	socket.player = {
-		id: server.lastPlayderID++,
-		x: randomInt(400, 900),
-		y: randomInt(900, 1000),
-		class: randomClass()
-	};
-	socket.emit('addMainPlayer', socket.player);
 
-	socket.broadcast.emit('addPlayer', socket.player);
+	socket.on('init', function (chosenClass) {
+		socket.emit('addPlayers', getAllPlayers());
+		socket.player = {
+			id: server.lastPlayderID++,
+			x: randomInt(400, 900),
+			y: randomInt(900, 1000),
+			class: chosenClass
+		};
+		socket.emit('addMainPlayer', socket.player);
+
+		socket.broadcast.emit('addPlayer', socket.player);
+	});
 
 	socket.on('move', function (data) {
 		socket.player.x = data.x;
@@ -52,14 +55,4 @@ function getAllPlayers() {
 
 function randomInt(low, high) {
 	return Math.floor(Math.random() * (high - low) + low);
-}
-function randomClass() {
-	var randomClass = randomInt(1, 3);
-	if (randomClass == 1) {
-		return 'warrior';
-	} else if (randomClass == 2) {
-		return 'mage';
-	} else {
-		return 'ranger';
-	}
 }
