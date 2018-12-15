@@ -12,6 +12,11 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('mage', 'assets/player/mage.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('ranger', 'assets/player/ranger.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.image('greenBar', 'assets/player/greenBar.png');
+		this.load.image('redBar', 'assets/player/redBar.png');
+		this.load.spritesheet('brainy', 'assets/enemy/brainy.png', { frameWidth: 32, frameHeight: 64 });
+		this.load.spritesheet('skeleton', 'assets/enemy/skeleton.png', { frameWidth: 32, frameHeight: 64 });
+		this.load.spritesheet('spider', 'assets/enemy/spider.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('zombie', 'assets/enemy/zombie.png', { frameWidth: 32, frameHeight: 64 });
 	};
 
 	create() {
@@ -21,6 +26,12 @@ class Game extends Phaser.Scene {
 		AnimationCreator.create(this, "warrior");
 		AnimationCreator.create(this, "mage");
 		AnimationCreator.create(this, "ranger");
+		AnimationCreator.createEnemies(this, "brainy");
+		AnimationCreator.createEnemies(this, "skeleton");
+		AnimationCreator.createSpider(this, "spider");
+		AnimationCreator.createEnemies(this, "zombie");
+		this.enemy = new Enemy({ id: 2, scene: this, x: 700, y: 800, key: 'skeleton' });
+		this.mapClass.setColliders(this.enemy.playerSprite);
 	};
 	update() {
 		Object.keys(this.players).forEach(id => {
@@ -29,6 +40,7 @@ class Game extends Phaser.Scene {
 				this.client.move(this.players[id].playerSprite.x, this.players[id].playerSprite.y);
 			}
 		});
+		this.enemy.update();
 	}
 	addMainPlayer(id, x, y, randomClass) {
 		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: randomClass });
