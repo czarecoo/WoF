@@ -18,6 +18,10 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('skeleton', 'assets/enemy/skeleton.png', { frameWidth: 32, frameHeight: 64 });
 		this.load.spritesheet('spider', 'assets/enemy/spider.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('zombie', 'assets/enemy/zombie.png', { frameWidth: 32, frameHeight: 64 });
+		this.load.spritesheet('dog', 'assets/enemy/dog2.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('white cat', 'assets/enemy/wcat.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.image('npc', 'assets/player/otherPlayer.png');
 	};
 
 	create() {
@@ -32,6 +36,10 @@ class Game extends Phaser.Scene {
 		AnimationCreator.createEnemies(this, "skeleton");
 		AnimationCreator.createSpider(this, "spider");
 		AnimationCreator.createEnemies(this, "zombie");
+		AnimationCreator.createEnemies(this, "dog");
+		AnimationCreator.createEnemies(this, "white cat");
+		AnimationCreator.createEnemies(this, "black cat");
+		this.someNpc = this.physics.add.sprite(416, 520, 'npc');
 	};
 	update() {
 		Object.keys(this.players).forEach(id => {

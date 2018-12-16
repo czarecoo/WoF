@@ -24,36 +24,68 @@ server.listen(process.env.PORT || port, function () {
 var enemies = [
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
-		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
+		x: randomInt(78 * Map.tileWidth, 80 * Map.tileWidth),
+		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'brainy',
-		direction: 4,
-		speed: 1
-	},
-	{
-		id: server.lastEnemyID++,
-		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
-		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
-		class: 'skeleton',
-		direction: 4,
-		speed: 3
-	},
-	{
-		id: server.lastEnemyID++,
-		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
-		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
-		class: 'zombie',
 		direction: 4,
 		speed: 2
 	},
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
-		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
-		class: 'spider',
+		x: randomInt(78 * Map.tileWidth, 80 * Map.tileWidth),
+		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
+		class: 'skeleton',
 		direction: 4,
 		speed: 1
-	}
+	},
+	{
+		id: server.lastEnemyID++,
+		x: randomInt(78 * Map.tileWidth, 80 * Map.tileWidth),
+		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
+		class: 'skeleton',
+		direction: 4,
+		speed: 1
+	},
+	{
+		id: server.lastEnemyID++,
+		x: 71 * Map.tileWidth,
+		y: 23 * Map.tileHeight,
+		class: 'zombie',
+		direction: 4,
+		speed: 0.8
+	},
+	{
+		id: server.lastEnemyID++,
+		x: 6 * Map.tileWidth,
+		y: 28 * Map.tileHeight,
+		class: 'spider',
+		direction: 4,
+		speed: 0.5
+	},
+	{
+		id: server.lastEnemyID++,
+		x: 33 * Map.tileWidth,
+		y: 17 * Map.tileHeight,
+		class: 'dog',
+		direction: 4,
+		speed: 1.1
+	},
+	{
+		id: server.lastEnemyID++,
+		x: 28 * Map.tileWidth,
+		y: 13 * Map.tileHeight,
+		class: 'white cat',
+		direction: 4,
+		speed: 1.5
+	},
+	{
+		id: server.lastEnemyID++,
+		x: 48 * Map.tileWidth,
+		y: 16 * Map.tileHeight,
+		class: 'black cat',
+		direction: 4,
+		speed: 1.5
+	},
 ];
 
 io.on('connection', function (socket) {
@@ -62,10 +94,10 @@ io.on('connection', function (socket) {
 		socket.emit('addPlayers', getAllPlayers());
 		socket.player = {
 			id: server.lastPlayderID++,
-			x: randomInt(600, 900),
-			y: randomInt(900, 1000),
-			//x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
-			//y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
+			//x: randomInt(600, 900),
+			//y: randomInt(900, 1000),
+			x: randomInt(18 * Map.tileWidth, 24 * Map.tileWidth),
+			y: 30 * Map.tileHeight,
 			class: chosenClass,
 		};
 		socket.emit('addEnemies', enemies);
