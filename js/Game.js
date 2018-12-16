@@ -22,6 +22,10 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('white cat', 'assets/enemy/wcat.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.image('npc', 'assets/player/otherPlayer.png');
+		this.load.image('leftArrow', 'assets/ui/leftArrow.png');
+		this.load.image('upArrow', 'assets/ui/upArrow.png');
+		this.load.image('rightArrow', 'assets/ui/rightArrow.png');
+		this.load.image('downArrow', 'assets/ui/downArrow.png');
 	};
 
 	create() {
