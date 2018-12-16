@@ -21,8 +21,9 @@ class Game extends Phaser.Scene {
 
 	create() {
 		this.mapClass = new Map(this);
-		this.client = new Client(this);
 		this.players = {};
+		this.enemies = [];
+		this.client = new Client(this);
 		AnimationCreator.create(this, "warrior");
 		AnimationCreator.create(this, "mage");
 		AnimationCreator.create(this, "ranger");
@@ -30,8 +31,6 @@ class Game extends Phaser.Scene {
 		AnimationCreator.createEnemies(this, "skeleton");
 		AnimationCreator.createSpider(this, "spider");
 		AnimationCreator.createEnemies(this, "zombie");
-		this.enemy = new Enemy({ id: 2, scene: this, x: 700, y: 800, key: 'skeleton' });
-		this.mapClass.setColliders(this.enemy.playerSprite);
 	};
 	update() {
 		Object.keys(this.players).forEach(id => {
@@ -40,7 +39,9 @@ class Game extends Phaser.Scene {
 				this.client.move(this.players[id].playerSprite.x, this.players[id].playerSprite.y);
 			}
 		});
-		this.enemy.update();
+		this.enemies.forEach(function (enemy) {
+			enemy.update();
+		});
 	}
 	addMainPlayer(id, x, y, randomClass) {
 		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: randomClass });
@@ -57,16 +58,33 @@ class Game extends Phaser.Scene {
 	}
 	movePlayer(id, x, y) {
 		var player = this.players[id];
-		player.newX = x;
-		player.newY = y;
-		if (player instanceof OtherPlayer) {
-			player.playerSprite.x = x;
-			player.playerSprite.y = y;
+		if (player != undefined) {
+			player.newX = x;
+			player.newY = y;
+			if (player instanceof OtherPlayer) {
+				player.playerSprite.x = x;
+				player.playerSprite.y = y;
+			}
 		}
 	}
 	removePlayer(id) {
 		this.map[id].destroy();
 		delete this.map[id];
 		delete this.players[id];
+	}
+	addEnemies(data) {
+		for (var i = 0; i < data.length; i++) {
+			var newEnemy = new Enemy({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class });
+			this.mapClass.setColliders(newEnemy);
+			this.enemies.push(newEnemy);
+		}
+	}
+	processEnemyData(data) {
+		for (var i = 0; i < this.enemies.length; i++) {
+			this.enemies[i].playerSprite.x = data[i].x;
+			this.enemies[i].playerSprite.y = data[i].y;
+			this.enemies[i].direction = data[i].direction;
+			this.enemies[i].playerSprite.speed = data[i].speed;
+		}
 	}
 }
