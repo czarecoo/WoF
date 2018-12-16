@@ -1,0 +1,17 @@
+enemy:
+https://opengameart.org/content/lpc-rat-cat-and-dog
+https://opengameart.org/content/lil-puddin-puggums-deluxe
+Skeleton -https://opengameart.org/content/zombie-and-skeleton-32x48
+Spider -https://opengameart.org/content/giant-spider-32x32
+Zombie -https://opengameart.org/content/zombie-and-skeleton-32x48
+https://opengameart.org/content/brain-monster
+
+items:
+https://opengameart.org/content/rpg-itemterraincharacter-sprites-ice-insignia
+https://opengameart.org/content/whispers-of-avalon-item-icons
+
+map:
+http://www.dynetisgames.com/2017/03/06/how-to-make-a-multiplayer-online-game-with-phaser-socket-io-and-node-js/
+https://opengameart.org/content/cave-tileset-0
+https://opengameart.org/content/dungeon-tileset-4
+https://opengameart.org/content/best-orthogonal-rectangular-tilesets-for-tilemaps

@@ -24,35 +24,35 @@ server.listen(process.env.PORT || port, function () {
 var enemies = [
 	{
 		id: server.lastEnemyID++,
-		x: 34 * Map.tileWidth,//randomInt(600, 900),
-		y: 19 * Map.tileHeight,//randomInt(900, 1000),
+		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
+		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'brainy',
 		direction: 4,
 		speed: 1
 	},
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(600, 900),
-		y: randomInt(900, 1000),
+		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
+		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
 		speed: 3
 	},
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(600, 900),
-		y: randomInt(900, 1000),
+		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
+		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'zombie',
 		direction: 4,
-		speed: 6
+		speed: 2
 	},
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(600, 900),
-		y: randomInt(900, 1000),
+		x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
+		y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'spider',
 		direction: 4,
-		speed: 3
+		speed: 1
 	}
 ];
 
@@ -64,6 +64,8 @@ io.on('connection', function (socket) {
 			id: server.lastPlayderID++,
 			x: randomInt(600, 900),
 			y: randomInt(900, 1000),
+			//x: randomInt(70 * Map.tileWidth, 87 * Map.tileWidth),
+			//y: randomInt(20 * Map.tileHeight, 26 * Map.tileHeight),
 			class: chosenClass,
 		};
 		socket.emit('addEnemies', enemies);
@@ -105,7 +107,7 @@ setInterval(function () {
 	//console.log(counter++);
 	//console.log(util.inspect(enemies, false, 3));
 	enemies.forEach(function (enemy) {
-		enemy.direction = randomInt(0, 5);
+		enemy.direction = randomInt(0, 4);
 	});
 }, 1000);
 setInterval(function () {
