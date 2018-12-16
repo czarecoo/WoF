@@ -107,9 +107,20 @@ io.on('connection', function (socket) {
 
 		socket.on('move', function (data) {
 			if (socket.player != undefined) {
-				socket.player.x = data.x;
-				socket.player.y = data.y;
-				io.emit('movePlayer', socket.player);
+				if (isTeleportingToDung(data.x, data.y)) {
+					socket.player.x = 79.5 * Map.tileWidth;
+					socket.player.y = 30 * Map.tileHeight;
+					io.emit('forceMovePlayer', socket.player);
+				}
+				else if (isTeleportingToTown(data.x, data.y)) {
+					socket.player.x = 19.5 * Map.tileWidth;
+					socket.player.y = 3 * Map.tileHeight;
+					io.emit('forceMovePlayer', socket.player);
+				} else {
+					socket.player.x = data.x;
+					socket.player.y = data.y;
+					io.emit('movePlayer', socket.player);
+				}
 			}
 		});
 
@@ -164,4 +175,10 @@ setInterval(function () {
 
 function canWalkThere(x, y) {
 	return Map.isWalkable(Math.floor(x / Map.tileWidth), Math.floor(y / Map.tileHeight));
+}
+function isTeleportingToDung(x, y) {
+	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 2;
+}
+function isTeleportingToTown(x, y) {
+	return Math.floor(x / Map.tileWidth) == 79 && Math.floor(y / Map.tileHeight) == 31;
 }

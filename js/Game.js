@@ -76,6 +76,13 @@ class Game extends Phaser.Scene {
 			}
 		}
 	}
+	forceMovePlayer(id, x, y) {
+		var player = this.players[id];
+		if (player != undefined) {
+			player.playerSprite.x = x;
+			player.playerSprite.y = y;
+		}
+	}
 	removePlayer(id) {
 		this.map[id].destroy();
 		delete this.map[id];

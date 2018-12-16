@@ -24,7 +24,9 @@ class Client {
 		this.socket.on('movePlayer', function (data) {
 			Game.movePlayer(data.id, data.x, data.y);
 		});
-
+		this.socket.on('forceMovePlayer', function (data) {
+			Game.forceMovePlayer(data.id, data.x, data.y);
+		});
 		this.socket.on('removePlayer', function (id) {
 			Game.removePlayer(id);
 		});
