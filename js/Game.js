@@ -73,7 +73,6 @@ class Game extends Phaser.Scene {
 		this.mapClass.setColliders(this.players[id].playerSprite);
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
-		this.cameras.main.roundPixels = true;
 	}
 	processUpdate(enemies, players) {
 		for (var i = 0; i < this.enemies.length; i++) {

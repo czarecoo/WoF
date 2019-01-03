@@ -2,7 +2,7 @@ var config;
 var game;
 window.onload = function () {
 	config = {
-		type: Phaser.CANVAS,
+		type: Phaser.AUTO,
 		width: 800,
 		height: 600,
 		backgroundColor: '#FFFFFF',
@@ -18,7 +18,7 @@ window.onload = function () {
 	game = new Phaser.Game(config);
 
 	resize();
-	//window.addEventListener("resize", resize, false);
+	window.addEventListener("resize", resize, false);
 };
 
 
