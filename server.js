@@ -110,12 +110,12 @@ io.on('connection', function (socket) {
 				if (isTeleportingToDung(data.x, data.y)) {
 					socket.player.x = 79.5 * Map.tileWidth;
 					socket.player.y = 30 * Map.tileHeight;
-					io.emit('movePlayer', socket.player);
+					io.emit('forceMovePlayer', socket.player);
 				}
 				else if (isTeleportingToTown(data.x, data.y)) {
 					socket.player.x = 19.5 * Map.tileWidth;
 					socket.player.y = 4 * Map.tileHeight;
-					io.emit('movePlayer', socket.player);
+					io.emit('forceMovePlayer', socket.player);
 				} else {
 					socket.player.x = data.x;
 					socket.player.y = data.y;
