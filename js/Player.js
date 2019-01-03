@@ -29,6 +29,14 @@ class Player {
 		this.healthBar.y = this.playerSprite.y - 27;
 		this.playerSprite.setVelocityX(0);
 		this.playerSprite.setVelocityY(0);
+		if (this.playerSprite.Speed == 0) { //fix wsad joy sim use bug
+			for (var name in this.keys) {
+				if (this.keys[name].isDown) {
+					this.playerSprite.Speed = 300;
+				}
+			}
+		}
+
 		if (this.keys.D.isDown && this.keys.S.isDown || this.goingDown && this.goingRight) { //down right
 			this.playerSprite.setVelocityX(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
 			this.playerSprite.setVelocityY(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
