@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
-server.lastPlayderID = 0;
+server.lastPlayerID = 0;
 server.lastEnemyID = 0;
 
 server.listen(process.env.PORT || port, function () {
@@ -94,7 +94,7 @@ io.on('connection', function (socket) {
 	socket.on('init', function (chosenClass) {
 		console.log("Player with socketid: " + socket.id + " connected.")
 		socket.emit('addPlayers', getAllPlayers());
-		socket.playerID = server.lastPlayderID++;
+		socket.playerID = server.lastPlayerID++;
 		var player = {
 			id: socket.playerID,
 			x: randomInt(18 * Map.tileWidth, 24 * Map.tileWidth),
@@ -120,7 +120,6 @@ io.on('connection', function (socket) {
 				} else {
 					players[socket.playerID].x = data.x;
 					players[socket.playerID].y = data.y;
-					io.emit('movePlayer', players[socket.playerID]);
 				}
 			}
 		});
@@ -128,6 +127,7 @@ io.on('connection', function (socket) {
 		socket.on('disconnect', function () {
 			console.log("Player with socketid: " + socket.id + " disconnected.");
 			if (socket.playerID != undefined) {
+				delete players[socket.playerID];
 				io.emit('removePlayer', socket.playerID);
 			}
 		});
@@ -141,7 +141,7 @@ function randomInt(low, high) {
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
-	console.log(util.inspect(players, false, 3));
+	//console.log(util.inspect(players, false, 3));
 	enemies.forEach(function (enemy) {
 		enemy.direction = randomInt(0, 4);
 	});
@@ -161,8 +161,9 @@ setInterval(function () {
 			enemy.y += enemy.speed;
 		}
 	});
+	var playersArr = getAllPlayers();
 	Object.keys(io.sockets.connected).forEach(function (socketId) {
-		io.to(socketId).emit('enemyData', enemies);
+		io.to(socketId).emit('update', enemies, playersArr);
 	});
 }, 20);
 

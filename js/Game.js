@@ -44,6 +44,7 @@ class Game extends Phaser.Scene {
 		AnimationCreator.createEnemies(this, "white cat");
 		AnimationCreator.createEnemies(this, "black cat");
 		this.someNpc = this.physics.add.sprite(416, 520, 'npc');
+		this.connectedPlayersText = this.add.text(55, 55, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
 	};
 	update() {
 		Object.keys(this.players).forEach(id => {
@@ -56,6 +57,18 @@ class Game extends Phaser.Scene {
 			enemy.update();
 		});
 	}
+	addPlayer(id, x, y, randomClass) {
+		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: randomClass });
+		this.map[id] = this.players[id].playerSprite;
+		this.mapClass.setColliders(this.players[id].playerSprite);
+	}
+	addEnemies(data) {
+		for (var i = 0; i < data.length; i++) {
+			var newEnemy = new Enemy({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class });
+			this.mapClass.setColliders(newEnemy);
+			this.enemies.push(newEnemy);
+		}
+	}
 	addMainPlayer(id, x, y, randomClass) {
 		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: randomClass });
 		this.mainPlayer = this.players[id];
@@ -64,17 +77,24 @@ class Game extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
 	}
-	addPlayer(id, x, y, randomClass) {
-		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: randomClass });
-		this.map[id] = this.players[id].playerSprite;
-		this.mapClass.setColliders(this.players[id].playerSprite);
+	processUpdate(enemies, players) {
+		for (var i = 0; i < this.enemies.length; i++) {
+			this.enemies[i].playerSprite.x = enemies[i].x;
+			this.enemies[i].playerSprite.y = enemies[i].y;
+			this.enemies[i].direction = enemies[i].direction;
+			this.enemies[i].playerSprite.speed = enemies[i].speed;
+		}
+		for (var i = 0; i < players.length; i++) {
+			this.movePlayer(players[i].id, players[i].x, players[i].y);
+		}
+		this.connectedPlayersText.setText('Connected players: ' + players.length);
 	}
 	movePlayer(id, x, y) {
 		var player = this.players[id];
 		if (player != undefined) {
-			player.newX = x;
-			player.newY = y;
 			if (player instanceof OtherPlayer) {
+				player.newX = x;
+				player.newY = y;
 				player.playerSprite.x = x;
 				player.playerSprite.y = y;
 			}
@@ -90,21 +110,8 @@ class Game extends Phaser.Scene {
 	removePlayer(id) {
 		this.map[id].destroy();
 		delete this.map[id];
+		this.players[id].nameText.destroy();
+		this.players[id].healthBar.destroy();
 		delete this.players[id];
-	}
-	addEnemies(data) {
-		for (var i = 0; i < data.length; i++) {
-			var newEnemy = new Enemy({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class });
-			this.mapClass.setColliders(newEnemy);
-			this.enemies.push(newEnemy);
-		}
-	}
-	processEnemyData(data) {
-		for (var i = 0; i < this.enemies.length; i++) {
-			this.enemies[i].playerSprite.x = data[i].x;
-			this.enemies[i].playerSprite.y = data[i].y;
-			this.enemies[i].direction = data[i].direction;
-			this.enemies[i].playerSprite.speed = data[i].speed;
-		}
 	}
 }
