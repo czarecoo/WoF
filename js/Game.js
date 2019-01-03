@@ -7,8 +7,8 @@ class Game extends Phaser.Scene {
 	}
 	preload() {
 		this.load.tilemapTiledJSON('map', 'assets/map/example_map.json');
-		this.load.image('tileset', 'assets/map/tilesheet.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.image('dungeonset', 'assets/map/dungeon.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.image('tileset', 'assets/map/tilesheet.png');
+		this.load.image('dungeonset', 'assets/map/dungeon.png');
 		this.load.spritesheet('warrior', 'assets/player/warrior.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('mage', 'assets/player/mage.png', { frameWidth: 32, frameHeight: 36 });
 		this.load.spritesheet('ranger', 'assets/player/ranger.png', { frameWidth: 32, frameHeight: 36 });

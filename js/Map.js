@@ -1,7 +1,9 @@
 class Map {
 	constructor(scene) {
 		this.scene = scene;
-		this.scene.map = this.scene.make.tilemap({ key: "map" });
+		this.scene.map = this.scene.make.tilemap({
+			key: "map", tileWidth: 32, tileHeight: 32
+		});
 		this.scene.physics.world.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels, true, true, true, true);
 		const tileset = this.scene.map.addTilesetImage("tilesheet", "tileset");
 		const dungeon = this.scene.map.addTilesetImage("dungeon", "dungeonset");
