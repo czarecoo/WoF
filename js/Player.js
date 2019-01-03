@@ -10,33 +10,24 @@ class Player {
 		this.playerSprite.diagonalSpeedModifier = 0.6;
 		this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
-		this.btnLeft = this.scene.add.sprite(100, 100, 'leftArrow')
+		this.btnLeft = this.scene.add.sprite(50, 500, 'leftArrow').setScrollFactor(0)
 			.setInteractive()
 			.on('pointerdown', () => this.goingLeft = true)
 			.on('pointerup', () => this.goingLeft = false);
-		this.btnTop = this.scene.add.sprite(100, 100, 'upArrow')
+		this.btnTop = this.scene.add.sprite(100, 450, 'upArrow').setScrollFactor(0)
 			.setInteractive()
 			.on('pointerdown', () => this.goingTop = true)
 			.on('pointerup', () => this.goingTop = false);
-		this.btnRight = this.scene.add.sprite(100, 100, 'rightArrow')
+		this.btnRight = this.scene.add.sprite(150, 500, 'rightArrow').setScrollFactor(0)
 			.setInteractive()
 			.on('pointerdown', () => this.goingRight = true)
 			.on('pointerup', () => this.goingRight = false);
-		this.btnDown = this.scene.add.sprite(100, 100, 'downArrow')
+		this.btnDown = this.scene.add.sprite(100, 550, 'downArrow').setScrollFactor(0)
 			.setInteractive()
 			.on('pointerdown', () => this.goingDown = true)
 			.on('pointerup', () => this.goingDown = false);
 	};
 	update() {
-		this.btnLeft.x = this.scene.cameras.main.scrollX + 50;
-		this.btnLeft.y = this.scene.cameras.main.scrollY + 500;
-		this.btnTop.x = this.scene.cameras.main.scrollX + 100;
-		this.btnTop.y = this.scene.cameras.main.scrollY + 450;
-		this.btnRight.x = this.scene.cameras.main.scrollX + 150
-		this.btnRight.y = this.scene.cameras.main.scrollY + 500;
-		this.btnDown.x = this.scene.cameras.main.scrollX + 100;
-		this.btnDown.y = this.scene.cameras.main.scrollY + 550;
-
 		this.nameText.x = this.playerSprite.x;
 		this.nameText.y = this.playerSprite.y - 40;
 		this.healthBar.x = this.playerSprite.x - this.playerSprite.displayWidth / 2;
