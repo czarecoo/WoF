@@ -114,7 +114,7 @@ io.on('connection', function (socket) {
 				}
 				else if (isTeleportingToTown(data.x, data.y)) {
 					socket.player.x = 19.5 * Map.tileWidth;
-					socket.player.y = 3 * Map.tileHeight;
+					socket.player.y = 4 * Map.tileHeight;
 					io.emit('forceMovePlayer', socket.player);
 				} else {
 					socket.player.x = data.x;
@@ -177,7 +177,7 @@ function canWalkThere(x, y) {
 	return Map.isWalkable(Math.floor(x / Map.tileWidth), Math.floor(y / Map.tileHeight));
 }
 function isTeleportingToDung(x, y) {
-	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 2;
+	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 3;
 }
 function isTeleportingToTown(x, y) {
 	return Math.floor(x / Map.tileWidth) == 79 && Math.floor(y / Map.tileHeight) == 31;
