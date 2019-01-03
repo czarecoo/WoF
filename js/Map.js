@@ -6,8 +6,8 @@ class Map {
 		});
 		this.scene.map.setBaseTileSize(32, 32);
 		this.scene.physics.world.setBounds(0, 0, this.scene.map.widthInPixels, this.scene.map.heightInPixels, true, true, true, true);
-		const tileset = this.scene.map.addTilesetImage("tilesheet", "tileset");
-		const dungeon = this.scene.map.addTilesetImage("dungeon", "dungeonset");
+		const tileset = this.scene.map.addTilesetImage("tilesheet", "tilesetE", 32, 32, 1, 2);
+		const dungeon = this.scene.map.addTilesetImage("dungeon", "dungeonsetE", 32, 32, 1, 2);
 		this.sandLayer = this.scene.map.createStaticLayer("sand", tileset, 0, 0).setCollisionByProperty({ collides: true });
 		this.dungeon0 = this.scene.map.createStaticLayer("dungeon0", dungeon, 0, 0).setCollisionByProperty({ collides: true });
 		this.dungeon1 = this.scene.map.createStaticLayer("dungeon1", dungeon, 0, 0).setCollisionByProperty({ collides: true });
