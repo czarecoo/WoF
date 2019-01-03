@@ -88,58 +88,51 @@ var enemies = [
 	},
 ];
 
+var players = {};
+
 io.on('connection', function (socket) {
 	socket.on('init', function (chosenClass) {
 		console.log("Player with socketid: " + socket.id + " connected.")
 		socket.emit('addPlayers', getAllPlayers());
-		socket.player = {
-			id: server.lastPlayderID++,
-			//x: randomInt(600, 900),
-			//y: randomInt(900, 1000),
+		socket.playerID = server.lastPlayderID++;
+		var player = {
+			id: socket.playerID,
 			x: randomInt(18 * Map.tileWidth, 24 * Map.tileWidth),
 			y: 30 * Map.tileHeight,
 			class: chosenClass,
 		};
+		players[socket.playerID] = player;
 		socket.emit('addEnemies', enemies);
-		socket.emit('addMainPlayer', socket.player);
-
-		socket.broadcast.emit('addPlayer', socket.player);
+		socket.emit('addMainPlayer', players[socket.playerID]);
+		socket.broadcast.emit('addPlayer', players[socket.playerID]);
 
 		socket.on('move', function (data) {
-			if (socket.player != undefined) {
+			if (socket.playerID != undefined) {
 				if (isTeleportingToDung(data.x, data.y)) {
-					socket.player.x = 79.5 * Map.tileWidth;
-					socket.player.y = 30 * Map.tileHeight;
-					io.emit('forceMovePlayer', socket.player);
+					players[socket.playerID].x = 79.5 * Map.tileWidth;
+					players[socket.playerID].y = 30 * Map.tileHeight;
+					io.emit('forceMovePlayer', players[socket.playerID]);
 				}
 				else if (isTeleportingToTown(data.x, data.y)) {
-					socket.player.x = 19.5 * Map.tileWidth;
-					socket.player.y = 4 * Map.tileHeight;
-					io.emit('forceMovePlayer', socket.player);
+					players[socket.playerID].x = 19.5 * Map.tileWidth;
+					players[socket.playerID].y = 4 * Map.tileHeight;
+					io.emit('forceMovePlayer', players[socket.playerID]);
 				} else {
-					socket.player.x = data.x;
-					socket.player.y = data.y;
-					io.emit('movePlayer', socket.player);
+					players[socket.playerID].x = data.x;
+					players[socket.playerID].y = data.y;
+					io.emit('movePlayer', players[socket.playerID]);
 				}
 			}
 		});
 
 		socket.on('disconnect', function () {
 			console.log("Player with socketid: " + socket.id + " disconnected.");
-			if (socket.player != undefined) {
-				io.emit('removePlayer', socket.player.id);
+			if (socket.playerID != undefined) {
+				io.emit('removePlayer', socket.playerID);
 			}
 		});
 	});
 });
-function getAllPlayers() {
-	var players = [];
-	Object.keys(io.sockets.connected).forEach(function (socketID) {
-		var player = io.sockets.connected[socketID].player;
-		if (player) players.push(player);
-	});
-	return players;
-}
 
 function randomInt(low, high) {
 	return Math.floor(Math.random() * (high - low) + low);
@@ -148,7 +141,7 @@ function randomInt(low, high) {
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
-	//console.log(util.inspect(enemies, false, 3));
+	console.log(util.inspect(players, false, 3));
 	enemies.forEach(function (enemy) {
 		enemy.direction = randomInt(0, 4);
 	});
@@ -181,4 +174,12 @@ function isTeleportingToDung(x, y) {
 }
 function isTeleportingToTown(x, y) {
 	return Math.floor(x / Map.tileWidth) == 79 && Math.floor(y / Map.tileHeight) == 31;
+}
+function getAllPlayers() {
+	var playersArr = [];
+	Object.keys(players).forEach(function (socketID) {
+		var player = players[socketID];
+		if (player) playersArr.push(player);
+	});
+	return playersArr;
 }
