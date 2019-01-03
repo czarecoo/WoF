@@ -22,10 +22,7 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('white cat', 'assets/enemy/wcat.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.image('npc', 'assets/player/otherPlayer.png');
-		this.load.image('leftArrow', 'assets/ui/leftArrow.png');
-		this.load.image('upArrow', 'assets/ui/upArrow.png');
-		this.load.image('rightArrow', 'assets/ui/rightArrow.png');
-		this.load.image('downArrow', 'assets/ui/downArrow.png');
+		this.load.plugin('rexvirtualjoystickplugin', 'js/rexvirtualjoystickplugin.min.js', true);
 	};
 
 	create() {
@@ -45,7 +42,48 @@ class Game extends Phaser.Scene {
 		AnimationCreator.createEnemies(this, "black cat");
 		this.someNpc = this.physics.add.sprite(416, 520, 'npc');
 		this.connectedPlayersText = this.add.text(55, 55, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
+		this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
+			x: 120,
+			y: 480,
+			radius: 80,
+			base: this.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
+			thumb: this.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),
+			// dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
+			forceMin: 15,
+			// enable: true
+		}).on('update', this.handleJoy, this);
 	};
+	handleJoy() {
+		this.mainPlayer.playerSprite.Speed = this.mainPlayer.playerSprite.MaxSpeed * this.joyStick.force / 100;
+		if (this.mainPlayer.playerSprite.Speed < 0) {
+			this.mainPlayer.playerSprite.Speed = 0;
+		}
+		if (this.mainPlayer.playerSprite.Speed > this.mainPlayer.playerSprite.MaxSpeed) {
+			this.mainPlayer.playerSprite.Speed = this.mainPlayer.playerSprite.MaxSpeed;
+		}
+
+		var cursorKeys = this.joyStick.createCursorKeys();
+		if (cursorKeys["down"].isDown) {
+			this.mainPlayer.goingDown = true;
+		} else {
+			this.mainPlayer.goingDown = false;
+		}
+		if (cursorKeys["left"].isDown) {
+			this.mainPlayer.goingLeft = true;
+		} else {
+			this.mainPlayer.goingLeft = false;
+		}
+		if (cursorKeys["right"].isDown) {
+			this.mainPlayer.goingRight = true;
+		} else {
+			this.mainPlayer.goingRight = false;
+		}
+		if (cursorKeys["up"].isDown) {
+			this.mainPlayer.goingUp = true;
+		} else {
+			this.mainPlayer.goingUp = false;
+		}
+	}
 	update() {
 		Object.keys(this.players).forEach(id => {
 			this.players[id].update();
@@ -76,6 +114,7 @@ class Game extends Phaser.Scene {
 		this.mapClass.setColliders(this.players[id].playerSprite);
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
+		this.cameras.main.roundPixels = true;
 	}
 	processUpdate(enemies, players) {
 		for (var i = 0; i < this.enemies.length; i++) {
