@@ -29,4 +29,8 @@ class AnimationCreator {
 		scene.anims.create({ key: className + 'idleLeft', frames: [{ key: className, frame: 6 }], frameRate: 0 });
 		scene.anims.create({ key: className + 'idleUp', frames: [{ key: className, frame: 18 }], frameRate: 0 });
 	}
+	static createDragon(scene, className) {
+		scene.anims.create({ key: className + 'moving', frames: scene.anims.generateFrameNumbers(className, { start: 0, end: 2 }), frameRate: 3, yoyo: false, repeat: -1 });
+		scene.anims.create({ key: className + 'idle', frames: [{ key: className, frame: 1 }], frameRate: 0 });
+	}
 }

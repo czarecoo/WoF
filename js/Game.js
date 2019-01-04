@@ -15,6 +15,7 @@ class Game extends Phaser.Scene {
 		this.load.image('greenBar', 'assets/ui/greenBar.png');
 		this.load.image('redBar', 'assets/ui/redBar.png');
 		this.load.image('grayBar', 'assets/ui/grayBar.png');
+		this.load.image('redBossBar', 'assets/ui/redBossBar.png');
 		this.load.spritesheet('brainy', 'assets/enemy/brainy.png', { frameWidth: 32, frameHeight: 64 });
 		this.load.spritesheet('skeleton', 'assets/enemy/skeleton.png', { frameWidth: 32, frameHeight: 64 });
 		this.load.spritesheet('spider', 'assets/enemy/spider.png', { frameWidth: 32, frameHeight: 32 });
@@ -24,6 +25,9 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.image('npc', 'assets/player/otherPlayer.png');
 		this.load.plugin('rexvirtualjoystickplugin', 'js/rexvirtualjoystickplugin.min.js', true);
+		this.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
+
+		this.load.image('fireball', 'assets/spells/fireball.png');
 	};
 
 	create() {
@@ -43,6 +47,13 @@ class Game extends Phaser.Scene {
 		AnimationCreator.createEnemies(this, "black cat");
 		this.someNpc = this.physics.add.sprite(416, 520, 'npc');
 		this.connectedPlayersText = this.add.text(55, 55, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
+		AnimationCreator.createDragon(this, "dragon");
+		this.projectilles = [];
+
+		for (var i = 0; i < 4; i++) {
+			this.projectilles.push(this.physics.add.sprite(0, 0, 'fireball'));
+		}
+
 	};
 	update() {
 		Object.keys(this.players).forEach(id => {
@@ -62,7 +73,12 @@ class Game extends Phaser.Scene {
 	}
 	addEnemies(data) {
 		for (var i = 0; i < data.length; i++) {
-			var newEnemy = new Enemy({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class, aggresive: data[i].aggresive });
+			var newEnemy;
+			if (data[i].isBoss) {
+				newEnemy = new Boss({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class });
+			} else {
+				newEnemy = new Enemy({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class, aggresive: data[i].aggresive });
+			}
 			this.mapClass.setColliders(newEnemy);
 			this.enemies.push(newEnemy);
 		}
@@ -75,7 +91,7 @@ class Game extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
 	}
-	processUpdate(enemies, players) {
+	processUpdate(enemies, players, projectilles) {
 		for (var i = 0; i < this.enemies.length; i++) {
 			this.enemies[i].playerSprite.x = enemies[i].x;
 			this.enemies[i].playerSprite.y = enemies[i].y;
@@ -84,6 +100,12 @@ class Game extends Phaser.Scene {
 		}
 		for (var i = 0; i < players.length; i++) {
 			this.movePlayer(players[i].id, players[i].x, players[i].y);
+		}
+
+		for (var i = 0; i < projectilles.length; i++) {
+			this.projectilles[i].x = projectilles[i].x;
+			this.projectilles[i].y = projectilles[i].y;
+			this.projectilles[i].rotation = projectilles[i].rotation;
 		}
 		this.connectedPlayersText.setText('Connected players: ' + players.length);
 	}

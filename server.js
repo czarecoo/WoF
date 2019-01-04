@@ -16,6 +16,7 @@ app.get('/', function (req, res) {
 
 server.lastPlayerID = 0;
 server.lastEnemyID = 0;
+server.lastProjectilleID = 0;
 
 server.listen(process.env.PORT || port, function () {
 	console.log('Listening on ' + server.address().port);
@@ -29,7 +30,8 @@ var enemies = [
 		class: 'brainy',
 		direction: 4,
 		speed: 2,
-		aggresive: true
+		aggresive: true,
+		isBoss: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -38,7 +40,8 @@ var enemies = [
 		class: 'skeleton',
 		direction: 4,
 		speed: 1,
-		aggresive: true
+		aggresive: true,
+		isBoss: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -47,7 +50,8 @@ var enemies = [
 		class: 'skeleton',
 		direction: 4,
 		speed: 1,
-		aggresive: true
+		aggresive: true,
+		isBoss: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -56,7 +60,8 @@ var enemies = [
 		class: 'zombie',
 		direction: 4,
 		speed: 0.8,
-		aggresive: true
+		aggresive: true,
+		isBoss: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -65,7 +70,8 @@ var enemies = [
 		class: 'white cat',
 		direction: 4,
 		speed: 1.5,
-		aggresive: false
+		aggresive: false,
+		isBoss: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -74,7 +80,8 @@ var enemies = [
 		class: 'dog',
 		direction: 4,
 		speed: 1.1,
-		aggresive: false
+		aggresive: false,
+		isBoss: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -83,11 +90,23 @@ var enemies = [
 		class: 'black cat',
 		direction: 4,
 		speed: 1.5,
-		aggresive: false
+		aggresive: false,
+		isBoss: false
+	},
+	{
+		id: server.lastEnemyID++,
+		x: 145 * Map.tileWidth,
+		y: 16 * Map.tileHeight,
+		class: 'dragon',
+		direction: 4,
+		speed: 0,
+		aggresive: true,
+		isBoss: true
 	},
 ];
 
 var players = {};
+var projectilles = [];
 
 io.on('connection', function (socket) {
 	socket.on('init', function (chosenClass) {
@@ -96,8 +115,10 @@ io.on('connection', function (socket) {
 		socket.playerID = server.lastPlayerID++;
 		var player = {
 			id: socket.playerID,
-			x: randomInt(18 * Map.tileWidth, 24 * Map.tileWidth),
-			y: 30 * Map.tileHeight,
+			//x: randomInt(18 * Map.tileWidth, 24 * Map.tileWidth),
+			//y: 30 * Map.tileHeight,
+			x: 140 * Map.tileWidth,
+			y: 16 * Map.tileHeight,
 			class: chosenClass,
 		};
 		players[socket.playerID] = player;
@@ -145,6 +166,48 @@ function randomInt(low, high) {
 	return Math.floor(Math.random() * (high - low) + low);
 }
 
+setInterval(function () {
+	for (i = 0; i < projectilles.length; i++) {
+		projectilles.splice(i, 1);
+		i--;
+	}
+	var rand = randomInt(0, 360);
+	projectilles.push(
+		{
+			id: server.lastProjectilleID++,
+			x: 145 * Map.tileWidth,
+			y: 16 * Map.tileHeight,
+			class: 'fireball',
+			rotation: (0 + rand) * Math.PI / 180,
+			speed: 2,
+		},
+		{
+			id: server.lastProjectilleID++,
+			x: 145 * Map.tileWidth,
+			y: 16 * Map.tileHeight,
+			class: 'fireball',
+			rotation: (90 + rand) * Math.PI / 180,
+			speed: 2,
+		},
+		{
+			id: server.lastProjectilleID++,
+			x: 145 * Map.tileWidth,
+			y: 16 * Map.tileHeight,
+			class: 'fireball',
+			rotation: (180 + rand) * Math.PI / 180,
+			speed: 2,
+		},
+		{
+			id: server.lastProjectilleID++,
+			x: 145 * Map.tileWidth,
+			y: 16 * Map.tileHeight,
+			class: 'fireball',
+			rotation: (270 + rand) * Math.PI / 180,
+			speed: 2,
+		});
+
+}, 3000);
+
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
@@ -154,6 +217,11 @@ setInterval(function () {
 	});
 }, 1000);
 setInterval(function () {
+	projectilles.forEach(function (projectille) {
+		projectille.x += projectille.speed * Math.cos(projectille.rotation);
+		projectille.y += projectille.speed * Math.sin(projectille.rotation);
+	});
+
 	enemies.forEach(function (enemy) {
 		if (enemy.direction == 0 && canWalkThere(enemy.x - enemy.speed - 16, enemy.y)) {//left
 			enemy.x -= enemy.speed;
@@ -170,7 +238,7 @@ setInterval(function () {
 	});
 	var playersArr = getAllPlayers();
 	Object.keys(io.sockets.connected).forEach(function (socketId) {
-		io.to(socketId).emit('update', enemies, playersArr);
+		io.to(socketId).emit('update', enemies, playersArr, projectilles);
 	});
 }, 20);
 
