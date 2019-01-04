@@ -28,7 +28,8 @@ var enemies = [
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'brainy',
 		direction: 4,
-		speed: 2
+		speed: 2,
+		aggresive: true
 	},
 	{
 		id: server.lastEnemyID++,
@@ -36,7 +37,8 @@ var enemies = [
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
-		speed: 1
+		speed: 1,
+		aggresive: true
 	},
 	{
 		id: server.lastEnemyID++,
@@ -44,7 +46,8 @@ var enemies = [
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
-		speed: 1
+		speed: 1,
+		aggresive: true
 	},
 	{
 		id: server.lastEnemyID++,
@@ -52,15 +55,17 @@ var enemies = [
 		y: 23 * Map.tileHeight,
 		class: 'zombie',
 		direction: 4,
-		speed: 0.8
+		speed: 0.8,
+		aggresive: true
 	},
 	{
 		id: server.lastEnemyID++,
 		x: 6 * Map.tileWidth,
 		y: 28 * Map.tileHeight,
-		class: 'spider',
+		class: 'white cat',
 		direction: 4,
-		speed: 0.5
+		speed: 1.5,
+		aggresive: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -68,15 +73,8 @@ var enemies = [
 		y: 17 * Map.tileHeight,
 		class: 'dog',
 		direction: 4,
-		speed: 1.1
-	},
-	{
-		id: server.lastEnemyID++,
-		x: 28 * Map.tileWidth,
-		y: 13 * Map.tileHeight,
-		class: 'white cat',
-		direction: 4,
-		speed: 1.5
+		speed: 1.1,
+		aggresive: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -84,7 +82,8 @@ var enemies = [
 		y: 16 * Map.tileHeight,
 		class: 'black cat',
 		direction: 4,
-		speed: 1.5
+		speed: 1.5,
+		aggresive: false
 	},
 ];
 

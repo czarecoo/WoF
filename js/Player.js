@@ -9,7 +9,7 @@ class Player {
 		this.playerSprite.MaxSpeed = 300;
 		this.playerSprite.Speed = 300;
 		this.playerSprite.diagonalSpeedModifier = 0.6;
-		this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
+		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
 		this.joyStick = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
 			x: 120,
