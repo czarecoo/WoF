@@ -120,6 +120,8 @@ io.on('connection', function (socket) {
 			x: 140 * Map.tileWidth,
 			y: 16 * Map.tileHeight,
 			class: chosenClass,
+			maxHp: 100,
+			hp: 100,
 		};
 		players[socket.playerID] = player;
 		socket.emit('addEnemies', enemies);
@@ -204,6 +206,14 @@ setInterval(function () {
 			class: 'fireball',
 			rotation: (270 + rand) * Math.PI / 180,
 			speed: 2,
+		},
+		{
+			id: server.lastProjectilleID++,
+			x: 145 * Map.tileWidth,
+			y: 16 * Map.tileHeight,
+			class: 'fireball',
+			rotation: (315 + rand) * Math.PI / 180,
+			speed: 2,
 		});
 
 }, 3000);
@@ -211,16 +221,26 @@ setInterval(function () {
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
-	//console.log(util.inspect(players, false, 3));
+	//console.log(util.inspect(projectilles, false, 3));
 	enemies.forEach(function (enemy) {
 		enemy.direction = randomInt(0, 4);
 	});
 }, 1000);
 setInterval(function () {
-	projectilles.forEach(function (projectille) {
+	for (var i = 0; i < projectilles.length; i++) {
+		var projectille = projectilles[i];
 		projectille.x += projectille.speed * Math.cos(projectille.rotation);
 		projectille.y += projectille.speed * Math.sin(projectille.rotation);
-	});
+		let id;
+		for (id in players) {
+			if (areColliding(players[id], projectille, 20)) {
+				players[id].hp -= 20;
+				projectilles.splice(i, 1);
+				i--;
+				break;
+			}
+		}
+	}
 
 	enemies.forEach(function (enemy) {
 		if (enemy.direction == 0 && canWalkThere(enemy.x - enemy.speed - 16, enemy.y)) {//left
@@ -264,4 +284,7 @@ function getAllPlayers() {
 		if (player) playersArr.push(player);
 	});
 	return playersArr;
+}
+function areColliding(a, b, size) {
+	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }

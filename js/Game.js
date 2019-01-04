@@ -49,11 +49,6 @@ class Game extends Phaser.Scene {
 		this.connectedPlayersText = this.add.text(55, 55, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
-
-		for (var i = 0; i < 4; i++) {
-			this.projectilles.push(this.physics.add.sprite(0, 0, 'fireball'));
-		}
-
 	};
 	update() {
 		Object.keys(this.players).forEach(id => {
@@ -99,24 +94,32 @@ class Game extends Phaser.Scene {
 			this.enemies[i].playerSprite.speed = enemies[i].speed;
 		}
 		for (var i = 0; i < players.length; i++) {
-			this.movePlayer(players[i].id, players[i].x, players[i].y);
+			this.updatePlayer(players[i]);
+		}
+		for (var i = 0; i < this.projectilles.length; i++) {
+			this.projectilles[i].destroy();
+			this.projectilles.splice(i, 1);
+			i--;
 		}
 
 		for (var i = 0; i < projectilles.length; i++) {
+			this.projectilles.push(this.physics.add.sprite(0, 0, 'fireball'));
 			this.projectilles[i].x = projectilles[i].x;
 			this.projectilles[i].y = projectilles[i].y;
 			this.projectilles[i].rotation = projectilles[i].rotation;
 		}
 		this.connectedPlayersText.setText('Connected players: ' + players.length);
 	}
-	movePlayer(id, x, y) {
-		var player = this.players[id];
+	updatePlayer(playerData) {
+		var player = this.players[playerData.id];
 		if (player != undefined) {
+			player.maxHp = playerData.maxHp;
+			player.hp = playerData.hp;
 			if (player instanceof OtherPlayer) {
-				player.newX = x;
-				player.newY = y;
-				player.playerSprite.x = x;
-				player.playerSprite.y = y;
+				player.newX = playerData.x;
+				player.newY = playerData.y;
+				player.playerSprite.x = playerData.x;
+				player.playerSprite.y = playerData.y;
 			}
 		}
 	}
