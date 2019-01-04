@@ -13,6 +13,7 @@ class OtherPlayer {
 		this.nameText.y = this.playerSprite.y - 40;
 		this.healthBar.x = this.playerSprite.x - this.playerSprite.displayWidth / 2;
 		this.healthBar.y = this.playerSprite.y - 27;
+		this.healthBar.displayWidth = this.healthBar.width * this.hp / this.maxHp;
 		if (this.newX > this.lastX && this.newY > this.lastY) { //right down
 			this.playerSprite.anims.play(this.animationKey + 'walkDown', true);
 			this.playerSprite.lastDir = 2;

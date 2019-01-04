@@ -31,4 +31,8 @@ class Client {
 	move(x, y) {
 		this.socket.emit('move', { x: x, y: y });
 	};
+	disconnect() {
+		this.socket.emit('disconnect');
+		this.socket.close();
+	}
 }

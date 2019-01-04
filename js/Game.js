@@ -92,6 +92,7 @@ class Game extends Phaser.Scene {
 	}
 	processUpdate(enemies, players, projectilles) {
 		if (this.mainPlayer != undefined && this.mainPlayer.hp <= 0) {
+			this.gameOver();
 			return;
 		}
 		for (var i = 0; i < this.enemies.length; i++) {
@@ -146,6 +147,7 @@ class Game extends Phaser.Scene {
 	}
 
 	gameOver() {
+		this.client.disconnect();
 		this.cameras.main.shake(500);
 
 		this.time.delayedCall(250, function () {
