@@ -51,6 +51,10 @@ class Game extends Phaser.Scene {
 		this.projectilles = [];
 	};
 	update() {
+		if (this.mainPlayer != undefined && this.mainPlayer.hp <= 0) {
+			this.gameOver();
+			return;
+		}
 		Object.keys(this.players).forEach(id => {
 			this.players[id].update();
 			if (this.players[id] instanceof Player) {
@@ -87,6 +91,9 @@ class Game extends Phaser.Scene {
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
 	}
 	processUpdate(enemies, players, projectilles) {
+		if (this.mainPlayer != undefined && this.mainPlayer.hp <= 0) {
+			return;
+		}
 		for (var i = 0; i < this.enemies.length; i++) {
 			this.enemies[i].playerSprite.x = enemies[i].x;
 			this.enemies[i].playerSprite.y = enemies[i].y;
@@ -137,4 +144,17 @@ class Game extends Phaser.Scene {
 		this.players[id].healthBar.destroy();
 		delete this.players[id];
 	}
+
+	gameOver() {
+		this.cameras.main.shake(500);
+
+		this.time.delayedCall(250, function () {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		this.time.delayedCall(500, function () {
+			this.scene.start('GameOverScene');
+		}, [], this);
+
+	};
 }

@@ -11,7 +11,7 @@ window.onload = function () {
 			arcade: { gravity: 0 }
 		},
 		scene: [
-			BootScene, Game
+			BootScene, Game, GameOverScene
 		]
 	};
 

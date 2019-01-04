@@ -10,7 +10,7 @@ class BootScene extends Phaser.Scene {
 
 	create() {
 		var width = this.game.canvas.width;
-		this.add.text(width * 1 / 2, 40, 'Choose your class', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
+		this.add.text(width * 1 / 2, 40, 'Choose your class', { font: '40px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
 		this.input.keyboard.once('keyup_ONE', function () {
 			this.scene.start('Game', { class: 'warrior' });
 		}, this);
