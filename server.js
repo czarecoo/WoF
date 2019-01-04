@@ -24,7 +24,7 @@ server.listen(process.env.PORT || port, function () {
 var enemies = [
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(78 * Map.tileWidth, 80 * Map.tileWidth),
+		x: randomInt(93 * Map.tileWidth, 95 * Map.tileWidth),
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'brainy',
 		direction: 4,
@@ -33,7 +33,7 @@ var enemies = [
 	},
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(78 * Map.tileWidth, 80 * Map.tileWidth),
+		x: randomInt(93 * Map.tileWidth, 95 * Map.tileWidth),
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
@@ -42,7 +42,7 @@ var enemies = [
 	},
 	{
 		id: server.lastEnemyID++,
-		x: randomInt(78 * Map.tileWidth, 80 * Map.tileWidth),
+		x: randomInt(93 * Map.tileWidth, 95 * Map.tileWidth),
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
@@ -51,7 +51,7 @@ var enemies = [
 	},
 	{
 		id: server.lastEnemyID++,
-		x: 71 * Map.tileWidth,
+		x: 86 * Map.tileWidth,
 		y: 23 * Map.tileHeight,
 		class: 'zombie',
 		direction: 4,
@@ -108,15 +108,23 @@ io.on('connection', function (socket) {
 		socket.on('move', function (data) {
 			if (socket.playerID != undefined) {
 				if (isTeleportingToDung(data.x, data.y)) {
-					players[socket.playerID].x = 79.5 * Map.tileWidth;
+					players[socket.playerID].x = 94.5 * Map.tileWidth;
 					players[socket.playerID].y = 30 * Map.tileHeight;
 					io.emit('forceMovePlayer', players[socket.playerID]);
-				}
-				else if (isTeleportingToTown(data.x, data.y)) {
+				} else if (isTeleportingToTown(data.x, data.y)) {
 					players[socket.playerID].x = 19.5 * Map.tileWidth;
 					players[socket.playerID].y = 3 * Map.tileHeight;
 					io.emit('forceMovePlayer', players[socket.playerID]);
-				} else {
+				} else if (isTeleportingToDungLadder(data.x, data.y)) {
+					players[socket.playerID].x = 86.5 * Map.tileWidth;
+					players[socket.playerID].y = 24 * Map.tileHeight;
+					io.emit('forceMovePlayer', players[socket.playerID]);
+				} else if (isTeleportingToBossRoom(data.x, data.y)) {
+					players[socket.playerID].x = 136.5 * Map.tileWidth;
+					players[socket.playerID].y = 8 * Map.tileHeight;
+					io.emit('forceMovePlayer', players[socket.playerID]);
+				}
+				else {
 					players[socket.playerID].x = data.x;
 					players[socket.playerID].y = data.y;
 				}
@@ -173,7 +181,13 @@ function isTeleportingToDung(x, y) {
 	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 2;
 }
 function isTeleportingToTown(x, y) {
-	return Math.floor(x / Map.tileWidth) == 79 && Math.floor(y / Map.tileHeight) == 31;
+	return Math.floor(x / Map.tileWidth) == 94 && Math.floor(y / Map.tileHeight) == 31;
+}
+function isTeleportingToDungLadder(x, y) {
+	return Math.floor(x / Map.tileWidth) == 136 && Math.floor(y / Map.tileHeight) == 7;
+}
+function isTeleportingToBossRoom(x, y) {
+	return Math.floor(x / Map.tileWidth) == 86 && Math.floor(y / Map.tileHeight) == 25;
 }
 function getAllPlayers() {
 	var playersArr = [];

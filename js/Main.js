@@ -2,9 +2,9 @@ var config;
 var game;
 window.onload = function () {
 	config = {
-		type: Phaser.WEBGL,
-		width: 800,
-		height: 600,
+		type: Phaser.AUTO,
+		width: 960,
+		height: 540,
 		backgroundColor: '#FFFFFF',
 		physics: {
 			default: 'arcade',

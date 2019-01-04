@@ -12,8 +12,8 @@ class Player {
 		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
 		this.joyStick = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
-			x: 120,
-			y: 480,
+			x: 140,
+			y: 420,
 			radius: 80,
 			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
 			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),

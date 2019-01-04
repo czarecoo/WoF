@@ -9,7 +9,8 @@ class BootScene extends Phaser.Scene {
 	};
 
 	create() {
-		this.add.text(10, 10, 'Press 1, 2, 3 or click to choose your class', { font: '20px Arial', fill: '#000000' });
+		var width = this.game.canvas.width;
+		this.add.text(width * 1 / 2, 40, 'Choose your class', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
 		this.input.keyboard.once('keyup_ONE', function () {
 			this.scene.start('Game', { class: 'warrior' });
 		}, this);
@@ -19,12 +20,12 @@ class BootScene extends Phaser.Scene {
 		this.input.keyboard.once('keyup_THREE', function () {
 			this.scene.start('Game', { class: 'ranger' });
 		}, this);
-		this.add.text(200, 200, 'Warrior', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
-		this.add.text(400, 200, 'Mage', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
-		this.add.text(600, 200, 'Ranger', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
-		var warriorImg = this.add.image(200, 400, 'warriorArt').setInteractive();
-		var mageImg = this.add.image(400, 400, 'mageArt').setInteractive();
-		var rangerImg = this.add.image(600, 400, 'rangerArt').setInteractive();
+		this.add.text(width * 1 / 3, 100, 'Warrior', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
+		this.add.text(width * 1 / 2, 100, 'Mage', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
+		this.add.text(width * 2 / 3, 100, 'Ranger', { font: '20px Arial', fill: '#000000' }).setOrigin(0.5, 0.5);
+		var warriorImg = this.add.image(width * 1 / 3, 300, 'warriorArt').setInteractive();
+		var mageImg = this.add.image(width * 1 / 2, 300, 'mageArt').setInteractive();
+		var rangerImg = this.add.image(width * 2 / 3, 300, 'rangerArt').setInteractive();
 		warriorImg.on('pointerdown', function (pointer) {
 			this.scene.start('Game', { class: 'warrior' });
 		}, this);
@@ -37,6 +38,5 @@ class BootScene extends Phaser.Scene {
 	};
 
 	update() {
-
 	}
 }
