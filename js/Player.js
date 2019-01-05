@@ -26,7 +26,7 @@ class Player {
 	};
 	update() {
 		//console.log(this.scene.input.manager.pointers)
-		var pointer = this.scene.input.manager.pointers[0];
+		var pointer = this.scene.input.manager.pointers[1];
 		if (pointer.isDown && this.joyStick.pointer == undefined) {
 			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 				pointer.x + this.scene.cameras.main.scrollX,
