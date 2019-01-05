@@ -26,12 +26,7 @@ class Player {
 	};
 	update() {
 		if (this.scene.game.device.os.desktop) {
-			if (this.scene.input.activePointer.isDown && this.joyStick.pointer == undefined) {
-				var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
-					this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
-					this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
-				this.shoot(angle * 180 / Math.PI);
-			} else if (this.keys.ONE.isDown && this.joyStick.pointer == undefined) {
+			if (this.scene.input.mousePointer.isDown && this.joyStick.pointer == undefined) {
 				var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 					this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
 					this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
