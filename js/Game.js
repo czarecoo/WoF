@@ -32,6 +32,7 @@ class Game extends Phaser.Scene {
 	};
 
 	create() {
+		this.input.addPointer(1);
 		this.mapClass = new Map(this);
 		this.players = {};
 		this.enemies = [];
