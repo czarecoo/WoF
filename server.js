@@ -31,7 +31,9 @@ var enemies = [
 		direction: 4,
 		speed: 2,
 		aggresive: true,
-		isBoss: false
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -41,7 +43,9 @@ var enemies = [
 		direction: 4,
 		speed: 1,
 		aggresive: true,
-		isBoss: false
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -51,7 +55,9 @@ var enemies = [
 		direction: 4,
 		speed: 1,
 		aggresive: true,
-		isBoss: false
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -61,7 +67,9 @@ var enemies = [
 		direction: 4,
 		speed: 0.8,
 		aggresive: true,
-		isBoss: false
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -71,7 +79,9 @@ var enemies = [
 		direction: 4,
 		speed: 1.5,
 		aggresive: false,
-		isBoss: false
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -81,7 +91,9 @@ var enemies = [
 		direction: 4,
 		speed: 1.1,
 		aggresive: false,
-		isBoss: false
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -91,20 +103,24 @@ var enemies = [
 		direction: 4,
 		speed: 1.5,
 		aggresive: false,
-		isBoss: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: 146 * Map.tileWidth,
-		y: 17 * Map.tileHeight,
-		class: 'dragon',
-		direction: 4,
-		speed: 0,
-		aggresive: true,
-		isBoss: true
-	},
+		isBoss: false,
+		maxHp: 100,
+		hp: 100,
+	}
 ];
-
+var boss = {
+	id: server.lastEnemyID++,
+	x: 146 * Map.tileWidth,
+	y: 17 * Map.tileHeight,
+	class: 'dragon',
+	direction: 4,
+	speed: 0,
+	aggresive: true,
+	isBoss: true,
+	maxHp: 100,
+	hp: 100,
+};
+enemies.push(boss);
 var players = {};
 var projectilles = [];
 
@@ -153,7 +169,11 @@ io.on('connection', function (socket) {
 				}
 			}
 		});
-
+		socket.on('shoot', function (projectille) {
+			projectille.id = server.lastProjectilleID++;
+			projectille.isPlayerParent = true;
+			projectilles.push(projectille);
+		});
 		socket.on('disconnect', function () {
 			console.log("Player with socketid: " + socket.id + " disconnected.");
 			if (socket.playerID != undefined) {
@@ -170,52 +190,60 @@ function randomInt(low, high) {
 
 setInterval(function () {
 	for (i = 0; i < projectilles.length; i++) {
-		projectilles.splice(i, 1);
-		i--;
+		if (!projectilles[i].isPlayerParent) {
+			projectilles.splice(i, 1);
+			i--;
+		}
 	}
-	var rand = randomInt(0, 360);
-	projectilles.push(
-		{
-			id: server.lastProjectilleID++,
-			x: 146 * Map.tileWidth,
-			y: 17 * Map.tileHeight,
-			class: 'fireball',
-			rotation: (0 + rand) * Math.PI / 180,
-			speed: 2,
-		},
-		{
-			id: server.lastProjectilleID++,
-			x: 146 * Map.tileWidth,
-			y: 17 * Map.tileHeight,
-			class: 'fireball',
-			rotation: (90 + rand) * Math.PI / 180,
-			speed: 2,
-		},
-		{
-			id: server.lastProjectilleID++,
-			x: 146 * Map.tileWidth,
-			y: 17 * Map.tileHeight,
-			class: 'fireball',
-			rotation: (180 + rand) * Math.PI / 180,
-			speed: 2,
-		},
-		{
-			id: server.lastProjectilleID++,
-			x: 146 * Map.tileWidth,
-			y: 17 * Map.tileHeight,
-			class: 'fireball',
-			rotation: (270 + rand) * Math.PI / 180,
-			speed: 2,
-		},
-		{
-			id: server.lastProjectilleID++,
-			x: 146 * Map.tileWidth,
-			y: 17 * Map.tileHeight,
-			class: 'fireball',
-			rotation: (315 + rand) * Math.PI / 180,
-			speed: 2,
-		});
-
+	if (boss.hp > 0) {
+		var rand = randomInt(0, 360);
+		projectilles.push(
+			{
+				id: server.lastProjectilleID++,
+				x: 146 * Map.tileWidth,
+				y: 17 * Map.tileHeight,
+				class: 'fireball',
+				rotation: (0 + rand) * Math.PI / 180,
+				speed: 2,
+				isPlayerParent: false
+			},
+			{
+				id: server.lastProjectilleID++,
+				x: 146 * Map.tileWidth,
+				y: 17 * Map.tileHeight,
+				class: 'fireball',
+				rotation: (90 + rand) * Math.PI / 180,
+				speed: 2,
+				isPlayerParent: false
+			},
+			{
+				id: server.lastProjectilleID++,
+				x: 146 * Map.tileWidth,
+				y: 17 * Map.tileHeight,
+				class: 'fireball',
+				rotation: (180 + rand) * Math.PI / 180,
+				speed: 2,
+				isPlayerParent: false
+			},
+			{
+				id: server.lastProjectilleID++,
+				x: 146 * Map.tileWidth,
+				y: 17 * Map.tileHeight,
+				class: 'fireball',
+				rotation: (270 + rand) * Math.PI / 180,
+				speed: 2,
+				isPlayerParent: false
+			},
+			{
+				id: server.lastProjectilleID++,
+				x: 146 * Map.tileWidth,
+				y: 17 * Map.tileHeight,
+				class: 'fireball',
+				rotation: (315 + rand) * Math.PI / 180,
+				speed: 2,
+				isPlayerParent: false
+			});
+	}
 }, 3000);
 
 var counter = 0;
@@ -223,7 +251,11 @@ setInterval(function () {
 	//console.log(counter++);
 	//console.log(util.inspect(projectilles, false, 3));
 	enemies.forEach(function (enemy) {
-		enemy.direction = randomInt(0, 4);
+		if (enemy.hp <= 0) {
+			enemy.direction = -1;
+		} else {
+			enemy.direction = randomInt(0, 4);
+		}
 	});
 }, 1000);
 setInterval(function () {
@@ -233,13 +265,27 @@ setInterval(function () {
 		projectille.y += projectille.speed * Math.sin(projectille.rotation);
 		let id;
 		for (id in players) {
-			if (areColliding(players[id], projectille, 20)) {
+			if (areColliding(players[id], projectille, 20) && !projectille.isPlayerParent) {
 				players[id].hp -= 20;
+				if (players[id].hp <= 0) {
+					players[id].hp = 0
+				}
 				projectilles.splice(i, 1);
 				i--;
 				break;
 			}
 		}
+		for (var j = 0; j < enemies.length; j++) {
+			if (areColliding(enemies[j], projectille, 20) && projectille.isPlayerParent) {
+				enemies[j].hp -= 20;
+				if (enemies[j].hp <= 0) {
+					enemies[j].hp = 0;
+				}
+				projectilles.splice(j, 1);
+				i--;
+				break;
+			}
+		};
 	}
 
 	enemies.forEach(function (enemy) {

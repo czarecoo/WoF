@@ -35,4 +35,7 @@ class Client {
 		this.socket.emit('disconnect');
 		this.socket.close();
 	}
+	shoot(projectille) {
+		this.socket.emit('shoot', projectille);
+	}
 }

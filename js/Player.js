@@ -5,7 +5,7 @@ class Player {
 		this.animationKey = config.key;
 		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown');
 		this.playerSprite.setCollideWorldBounds(true);
-		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D');
+		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D,ONE');
 		this.playerSprite.MaxSpeed = 300;
 		this.playerSprite.Speed = 300;
 		this.playerSprite.diagonalSpeedModifier = 0.6;
@@ -21,8 +21,29 @@ class Player {
 			forceMin: 15,
 			// enable: true
 		}).on('update', this.handleJoy, this);
+		this.joyStick2 = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
+			x: 800,
+			y: 420,
+			radius: 80,
+			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
+			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),
+			// dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
+			forceMin: 15,
+			// enable: true
+		});
+		this.timer = 0;
+		this.scene.time.addEvent({ delay: 500, loop: true, callback: function () { this.timer++ }, callbackScope: this });
+		this.shootTime = 1;
+		//keyup_ONE
 	};
 	update() {
+		if (this.joyStick2.touchCursor.anyKeyDown) this.shoot(this.joyStick2.angle);
+		if (this.keys.ONE.isDown) {
+			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
+				this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
+				this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
+			this.shoot(angle * 180 / Math.PI);
+		}
 		this.nameText.x = this.playerSprite.x;
 		this.nameText.y = this.playerSprite.y - 40;
 		this.healthBar.x = this.playerSprite.x - this.playerSprite.displayWidth / 2;
@@ -122,6 +143,20 @@ class Player {
 			this.goingUp = true;
 		} else {
 			this.goingUp = false;
+		}
+	}
+	shoot(rotation) {
+		if (this.timer > this.shootTime) {
+			this.timer = 0;
+			this.scene.client.shoot(
+				{
+					x: this.playerSprite.x,
+					y: this.playerSprite.y,
+					rotation: rotation * Math.PI / 180,
+					speed: 5,
+					class: 'iceball'
+				}
+			);
 		}
 	}
 }

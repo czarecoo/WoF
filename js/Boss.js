@@ -14,10 +14,21 @@ class Boss {
 		this.direction = 4;
 	};
 	update() {
+		if (this.hp <= 0) {
+			this.playerSprite.visible = false;
+			//this.nameText = false;
+			//this.healthBar = false;
+
+		} else {
+			this.playerSprite.visible = true;
+			//this.nameText = true;
+			//this.healthBar = true;
+		}
 		this.nameText.x = this.playerSprite.x;
 		this.nameText.y = this.playerSprite.y - 110;
 		this.healthBar.x = this.playerSprite.x - this.playerSprite.displayWidth / 2
 		this.healthBar.y = this.playerSprite.y - 80;
+		this.healthBar.displayWidth = this.healthBar.width * this.hp / this.maxHp;
 		/*
 		if (this.timer > this.changeDir) {
 			this.timer = 0;

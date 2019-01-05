@@ -28,6 +28,7 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
 
 		this.load.image('fireball', 'assets/spells/fireball.png');
+		this.load.image('iceball', 'assets/spells/iceball.png');
 	};
 
 	create() {
@@ -78,6 +79,8 @@ class Game extends Phaser.Scene {
 			} else {
 				newEnemy = new Enemy({ id: data[i].id, scene: this, x: data[i].x, y: data[i].y, key: data[i].class, aggresive: data[i].aggresive });
 			}
+			newEnemy.hp = data[i].hp;
+			newEnemy.maxHp = data[i].maxHp;
 			this.mapClass.setColliders(newEnemy);
 			this.enemies.push(newEnemy);
 		}
@@ -100,6 +103,8 @@ class Game extends Phaser.Scene {
 			this.enemies[i].playerSprite.y = enemies[i].y;
 			this.enemies[i].direction = enemies[i].direction;
 			this.enemies[i].playerSprite.speed = enemies[i].speed;
+			this.enemies[i].hp = enemies[i].hp;
+			this.enemies[i].maxHp = enemies[i].maxHp;
 		}
 		for (var i = 0; i < players.length; i++) {
 			this.updatePlayer(players[i]);
@@ -111,9 +116,7 @@ class Game extends Phaser.Scene {
 		}
 
 		for (var i = 0; i < projectilles.length; i++) {
-			this.projectilles.push(this.physics.add.sprite(0, 0, 'fireball'));
-			this.projectilles[i].x = projectilles[i].x;
-			this.projectilles[i].y = projectilles[i].y;
+			this.projectilles.push(this.physics.add.sprite(projectilles[i].x, projectilles[i].y, projectilles[i].class));
 			this.projectilles[i].rotation = projectilles[i].rotation;
 		}
 		this.connectedPlayersText.setText('Connected players: ' + players.length);
