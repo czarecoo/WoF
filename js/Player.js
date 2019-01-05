@@ -6,8 +6,8 @@ class Player {
 		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown');
 		this.playerSprite.setCollideWorldBounds(true);
 		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D,ONE');
-		this.playerSprite.MaxSpeed = 300;
-		this.playerSprite.Speed = 300;
+		this.playerSprite.MaxSpeed = 150;
+		this.playerSprite.Speed = 150;
 		this.playerSprite.diagonalSpeedModifier = 0.6;
 		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
@@ -57,7 +57,7 @@ class Player {
 		if (this.playerSprite.Speed == 0) { //fix wsad joy sim use bug
 			for (var name in this.keys) {
 				if (this.keys[name].isDown) {
-					this.playerSprite.Speed = 300;
+					this.playerSprite.Speed = this.playerSprite.MaxSpeed;
 				}
 			}
 		}

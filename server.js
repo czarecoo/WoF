@@ -32,8 +32,8 @@ var enemies = [
 		speed: 2,
 		aggresive: true,
 		isBoss: false,
-		maxHp: 100,
-		hp: 100,
+		maxHp: 50,
+		hp: 50,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -68,8 +68,8 @@ var enemies = [
 		speed: 0.8,
 		aggresive: true,
 		isBoss: false,
-		maxHp: 100,
-		hp: 100,
+		maxHp: 200,
+		hp: 200,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -80,8 +80,8 @@ var enemies = [
 		speed: 1.5,
 		aggresive: false,
 		isBoss: false,
-		maxHp: 100,
-		hp: 100,
+		maxHp: 1,
+		hp: 1,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -92,8 +92,8 @@ var enemies = [
 		speed: 1.1,
 		aggresive: false,
 		isBoss: false,
-		maxHp: 100,
-		hp: 100,
+		maxHp: 1,
+		hp: 1,
 	},
 	{
 		id: server.lastEnemyID++,
@@ -104,8 +104,8 @@ var enemies = [
 		speed: 1.5,
 		aggresive: false,
 		isBoss: false,
-		maxHp: 100,
-		hp: 100,
+		maxHp: 1,
+		hp: 1,
 	}
 ];
 var boss = {
@@ -117,8 +117,8 @@ var boss = {
 	speed: 0,
 	aggresive: true,
 	isBoss: true,
-	maxHp: 100,
-	hp: 100,
+	maxHp: 3000,
+	hp: 3000,
 };
 enemies.push(boss);
 var players = {};
@@ -258,10 +258,11 @@ setInterval(function () {
 		if (enemy.hp <= 0) {
 			enemy.direction = -1;
 		} else {
-			enemy.direction = randomInt(0, 4);
+			if (randomInt(1, 99) > 50)
+				enemy.direction = randomInt(0, 4);
 		}
 	});
-}, 1000);
+}, 500);
 setInterval(function () {
 	for (var i = 0; i < projectilles.length; i++) {
 		var projectille = projectilles[i];
@@ -281,7 +282,7 @@ setInterval(function () {
 		}
 		for (var j = 0; j < enemies.length; j++) {
 			if (areColliding(enemies[j], projectille, 30) && projectille.isPlayerParent) {
-				enemies[j].hp -= 10;
+				enemies[j].hp -= 20;
 				if (enemies[j].hp <= 0) {
 					enemies[j].hp = 0;
 				}
