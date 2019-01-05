@@ -17,27 +17,22 @@ class Player {
 			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
 			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),
 			// dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
-			forceMin: 15,
+			forceMin: 1,
 			// enable: true
 		}).on('update', this.handleJoy, this);
-		this.joyStick2 = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
-			x: 800,
-			y: 420,
-			radius: 80,
-			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
-			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),
-			// dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
-			forceMin: 15,
-			// enable: true
-		});
 		this.timer = 0;
 		this.scene.time.addEvent({ delay: 500, loop: true, callback: function () { this.timer++ }, callbackScope: this });
 		this.shootTime = 1;
-		//keyup_ONE
 	};
 	update() {
-		if (this.joyStick2.touchCursor.anyKeyDown) this.shoot(this.joyStick2.angle);
-		if (this.keys.ONE.isDown) {
+		var pointer = this.scene.input.activePointer;
+		if (pointer.isDown && this.joyStick.pointer == undefined) {
+			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
+				pointer.x + this.scene.cameras.main.scrollX,
+				pointer.y + this.scene.cameras.main.scrollY);
+			this.shoot(angle * 180 / Math.PI);
+		}
+		if (this.keys.ONE.isDown && this.joyStick.pointer == undefined) {
 			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 				this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
 				this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
