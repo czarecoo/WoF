@@ -27,8 +27,8 @@ class Game extends Phaser.Scene {
 		this.load.plugin('rexvirtualjoystickplugin', 'js/rexvirtualjoystickplugin.min.js', true);
 		this.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
 
-		this.load.image('fireball', 'assets/spells/fireball.png');
-		this.load.image('iceball', 'assets/spells/iceball.png');
+		this.load.image('fireball', 'assets/spells/Fireball.png');
+		this.load.image('iceball', 'assets/spells/Iceball.png');
 	};
 
 	create() {
