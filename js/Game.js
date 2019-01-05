@@ -56,12 +56,10 @@ class Game extends Phaser.Scene {
 			this.gameOver();
 			return;
 		}
-		Object.keys(this.players).forEach(id => {
-			this.players[id].update();
-			if (this.players[id] instanceof Player) {
-				this.client.move(this.players[id].playerSprite.x, this.players[id].playerSprite.y);
-			}
-		});
+		if (this.mainPlayer != undefined) {
+			this.mainPlayer.update();
+			this.client.move(this.mainPlayer.playerSprite.x, this.mainPlayer.playerSprite.y);
+		}
 		this.enemies.forEach(function (enemy) {
 			enemy.update();
 		});
@@ -131,6 +129,7 @@ class Game extends Phaser.Scene {
 				player.newY = playerData.y;
 				player.playerSprite.x = playerData.x;
 				player.playerSprite.y = playerData.y;
+				player.update();
 			}
 		}
 	}
