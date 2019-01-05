@@ -8,7 +8,6 @@ class Player {
 		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D,ONE');
 		this.playerSprite.MaxSpeed = 150;
 		this.playerSprite.Speed = 150;
-		this.playerSprite.diagonalSpeedModifier = 0.6;
 		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
 		this.joyStick = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
@@ -63,23 +62,23 @@ class Player {
 		}
 
 		if (this.keys.D.isDown && this.keys.S.isDown || this.goingDown && this.goingRight) { //down right
-			this.playerSprite.setVelocityX(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
-			this.playerSprite.setVelocityY(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityX(this.playerSprite.Speed);
+			this.playerSprite.setVelocityY(this.playerSprite.Speed);
 			this.playerSprite.anims.play(this.animationKey + 'walkDown', true);
 			this.playerSprite.lastDir = 2;
 		} else if (this.keys.S.isDown && this.keys.A.isDown || this.goingDown && this.goingLeft) {//down left
-			this.playerSprite.setVelocityX(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
-			this.playerSprite.setVelocityY(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityX(-this.playerSprite.Speed);
+			this.playerSprite.setVelocityY(this.playerSprite.Speed);
 			this.playerSprite.anims.play(this.animationKey + 'walkDown', true);
 			this.playerSprite.lastDir = 2;
 		} else if (this.keys.A.isDown && this.keys.W.isDown || this.goingUp && this.goingLeft) { //up left
-			this.playerSprite.setVelocityX(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
-			this.playerSprite.setVelocityY(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityX(-this.playerSprite.Speed);
+			this.playerSprite.setVelocityY(-this.playerSprite.Speed);
 			this.playerSprite.anims.play(this.animationKey + 'walkUp', true);
 			this.playerSprite.lastDir = 4;
 		} else if (this.keys.W.isDown && this.keys.D.isDown || this.goingUp && this.goingRight) { //up right
-			this.playerSprite.setVelocityX(this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
-			this.playerSprite.setVelocityY(-this.playerSprite.Speed * this.playerSprite.diagonalSpeedModifier);
+			this.playerSprite.setVelocityX(this.playerSprite.Speed);
+			this.playerSprite.setVelocityY(-this.playerSprite.Speed);
 			this.playerSprite.anims.play(this.animationKey + 'walkUp', true);
 			this.playerSprite.lastDir = 4;
 		} else if (this.keys.A.isDown || this.goingLeft) {
@@ -111,8 +110,7 @@ class Player {
 				this.playerSprite.anims.play(this.animationKey + 'idleDown');
 			}
 		}
-		this.playerSprite.x = Math.round(this.playerSprite.x);
-		this.playerSprite.y = Math.round(this.playerSprite.y);
+		this.playerSprite.body.velocity.normalize().scale(this.playerSprite.Speed);
 	}
 	handleJoy() {
 		this.playerSprite.Speed = this.playerSprite.MaxSpeed * this.joyStick.force / 100;
