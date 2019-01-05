@@ -25,14 +25,19 @@ class Player {
 		this.shootTime = 1;
 	};
 	update() {
-		var pointer = this.scene.input.pointer1;
-		if (pointer.isDown && this.joyStick.pointer == undefined) {
+		var pointer;
+		if (this.joyStick.pointer == undefined) {
+			var pointer = this.scene.input.pointer1;
+		} else {
+			var pointer = this.scene.input.pointer2;
+		}
+		if (pointer.isDown) {
 			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 				pointer.x + this.scene.cameras.main.scrollX,
 				pointer.y + this.scene.cameras.main.scrollY);
 			this.shoot(angle * 180 / Math.PI);
 		}
-		if (this.keys.ONE.isDown && this.joyStick.pointer == undefined) {
+		if (this.keys.ONE.isDown) {
 			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 				this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
 				this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
