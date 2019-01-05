@@ -40,9 +40,9 @@ class Player {
 		} else {
 			var pointer;
 			if (this.joyStick.pointer == undefined) {
-				var pointer = this.scene.input.pointer1;
+				pointer = this.scene.input.pointer1;
 			} else {
-				var pointer = this.scene.input.pointer2;
+				pointer = this.scene.input.pointer2;
 			}
 			if (pointer.isDown) {
 				var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
