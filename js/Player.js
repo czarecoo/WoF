@@ -17,32 +17,41 @@ class Player {
 			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
 			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),
 			// dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
-			forceMin: 1,
-			// enable: true
+			forceMin: 15,
+			//enable: !this.scene.game.device.os.desktop
 		}).on('update', this.handleJoy, this);
 		this.timer = 0;
 		this.scene.time.addEvent({ delay: 500, loop: true, callback: function () { this.timer++ }, callbackScope: this });
 		this.shootTime = 1;
 	};
 	update() {
-		var pointer;
-		if (this.joyStick.pointer == undefined) {
-			var pointer = this.scene.input.pointer1;
+		if (this.scene.game.device.os.desktop) {
+			if (this.scene.input.activePointer.isDown && this.joyStick.pointer == undefined) {
+				var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
+					this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
+					this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
+				this.shoot(angle * 180 / Math.PI);
+			} else if (this.keys.ONE.isDown && this.joyStick.pointer == undefined) {
+				var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
+					this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
+					this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
+				this.shoot(angle * 180 / Math.PI);
+			}
 		} else {
-			var pointer = this.scene.input.pointer2;
+			var pointer;
+			if (this.joyStick.pointer == undefined) {
+				var pointer = this.scene.input.pointer1;
+			} else {
+				var pointer = this.scene.input.pointer2;
+			}
+			if (pointer.isDown) {
+				var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
+					pointer.x + this.scene.cameras.main.scrollX,
+					pointer.y + this.scene.cameras.main.scrollY);
+				this.shoot(angle * 180 / Math.PI);
+			}
 		}
-		if (pointer.isDown) {
-			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
-				pointer.x + this.scene.cameras.main.scrollX,
-				pointer.y + this.scene.cameras.main.scrollY);
-			this.shoot(angle * 180 / Math.PI);
-		}
-		if (this.keys.ONE.isDown) {
-			var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
-				this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
-				this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
-			this.shoot(angle * 180 / Math.PI);
-		}
+
 		this.nameText.x = this.playerSprite.x;
 		this.nameText.y = this.playerSprite.y - 40;
 		this.healthBar.x = this.playerSprite.x - this.playerSprite.displayWidth / 2;

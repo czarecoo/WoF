@@ -118,7 +118,7 @@ class Game extends Phaser.Scene {
 			this.projectilles.push(this.physics.add.sprite(projectilles[i].x, projectilles[i].y, projectilles[i].class));
 			this.projectilles[i].rotation = projectilles[i].rotation;
 		}
-		this.connectedPlayersText.setText('Connected players: ' + players.length);
+		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.', 'Touch or click to use your skill.', '', 'Connected players: ' + players.length]);
 	}
 	updatePlayer(playerData) {
 		var player = this.players[playerData.id];
