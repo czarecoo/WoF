@@ -10,6 +10,9 @@ window.onload = function () {
 			default: 'arcade',
 			arcade: { gravity: 0 }
 		},
+		input: {
+			activePointers: 2,
+		},
 		scene: [
 			BootScene, Game, GameOverScene
 		]
