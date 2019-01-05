@@ -190,11 +190,14 @@ function randomInt(low, high) {
 
 setInterval(function () {
 	for (i = 0; i < projectilles.length; i++) {
-		if (!projectilles[i].isPlayerParent) {
+		if (!canWalkThere(projectilles[i].x, projectilles[i].y)) {
 			projectilles.splice(i, 1);
 			i--;
 		}
 	}
+}, 100);
+
+setInterval(function () {
 	if (boss.hp > 0) {
 		var rand = randomInt(0, 360);
 		projectilles.push(
@@ -250,6 +253,7 @@ var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
 	//console.log(util.inspect(projectilles, false, 3));
+	//console.log(projectilles.length);
 	enemies.forEach(function (enemy) {
 		if (enemy.hp <= 0) {
 			enemy.direction = -1;
@@ -276,12 +280,12 @@ setInterval(function () {
 			}
 		}
 		for (var j = 0; j < enemies.length; j++) {
-			if (areColliding(enemies[j], projectille, 20) && projectille.isPlayerParent) {
-				enemies[j].hp -= 20;
+			if (areColliding(enemies[j], projectille, 30) && projectille.isPlayerParent) {
+				enemies[j].hp -= 10;
 				if (enemies[j].hp <= 0) {
 					enemies[j].hp = 0;
 				}
-				projectilles.splice(j, 1);
+				projectilles.splice(i, 1);
 				i--;
 				break;
 			}
