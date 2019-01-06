@@ -34,6 +34,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 50,
 		hp: 50,
+		isAttacking: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -46,6 +47,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 100,
 		hp: 100,
+		isAttacking: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -58,6 +60,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 100,
 		hp: 100,
+		isAttacking: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -70,6 +73,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 200,
 		hp: 200,
+		isAttacking: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -82,6 +86,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 1,
 		hp: 1,
+		isAttacking: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -94,6 +99,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 1,
 		hp: 1,
+		isAttacking: false
 	},
 	{
 		id: server.lastEnemyID++,
@@ -106,6 +112,7 @@ var enemies = [
 		isBoss: false,
 		maxHp: 1,
 		hp: 1,
+		isAttacking: false
 	}
 ];
 var boss = {
@@ -119,6 +126,7 @@ var boss = {
 	isBoss: true,
 	maxHp: 5000,
 	hp: 5000,
+	isAttacking: false
 };
 enemies.push(boss);
 var players = {};
@@ -128,6 +136,7 @@ var items = [];
 io.on('connection', function (socket) {
 	socket.on('init', function (chosenClass) {
 		console.log("Player with socketid: " + socket.id + " connected.")
+		socket.emit('addItems', items);
 		socket.emit('addPlayers', getAllPlayers());
 		socket.playerID = server.lastPlayerID++;
 		var player = {
@@ -142,7 +151,6 @@ io.on('connection', function (socket) {
 		};
 		players[socket.playerID] = player;
 		socket.emit('addEnemies', enemies);
-		socket.emit('addItems', items);
 		socket.emit('addMainPlayer', players[socket.playerID]);
 		socket.broadcast.emit('addPlayer', players[socket.playerID]);
 
@@ -201,8 +209,10 @@ setInterval(function () {
 		if (enemy.hp <= 0) {
 			enemy.direction = -1;
 		} else {
-			if (randomInt(1, 99) > 50) {
-				enemy.direction = randomInt(0, 4);
+			if (!enemy.isAttacking) {
+				if (randomInt(1, 99) > 50) {
+					enemy.direction = randomInt(0, 4);
+				}
 			}
 		}
 	});
@@ -246,22 +256,36 @@ setInterval(function () {
 			}
 		};
 	}
-
+}, 100);
+setInterval(function () {
+	var playersArr = getAllPlayers();
 	enemies.forEach(function (enemy) {
-		if (enemy.direction == 0 && canWalkThere(enemy.x - enemy.speed - 16, enemy.y)) {//left
-			enemy.x -= enemy.speed;
-		}
-		if (enemy.direction == 1 && canWalkThere(enemy.x + enemy.speed + 16, enemy.y)) {//right
-			enemy.x += enemy.speed;
-		}
-		if (enemy.direction == 2 && canWalkThere(enemy.x, enemy.y - enemy.speed - 16)) {//up
-			enemy.y -= enemy.speed;
-		}
-		if (enemy.direction == 3 && canWalkThere(enemy.x, enemy.y + enemy.speed + 16)) {//down
-			enemy.y += enemy.speed;
+		for (var i = 0; i < playersArr.length; i++) {
+			if (areColliding(playersArr[i], enemy, 40) && enemy.aggresive && enemy.hp > 0) {
+				playersArr[i].hp -= 4;
+				if (playersArr[i].hp <= 0) {
+					playersArr[i].hp = 0
+					items.push({ x: playersArr[i].x, y: playersArr[i].y, class: 'deadplayer' });
+				}
+				enemy.isAttacking = true;
+			} else {
+				enemy.isAttacking = false;
+				if (enemy.direction == 0 && canWalkThere(enemy.x - enemy.speed - 16, enemy.y)) {//left
+					enemy.x -= enemy.speed;
+				}
+				if (enemy.direction == 1 && canWalkThere(enemy.x + enemy.speed + 16, enemy.y)) {//right
+					enemy.x += enemy.speed;
+				}
+				if (enemy.direction == 2 && canWalkThere(enemy.x, enemy.y - enemy.speed - 16)) {//up
+					enemy.y -= enemy.speed;
+				}
+				if (enemy.direction == 3 && canWalkThere(enemy.x, enemy.y + enemy.speed + 16)) {//down
+					enemy.y += enemy.speed;
+				}
+			}
 		}
 	});
-}, 100);
+}, 200);
 var lastUpdateTime = (new Date()).getTime();
 setInterval(function () {
 	var currentTime = (new Date()).getTime();

@@ -21,13 +21,13 @@ class Boss {
 			this.nameText.visible = false;
 			this.healthBar.visible = false;
 			this.deadSprite.visible = true;
-			this.deadSprite.x = this.playerSprite.x;
-			this.deadSprite.y = this.playerSprite.y;
 		} else {
 			this.playerSprite.visible = true;
 			this.nameText.visible = true;
 			this.healthBar.visible = true;
 			this.deadSprite.visible = false;
+			this.deadSprite.x = this.playerSprite.x;
+			this.deadSprite.y = this.playerSprite.y;
 		}
 		this.nameText.x = this.playerSprite.x;
 		this.nameText.y = this.playerSprite.y - 110;
