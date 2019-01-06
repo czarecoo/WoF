@@ -66,6 +66,11 @@ class Game extends Phaser.Scene {
 		this.enemies.forEach(function (enemy) {
 			enemy.update();
 		});
+		this.projectilles.forEach(function (projectille) {
+			if (projectille.class == "shuriken") {
+				projectille.rotation++;
+			}
+		});
 	}
 	addPlayer(id, x, y, randomClass) {
 		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: randomClass });
@@ -119,17 +124,53 @@ class Game extends Phaser.Scene {
 		for (var i = 0; i < players.length; i++) {
 			this.updatePlayer(players[i]);
 		}
+		this.processProjectilles(projectilles);
+
+		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.', 'Touch or click to use your skill.', '', 'Connected players: ' + players.length + ' diff: ' + diff + ' ms.']);
+	}
+	processProjectilles(projectilles) {
+		var tempProjectillesArray = [];
+		for (var i = 0; i < projectilles.length; i++) {
+			var shouldAdd = true;
+			for (var j = 0; j < this.projectilles.length; j++) {
+				if (projectilles[i].id == this.projectilles[j].id) {
+					this.tweens.add({
+						targets: this.projectilles[j],
+						x: projectilles[i].x,               // '+=100'
+						y: projectilles[i].y,               // '+=100'
+						ease: 'Linear',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
+						duration: 100,
+						repeat: 0,
+						yoyo: false
+					})
+
+					//this.projectilles[j].x = projectilles[i].x;
+					//this.projectilles[j].y = projectilles[i].y;
+					tempProjectillesArray.push(this.projectilles.splice(j, 1)[0]);
+					shouldAdd = false;
+					break;
+				}
+			}
+			if (shouldAdd) {
+				tempProjectillesArray.push(this.physics.add.sprite(projectilles[i].x, projectilles[i].y, projectilles[i].class));
+				tempProjectillesArray[tempProjectillesArray.length - 1].id = projectilles[i].id;
+				tempProjectillesArray[tempProjectillesArray.length - 1].class = projectilles[i].class;
+				tempProjectillesArray[tempProjectillesArray.length - 1].rotation = projectilles[i].rotation;
+				tempProjectillesArray[tempProjectillesArray.length - 1].speed = projectilles[i].speed;
+				tempProjectillesArray[tempProjectillesArray.length - 1].isPlayerParent = projectilles[i].isPlayerParent;
+			}
+		}
 		for (var i = 0; i < this.projectilles.length; i++) {
 			this.projectilles[i].destroy();
 			this.projectilles.splice(i, 1);
 			i--;
 		}
-
+		this.projectilles = tempProjectillesArray;
+		/*
 		for (var i = 0; i < projectilles.length; i++) {
 			this.projectilles.push(this.physics.add.sprite(projectilles[i].x, projectilles[i].y, projectilles[i].class));
 			this.projectilles[i].rotation = projectilles[i].rotation;
-		}
-		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.', 'Touch or click to use your skill.', '', 'Connected players: ' + players.length + ' diff: ' + diff + ' ms.']);
+		}*/
 	}
 	updatePlayer(playerData) {
 		var player = this.players[playerData.id];

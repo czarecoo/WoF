@@ -271,9 +271,10 @@ setInterval(function () {
 				players[id].hp -= 20;
 				if (players[id].hp <= 0) {
 					players[id].hp = 0
+				} else {
+					projectilles.splice(i, 1);
+					i--;
 				}
-				projectilles.splice(i, 1);
-				i--;
 				break;
 			}
 		}
@@ -282,9 +283,10 @@ setInterval(function () {
 				enemies[j].hp -= 20;
 				if (enemies[j].hp <= 0) {
 					enemies[j].hp = 0;
+				} else {
+					projectilles.splice(i, 1);
+					i--;
 				}
-				projectilles.splice(i, 1);
-				i--;
 				break;
 			}
 		};
