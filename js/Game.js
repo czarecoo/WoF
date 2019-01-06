@@ -28,6 +28,8 @@ class Game extends Phaser.Scene {
 		this.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
 
 		this.load.image('fireball', 'assets/spells/Fireball.png');
+		this.load.image('darkfireball', 'assets/spells/Fireball2.png');
+		this.load.image('bigfireball', 'assets/spells/BigFireball.png');
 		this.load.image('iceball', 'assets/spells/Iceball.png');
 		this.load.image('shuriken', 'assets/spells/Shuriken.png');
 		this.load.image('arrow', 'assets/spells/Arrow.png');
