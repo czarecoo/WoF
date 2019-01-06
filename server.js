@@ -312,7 +312,7 @@ setInterval(function () {
 	var currentTime = (new Date()).getTime();
 	var playersArr = getAllPlayers();
 	Object.keys(io.sockets.connected).forEach(function (socketId) {
-		io.to(socketId).emit('update', enemies, playersArr, projectilles, currentTime - lastUpdateTime);
+		io.to(socketId).emit('update', enemies, playersArr, projectilles, currentTime - lastUpdateTime, currentTime);
 	});
 	lastUpdateTime = currentTime;
 }, 50);
