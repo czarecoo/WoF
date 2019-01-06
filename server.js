@@ -230,10 +230,11 @@ setInterval(function () {
 			}
 		}
 		for (var j = 0; j < enemies.length; j++) {
-			if (areColliding(enemies[j], projectille, 30) && projectille.isPlayerParent) {
-				enemies[j].hp -= 20;
+			if (areColliding(enemies[j], projectille, projectille.size) && projectille.isPlayerParent) {
+				enemies[j].hp -= projectille.damage;
 				if (enemies[j].hp <= 0) {
 					enemies[j].hp = 0;
+					enemies[j].deathtime = (new Date()).getTime();
 				} else {
 					projectilles.splice(i, 1);
 					i--;
@@ -294,6 +295,15 @@ function getAllPlayers() {
 function areColliding(a, b, size) {
 	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }
+
+setInterval(function () {
+	var currentTime = (new Date()).getTime();
+	for (var i = 0; i < enemies.length; i++) {
+		if (enemies[i].hp <= 0 && currentTime - enemies[i].deathtime > 20000) {
+			enemies[i].hp = enemies[i].maxHp;
+		}
+	};
+}, 1000);
 
 setInterval(function () {
 	if (boss.hp > 0) {

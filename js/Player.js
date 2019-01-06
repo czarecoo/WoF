@@ -21,18 +21,23 @@ class Player {
 			//enable: !this.scene.game.device.os.desktop
 		}).on('update', this.handleJoy, this);
 		this.timer = 0;
-		this.scene.time.addEvent({ delay: 500, loop: true, callback: function () { this.timer++ }, callbackScope: this });
-		this.shootTime = 1;
+		this.scene.time.addEvent({ delay: 100, loop: true, callback: function () { this.timer++ }, callbackScope: this });
 
 		if (this.animationKey == 'warrior') {
 			this.shootSpeed = 18;
 			this.shootClass = 'shuriken'
+			this.shootTime = 6;
+			this.shootDmg = 20;
 		} else if (this.animationKey == 'mage') {
-			this.shootSpeed = 35;
+			this.shootSpeed = 32;
 			this.shootClass = 'iceball'
+			this.shootTime = 8;
+			this.shootDmg = 30;
 		} else {
 			this.shootSpeed = 25;
-			this.shootClass = 'arrow'
+			this.shootClass = 'arrow';
+			this.shootTime = 4;
+			this.shootDmg = 15;
 		}
 	};
 	update() {
@@ -167,7 +172,9 @@ class Player {
 					y: this.playerSprite.y,
 					rotation: rotation * Math.PI / 180,
 					speed: this.shootSpeed,
-					class: this.shootClass
+					class: this.shootClass,
+					damage: this.shootDmg,
+					size: 30
 				}
 			);
 		}
