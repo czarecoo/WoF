@@ -195,9 +195,5 @@ class Game extends Phaser.Scene {
 
 }
 function distance(a, b, size) {
-	if (Math.hypot(a.x - b.x, a.y - b.y) >= size) {
-		console.log(Math.hypot(a.x - b.x, a.y - b.y));
-	}
-
 	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }
