@@ -29,6 +29,8 @@ class Game extends Phaser.Scene {
 
 		this.load.image('fireball', 'assets/spells/Fireball.png');
 		this.load.image('iceball', 'assets/spells/Iceball.png');
+		this.load.image('shuriken', 'assets/spells/Shuriken.png');
+		this.load.image('arrow', 'assets/spells/Arrow.png');
 	};
 
 	create() {
@@ -92,14 +94,23 @@ class Game extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
 	}
-	processUpdate(enemies, players, projectilles) {
+	processUpdate(enemies, players, projectilles, diff) {
 		if (this.mainPlayer != undefined && this.mainPlayer.hp <= 0) {
 			this.gameOver();
 			return;
 		}
 		for (var i = 0; i < this.enemies.length; i++) {
-			this.enemies[i].playerSprite.x = enemies[i].x;
-			this.enemies[i].playerSprite.y = enemies[i].y;
+			this.tweens.add({
+				targets: this.enemies[i].playerSprite,
+				x: enemies[i].x,               // '+=100'
+				y: enemies[i].y,               // '+=100'
+				ease: 'Linear',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
+				duration: 100,
+				repeat: 0,
+				yoyo: false
+			})
+			//this.enemies[i].playerSprite.x = enemies[i].x;
+			//this.enemies[i].playerSprite.y = enemies[i].y;
 			this.enemies[i].direction = enemies[i].direction;
 			this.enemies[i].playerSprite.speed = enemies[i].speed;
 			this.enemies[i].hp = enemies[i].hp;
@@ -118,7 +129,7 @@ class Game extends Phaser.Scene {
 			this.projectilles.push(this.physics.add.sprite(projectilles[i].x, projectilles[i].y, projectilles[i].class));
 			this.projectilles[i].rotation = projectilles[i].rotation;
 		}
-		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.', 'Touch or click to use your skill.', '', 'Connected players: ' + players.length]);
+		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.', 'Touch or click to use your skill.', '', 'Connected players: ' + players.length + ' diff: ' + diff + ' ms.']);
 	}
 	updatePlayer(playerData) {
 		var player = this.players[playerData.id];
@@ -128,15 +139,34 @@ class Game extends Phaser.Scene {
 			if (player instanceof OtherPlayer) {
 				player.newX = playerData.x;
 				player.newY = playerData.y;
-				player.playerSprite.x = playerData.x;
-				player.playerSprite.y = playerData.y;
+				if (distance(player.playerSprite, playerData, 300)) {
+					player.tween = this.tweens.add({
+						targets: player.playerSprite,
+						x: playerData.x,               // '+=100'
+						y: playerData.y,               // '+=100'
+						ease: 'Linear',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
+						duration: 100,
+						repeat: 0,
+						yoyo: false,
+						onUpdate: function () {
+							player.nameText.x = player.playerSprite.x;
+							player.nameText.y = player.playerSprite.y - 40;
+							player.healthBar.x = player.playerSprite.x - player.playerSprite.displayWidth / 2;
+							player.healthBar.y = player.playerSprite.y - 27;
+						}
+					})
+				} else {
+					player.tween.stop()
+					player.playerSprite.x = playerData.x;
+					player.playerSprite.y = playerData.y;
+				}
 				player.update();
 			}
 		}
 	}
 	forceMovePlayer(id, x, y) {
 		var player = this.players[id];
-		if (player != undefined) {
+		if (player != undefined && player instanceof Player) {
 			player.playerSprite.x = x;
 			player.playerSprite.y = y;
 		}
@@ -162,4 +192,12 @@ class Game extends Phaser.Scene {
 		}, [], this);
 
 	};
+
+}
+function distance(a, b, size) {
+	if (Math.hypot(a.x - b.x, a.y - b.y) >= size) {
+		console.log(Math.hypot(a.x - b.x, a.y - b.y));
+	}
+
+	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }

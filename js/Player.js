@@ -23,6 +23,17 @@ class Player {
 		this.timer = 0;
 		this.scene.time.addEvent({ delay: 500, loop: true, callback: function () { this.timer++ }, callbackScope: this });
 		this.shootTime = 1;
+
+		if (this.animationKey == 'warrior') {
+			this.shootSpeed = 18;
+			this.shootClass = 'shuriken'
+		} else if (this.animationKey == 'mage') {
+			this.shootSpeed = 35;
+			this.shootClass = 'iceball'
+		} else {
+			this.shootSpeed = 25;
+			this.shootClass = 'arrow'
+		}
 	};
 	update() {
 		if (this.scene.game.device.os.desktop) {
@@ -155,8 +166,8 @@ class Player {
 					x: this.playerSprite.x,
 					y: this.playerSprite.y,
 					rotation: rotation * Math.PI / 180,
-					speed: 5,
-					class: 'iceball'
+					speed: this.shootSpeed,
+					class: this.shootClass
 				}
 			);
 		}

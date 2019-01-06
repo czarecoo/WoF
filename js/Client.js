@@ -18,8 +18,8 @@ class Client {
 		this.socket.on('addEnemies', function (data) {
 			Game.addEnemies(data);
 		});
-		this.socket.on('update', function (enemies, players, projectilles) {
-			Game.processUpdate(enemies, players, projectilles);
+		this.socket.on('update', function (enemies, players, projectilles, diff) {
+			Game.processUpdate(enemies, players, projectilles, diff);
 		});
 		this.socket.on('forceMovePlayer', function (data) {
 			Game.forceMovePlayer(data.id, data.x, data.y);

@@ -29,7 +29,7 @@ var enemies = [
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'brainy',
 		direction: 4,
-		speed: 2,
+		speed: 10,
 		aggresive: true,
 		isBoss: false,
 		maxHp: 50,
@@ -41,7 +41,7 @@ var enemies = [
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
-		speed: 1,
+		speed: 5,
 		aggresive: true,
 		isBoss: false,
 		maxHp: 100,
@@ -53,7 +53,7 @@ var enemies = [
 		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
 		class: 'skeleton',
 		direction: 4,
-		speed: 1,
+		speed: 5,
 		aggresive: true,
 		isBoss: false,
 		maxHp: 100,
@@ -65,7 +65,7 @@ var enemies = [
 		y: 23 * Map.tileHeight,
 		class: 'zombie',
 		direction: 4,
-		speed: 0.8,
+		speed: 4,
 		aggresive: true,
 		isBoss: false,
 		maxHp: 200,
@@ -77,7 +77,7 @@ var enemies = [
 		y: 28 * Map.tileHeight,
 		class: 'white cat',
 		direction: 4,
-		speed: 1.5,
+		speed: 8,
 		aggresive: false,
 		isBoss: false,
 		maxHp: 1,
@@ -89,7 +89,7 @@ var enemies = [
 		y: 17 * Map.tileHeight,
 		class: 'dog',
 		direction: 4,
-		speed: 1.1,
+		speed: 6,
 		aggresive: false,
 		isBoss: false,
 		maxHp: 1,
@@ -101,7 +101,7 @@ var enemies = [
 		y: 16 * Map.tileHeight,
 		class: 'black cat',
 		direction: 4,
-		speed: 1.5,
+		speed: 7.5,
 		aggresive: false,
 		isBoss: false,
 		maxHp: 1,
@@ -189,15 +189,6 @@ function randomInt(low, high) {
 }
 
 setInterval(function () {
-	for (i = 0; i < projectilles.length; i++) {
-		if (!canWalkThere(projectilles[i].x, projectilles[i].y)) {
-			projectilles.splice(i, 1);
-			i--;
-		}
-	}
-}, 100);
-
-setInterval(function () {
 	if (boss.hp > 0) {
 		var rand = randomInt(0, 360);
 		projectilles.push(
@@ -207,7 +198,7 @@ setInterval(function () {
 				y: 17 * Map.tileHeight,
 				class: 'fireball',
 				rotation: (0 + rand) * Math.PI / 180,
-				speed: 2,
+				speed: 10,
 				isPlayerParent: false
 			},
 			{
@@ -216,7 +207,7 @@ setInterval(function () {
 				y: 17 * Map.tileHeight,
 				class: 'fireball',
 				rotation: (90 + rand) * Math.PI / 180,
-				speed: 2,
+				speed: 10,
 				isPlayerParent: false
 			},
 			{
@@ -225,7 +216,7 @@ setInterval(function () {
 				y: 17 * Map.tileHeight,
 				class: 'fireball',
 				rotation: (180 + rand) * Math.PI / 180,
-				speed: 2,
+				speed: 10,
 				isPlayerParent: false
 			},
 			{
@@ -234,7 +225,7 @@ setInterval(function () {
 				y: 17 * Map.tileHeight,
 				class: 'fireball',
 				rotation: (270 + rand) * Math.PI / 180,
-				speed: 2,
+				speed: 10,
 				isPlayerParent: false
 			},
 			{
@@ -243,7 +234,7 @@ setInterval(function () {
 				y: 17 * Map.tileHeight,
 				class: 'fireball',
 				rotation: (315 + rand) * Math.PI / 180,
-				speed: 2,
+				speed: 10,
 				isPlayerParent: false
 			});
 	}
@@ -264,6 +255,12 @@ setInterval(function () {
 	});
 }, 500);
 setInterval(function () {
+	for (i = 0; i < projectilles.length; i++) {
+		if (!canWalkThere(projectilles[i].x, projectilles[i].y)) {
+			projectilles.splice(i, 1);
+			i--;
+		}
+	}
 	for (var i = 0; i < projectilles.length; i++) {
 		var projectille = projectilles[i];
 		projectille.x += projectille.speed * Math.cos(projectille.rotation);
@@ -307,11 +304,16 @@ setInterval(function () {
 			enemy.y += enemy.speed;
 		}
 	});
+}, 100);
+var lastUpdateTime = (new Date()).getTime();
+setInterval(function () {
+	var currentTime = (new Date()).getTime();
 	var playersArr = getAllPlayers();
 	Object.keys(io.sockets.connected).forEach(function (socketId) {
-		io.to(socketId).emit('update', enemies, playersArr, projectilles);
+		io.to(socketId).emit('update', enemies, playersArr, projectilles, currentTime - lastUpdateTime);
 	});
-}, 20);
+	lastUpdateTime = currentTime;
+}, 50);
 
 function canWalkThere(x, y) {
 	return Map.isWalkable(Math.floor(x / Map.tileWidth), Math.floor(y / Map.tileHeight));
