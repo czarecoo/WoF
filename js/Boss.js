@@ -3,6 +3,8 @@ class Boss {
 		this.id = config.id;
 		this.scene = config.scene;
 		this.animationKey = config.key;
+		this.deadSprite = this.scene.physics.add.sprite(0, 0, 'deadenemy');
+		this.deadSprite.visible = false;
 		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idle');
 		this.playerSprite.setCollideWorldBounds(true);
 		this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '20px Arial', fill: 'red' }).setOrigin(0.5, 0.5);
@@ -16,13 +18,16 @@ class Boss {
 	update() {
 		if (this.hp <= 0) {
 			this.playerSprite.visible = false;
-			//this.nameText = false;
-			//this.healthBar = false;
-
+			this.nameText.visible = false;
+			this.healthBar.visible = false;
+			this.deadSprite.visible = true;
+			this.deadSprite.x = this.playerSprite.x;
+			this.deadSprite.y = this.playerSprite.y;
 		} else {
 			this.playerSprite.visible = true;
-			//this.nameText = true;
-			//this.healthBar = true;
+			this.nameText.visible = true;
+			this.healthBar.visible = true;
+			this.deadSprite.visible = false;
 		}
 		this.nameText.x = this.playerSprite.x;
 		this.nameText.y = this.playerSprite.y - 110;

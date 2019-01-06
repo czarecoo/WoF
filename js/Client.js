@@ -18,6 +18,9 @@ class Client {
 		this.socket.on('addEnemies', function (data) {
 			Game.addEnemies(data);
 		});
+		this.socket.on('addItems', function (data) {
+			Game.addItems(data);
+		});
 		this.socket.on('update', function (enemies, players, projectilles, diff, servertime) {
 			Game.processUpdate(enemies, players, projectilles, diff, servertime);
 		});

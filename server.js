@@ -123,6 +123,7 @@ var boss = {
 enemies.push(boss);
 var players = {};
 var projectilles = [];
+var items = [];
 
 io.on('connection', function (socket) {
 	socket.on('init', function (chosenClass) {
@@ -141,6 +142,7 @@ io.on('connection', function (socket) {
 		};
 		players[socket.playerID] = player;
 		socket.emit('addEnemies', enemies);
+		socket.emit('addItems', items);
 		socket.emit('addMainPlayer', players[socket.playerID]);
 		socket.broadcast.emit('addPlayer', players[socket.playerID]);
 
@@ -222,6 +224,7 @@ setInterval(function () {
 				players[id].hp -= projectille.damage;
 				if (players[id].hp <= 0) {
 					players[id].hp = 0
+					items.push({ x: players[id].x, y: players[id].y, class: 'deadplayer' });
 				} else {
 					projectilles.splice(i, 1);
 					i--;

@@ -33,6 +33,9 @@ class Game extends Phaser.Scene {
 		this.load.image('iceball', 'assets/spells/Iceball.png');
 		this.load.image('shuriken', 'assets/spells/Shuriken.png');
 		this.load.image('arrow', 'assets/spells/Arrow.png');
+
+		this.load.image('deadenemy', 'assets/enemy/dead.png');
+		this.load.image('deadplayer', 'assets/player/deadplayer.png');
 	};
 
 	create() {
@@ -93,6 +96,11 @@ class Game extends Phaser.Scene {
 			this.enemies.push(newEnemy);
 		}
 	}
+	addItems(items) {
+		for (var i = 0; i < items.length; i++) {
+			this.physics.add.sprite(items[i].x, items[i].y, items[i].class);
+		}
+	}
 	addMainPlayer(id, x, y, randomClass) {
 		this.players[id] = new Player({ id: id, scene: this, x: x, y: y, key: randomClass });
 		this.mainPlayer = this.players[id];
@@ -122,6 +130,7 @@ class Game extends Phaser.Scene {
 			this.enemies[i].playerSprite.speed = enemies[i].speed;
 			this.enemies[i].hp = enemies[i].hp;
 			this.enemies[i].maxHp = enemies[i].maxHp;
+			this.enemies[i].deathtime = enemies[i].deathtime;
 		}
 		for (var i = 0; i < players.length; i++) {
 			this.updatePlayer(players[i]);
