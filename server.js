@@ -184,6 +184,9 @@ io.on('connection', function (socket) {
 			projectille.isPlayerParent = true;
 			projectilles.push(projectille);
 		});
+		socket.on('pingValue', function (data) {
+			socket.emit('pongValue', data);
+		});
 		socket.on('disconnect', function () {
 			console.log("Player with socketid: " + socket.id + " disconnected.");
 			if (socket.playerID != undefined) {
