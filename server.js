@@ -124,8 +124,8 @@ var boss = {
 	speed: 0,
 	aggresive: true,
 	isBoss: true,
-	maxHp: 5000,
-	hp: 5000,
+	maxHp: 1000,
+	hp: 1000,
 	isAttacking: false
 };
 enemies.push(boss);
