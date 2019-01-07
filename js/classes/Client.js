@@ -4,12 +4,15 @@ class Client {
 
 		this.socket.emit('init', Game.chosenClass);
 
-		setInterval(function () {
-			this.socket.emit('pingValue', (new Date()).getTime());
-		}.bind(this), 1000);
 		this.socket.on('pongValue', function (data) {
-			Game.lastPing = (new Date()).getTime() - parseInt(data, 10);
+			this.ping = (new Date()).getTime() - data;
 		});
+		var that = this;
+		setInterval(function () {
+			var time = (new Date()).getTime();
+			that.socket.emit('pingValue', time);
+		}, 1000);
+
 		this.socket.on('addMainPlayer', function (data) {
 			Game.addMainPlayer(data.id, data.x, data.y, data.class);
 		});
