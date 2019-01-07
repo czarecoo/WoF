@@ -1,4 +1,16 @@
 class AnimationCreator {
+	static createAll(scene) {
+		AnimationCreator.create(scene, "warrior");
+		AnimationCreator.create(scene, "mage");
+		AnimationCreator.create(scene, "ranger");
+		AnimationCreator.createEnemies(scene, "brainy");
+		AnimationCreator.createEnemies(scene, "skeleton");
+		AnimationCreator.createSpider(scene, "spider");
+		AnimationCreator.createEnemies(scene, "zombie");
+		AnimationCreator.createEnemies(scene, "dog");
+		AnimationCreator.createEnemies(scene, "white cat");
+		AnimationCreator.createEnemies(scene, "black cat");
+	}
 	static create(scene, className) {
 		scene.anims.create({ key: className + 'walkRight', frames: scene.anims.generateFrameNumbers(className, { start: 3, end: 5 }), frameRate: 6, yoyo: false, repeat: -1 });
 		scene.anims.create({ key: className + 'walkDown', frames: scene.anims.generateFrameNumbers(className, { start: 6, end: 8 }), frameRate: 6, yoyo: false, repeat: -1 });

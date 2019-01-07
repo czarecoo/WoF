@@ -10,7 +10,6 @@ class Client {
 		this.socket.on('pongValue', function (data) {
 			Game.lastPing = (new Date()).getTime() - parseInt(data, 10);
 		});
-
 		this.socket.on('addMainPlayer', function (data) {
 			Game.addMainPlayer(data.id, data.x, data.y, data.class);
 		});

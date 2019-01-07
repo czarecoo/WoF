@@ -6,36 +6,7 @@ class Game extends Phaser.Scene {
 		this.chosenClass = data.class;
 	}
 	preload() {
-		this.load.tilemapTiledJSON('map', 'assets/map/example_map.json');
-		this.load.image('tilesetE', 'assets/map/tilesheetE.png');
-		this.load.image('dungeonsetE', 'assets/map/dungeonE.png');
-		this.load.spritesheet('warrior', 'assets/player/warrior.png', { frameWidth: 32, frameHeight: 36 });
-		this.load.spritesheet('mage', 'assets/player/mage.png', { frameWidth: 32, frameHeight: 36 });
-		this.load.spritesheet('ranger', 'assets/player/ranger.png', { frameWidth: 32, frameHeight: 36 });
-		this.load.image('greenBar', 'assets/ui/greenBar.png');
-		this.load.image('redBar', 'assets/ui/redBar.png');
-		this.load.image('grayBar', 'assets/ui/grayBar.png');
-		this.load.image('redBossBar', 'assets/ui/redBossBar.png');
-		this.load.spritesheet('brainy', 'assets/enemy/brainy.png', { frameWidth: 32, frameHeight: 64 });
-		this.load.spritesheet('skeleton', 'assets/enemy/skeleton.png', { frameWidth: 32, frameHeight: 64 });
-		this.load.spritesheet('spider', 'assets/enemy/spider.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('zombie', 'assets/enemy/zombie.png', { frameWidth: 32, frameHeight: 64 });
-		this.load.spritesheet('dog', 'assets/enemy/dog2.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('white cat', 'assets/enemy/wcat.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.image('npc', 'assets/player/otherPlayer.png');
-		this.load.plugin('rexvirtualjoystickplugin', 'js/rexvirtualjoystickplugin.min.js', true);
-		this.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
-
-		this.load.image('fireball', 'assets/spells/Fireball.png');
-		this.load.image('darkfireball', 'assets/spells/Fireball2.png');
-		this.load.image('bigfireball', 'assets/spells/BigFireball.png');
-		this.load.image('iceball', 'assets/spells/Iceball.png');
-		this.load.image('shuriken', 'assets/spells/Shuriken.png');
-		this.load.image('arrow', 'assets/spells/Arrow.png');
-
-		this.load.image('deadenemy', 'assets/enemy/dead.png');
-		this.load.image('deadplayer', 'assets/player/deadplayer.png');
+		Loader.loadAll(this);
 	};
 
 	create() {
@@ -44,18 +15,9 @@ class Game extends Phaser.Scene {
 		this.players = {};
 		this.enemies = [];
 		this.client = new Client(this);
-		AnimationCreator.create(this, "warrior");
-		AnimationCreator.create(this, "mage");
-		AnimationCreator.create(this, "ranger");
-		AnimationCreator.createEnemies(this, "brainy");
-		AnimationCreator.createEnemies(this, "skeleton");
-		AnimationCreator.createSpider(this, "spider");
-		AnimationCreator.createEnemies(this, "zombie");
-		AnimationCreator.createEnemies(this, "dog");
-		AnimationCreator.createEnemies(this, "white cat");
-		AnimationCreator.createEnemies(this, "black cat");
+		AnimationCreator.createAll(this);
 		this.someNpc = this.physics.add.sprite(416, 520, 'npc');
-		this.connectedPlayersText = this.add.text(55, 55, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
+		this.connectedPlayersText = this.add.text(10, 10, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
 	};
@@ -139,7 +101,7 @@ class Game extends Phaser.Scene {
 
 		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.',
 			'Touch or click to use your skill.', '',
-			'Connected players: ' + players.length + '.', 'Ping: ' + this.lastPing + ' ms, ' + 'diff: ' + diff + ' ms']);
+			'Connected players: ' + players.length + '.', 'Ping: ' + (this.lastPing != undefined ? this.lastPing + ' ms, ' : '-, ') + 'diff: ' + diff + ' ms']);
 	}
 	processProjectilles(projectilles) {
 		var tempProjectillesArray = [];
