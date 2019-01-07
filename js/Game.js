@@ -109,7 +109,7 @@ class Game extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.players[id].playerSprite, true, 1, 1);
 	}
-	processUpdate(enemies, players, projectilles, diff, servertime) {
+	processUpdate(enemies, players, projectilles, diff) {
 		if (this.mainPlayer != undefined && this.mainPlayer.hp <= 0) {
 			this.gameOver();
 			return;
@@ -139,7 +139,7 @@ class Game extends Phaser.Scene {
 
 		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.',
 			'Touch or click to use your skill.', '',
-			'Connected players: ' + players.length + '.', 'Ping: ' + ((new Date()).getTime() - servertime) + ' ms, ' + 'diff: ' + diff + ' ms']);
+			'Connected players: ' + players.length + '.', 'Ping: ' + this.lastPing + ' ms, ' + 'diff: ' + diff + ' ms']);
 	}
 	processProjectilles(projectilles) {
 		var tempProjectillesArray = [];
