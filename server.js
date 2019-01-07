@@ -156,26 +156,29 @@ io.on('connection', function (socket) {
 
 		socket.on('move', function (data) {
 			if (socket.playerID != undefined) {
-				if (isTeleportingToDung(data.x, data.y)) {
-					players[socket.playerID].x = 94.5 * Map.tileWidth;
-					players[socket.playerID].y = 30 * Map.tileHeight;
-					io.emit('forceMovePlayer', players[socket.playerID]);
-				} else if (isTeleportingToTown(data.x, data.y)) {
-					players[socket.playerID].x = 19.5 * Map.tileWidth;
-					players[socket.playerID].y = 3 * Map.tileHeight;
-					io.emit('forceMovePlayer', players[socket.playerID]);
-				} else if (isTeleportingToDungLadder(data.x, data.y)) {
-					players[socket.playerID].x = 86.5 * Map.tileWidth;
-					players[socket.playerID].y = 24 * Map.tileHeight;
-					io.emit('forceMovePlayer', players[socket.playerID]);
-				} else if (isTeleportingToBossRoom(data.x, data.y)) {
-					players[socket.playerID].x = 136.5 * Map.tileWidth;
-					players[socket.playerID].y = 8 * Map.tileHeight;
-					io.emit('forceMovePlayer', players[socket.playerID]);
-				}
-				else {
-					players[socket.playerID].x = data.x;
-					players[socket.playerID].y = data.y;
+				var player = players[socket.playerID];
+				if (player != undefined) {
+					if (isTeleportingToDung(data.x, data.y)) {
+						player.x = 94.5 * Map.tileWidth;
+						player.y = 30 * Map.tileHeight;
+						io.emit('forceMovePlayer', player);
+					} else if (isTeleportingToTown(data.x, data.y)) {
+						player.x = 19.5 * Map.tileWidth;
+						player.y = 3 * Map.tileHeight;
+						io.emit('forceMovePlayer', player);
+					} else if (isTeleportingToDungLadder(data.x, data.y)) {
+						player.x = 86.5 * Map.tileWidth;
+						player.y = 24 * Map.tileHeight;
+						io.emit('forceMovePlayer', player);
+					} else if (isTeleportingToBossRoom(data.x, data.y)) {
+						player.x = 136.5 * Map.tileWidth;
+						player.y = 8 * Map.tileHeight;
+						io.emit('forceMovePlayer', player);
+					}
+					else {
+						player.x = data.x;
+						player.y = data.y;
+					}
 				}
 			}
 		});
