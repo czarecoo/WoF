@@ -1,6 +1,6 @@
 class Client {
 	constructor(Game) {
-		this.socket = io.connect('http://localhost:8081');
+		this.socket = io.connect();
 
 		this.socket.emit('init', Game.chosenClass);
 

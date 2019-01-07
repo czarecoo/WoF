@@ -5,7 +5,7 @@ var io = require('socket.io').listen(server);
 const MapClass = require('./Map.js');
 var Map = new MapClass();
 const util = require('util');
-var port = 8081;
+var port = 8080;
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/assets', express.static(__dirname + '/assets'));
