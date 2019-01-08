@@ -10,6 +10,8 @@ class Loader {
 		scene.load.image('redBar', 'assets/ui/redBar.png');
 		scene.load.image('grayBar', 'assets/ui/grayBar.png');
 		scene.load.image('redBossBar', 'assets/ui/redBossBar.png');
+		scene.load.image('cooldownBar', 'assets/ui/cooldownBar.png');
+
 		scene.load.spritesheet('brainy', 'assets/enemy/brainy.png', { frameWidth: 32, frameHeight: 64 });
 		scene.load.spritesheet('skeleton', 'assets/enemy/skeleton.png', { frameWidth: 32, frameHeight: 64 });
 		scene.load.spritesheet('spider', 'assets/enemy/spider.png', { frameWidth: 32, frameHeight: 32 });

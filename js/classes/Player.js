@@ -10,6 +10,8 @@ class Player {
 		this.playerSprite.Speed = 150;
 		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
+		this.cooldownBar = this.scene.physics.add.sprite(config.x, config.y, 'cooldownBar').setOrigin(0, 0.5);
+
 		this.joyStick = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
 			x: 140,
 			y: 420,
@@ -41,6 +43,10 @@ class Player {
 		}
 	};
 	update() {
+		if (this.timer > this.shootTime) {
+			this.timer = this.shootTime;
+		}
+
 		if (!this.scene.bobNpc.dialog.visible) {
 			if (this.scene.game.device.os.desktop) {
 				if (this.scene.input.mousePointer.isDown && this.joyStick.pointer == undefined) {
@@ -77,6 +83,10 @@ class Player {
 		if (this.healthBar.displayWidth < 0) {
 			this.healthBar.displayWidth = 0;
 		}
+		this.cooldownBar.x = this.playerSprite.x - this.playerSprite.displayWidth / 2;
+		this.cooldownBar.y = this.playerSprite.y + 27;
+		this.cooldownBar.displayWidth = this.cooldownBar.width * this.timer / this.shootTime;
+
 		this.playerSprite.setVelocityX(0);
 		this.playerSprite.setVelocityY(0);
 		if (this.playerSprite.Speed == 0) { //fix wsad joy sim use bug
@@ -170,7 +180,7 @@ class Player {
 		}
 	}
 	shoot(rotation) {
-		if (this.timer > this.shootTime) {
+		if (this.timer >= this.shootTime) {
 			this.timer = 0;
 			this.scene.client.shoot(
 				{
