@@ -1,31 +1,32 @@
 {
-  "name": "WorldOfFibula",
-  "version": "0.0.1",
-  "description": "Multiplayer online role playing game",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/czarecoo/WoF.git"
-  },
-  "keywords": [
-    "Phaser",
-    "WorldOfFibula",
-    "game",
-    "Node.js",
-    "socket.io"
-  ],
-  "author": "Cezary Witkowski",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/czarecoo/WoF/issues"
-  },
-  "homepage": "https://github.com/czarecoo/WoF#README",
-  "dependencies": {
-    "express": "^4.16.4",
-    "socket.io": "^2.1.1"
-  }
+	"name": "WorldOfFibula",
+	"version": "0.0.1",
+	"description": "Multiplayer online role playing game",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js",
+		"deploy": "openode deploy"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/czarecoo/WoF.git"
+	},
+	"keywords": [
+		"Phaser",
+		"WorldOfFibula",
+		"game",
+		"Node.js",
+		"socket.io"
+	],
+	"author": "Cezary Witkowski",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/czarecoo/WoF/issues"
+	},
+	"homepage": "https://github.com/czarecoo/WoF#README",
+	"dependencies": {
+		"express": "^4.16.4",
+		"socket.io": "^2.1.1"
+	}
 }
