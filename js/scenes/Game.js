@@ -16,7 +16,7 @@ class Game extends Phaser.Scene {
 		this.enemies = [];
 		this.client = new Client(this);
 		AnimationCreator.createAll(this);
-		this.someNpc = this.physics.add.sprite(416, 520, 'npc');
+		this.BobNpc = new BobNpc({ scene: this, x: 428, y: 530, key: "bobnpc" });
 		this.connectedPlayersText = this.add.text(10, 10, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
@@ -38,6 +38,7 @@ class Game extends Phaser.Scene {
 				projectille.rotation++;
 			}
 		});
+		this.BobNpc.update();
 	}
 	addPlayer(id, x, y, randomClass) {
 		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: randomClass });
@@ -154,7 +155,7 @@ class Game extends Phaser.Scene {
 			if (player instanceof OtherPlayer) {
 				player.newX = playerData.x;
 				player.newY = playerData.y;
-				if (distance(player.playerSprite, playerData, 300)) {
+				if (Utils.distance(player.playerSprite, playerData) < 300) {
 					player.tween = this.tweens.add({
 						targets: player.playerSprite,
 						x: playerData.x,               // '+=100'
@@ -207,8 +208,4 @@ class Game extends Phaser.Scene {
 		}, [], this);
 
 	};
-
-}
-function distance(a, b, size) {
-	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }

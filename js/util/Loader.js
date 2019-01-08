@@ -17,9 +17,13 @@ class Loader {
 		scene.load.spritesheet('dog', 'assets/enemy/dog2.png', { frameWidth: 32, frameHeight: 32 });
 		scene.load.spritesheet('white cat', 'assets/enemy/wcat.png', { frameWidth: 32, frameHeight: 32 });
 		scene.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
-		scene.load.image('npc', 'assets/player/otherPlayer.png');
 		scene.load.plugin('rexvirtualjoystickplugin', 'js/util/rexvirtualjoystickplugin.min.js', true);
 		scene.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
+
+		scene.load.image('bobnpc', 'assets/player/otherPlayer.png');
+		scene.load.image('exclamationYellow', 'assets/ui/exclamationYellow.png');
+		scene.load.image('questionGrey', 'assets/ui/questionGrey.png');
+		scene.load.image('questionYellow', 'assets/ui/questionYellow.png');
 
 		scene.load.image('fireball', 'assets/spells/Fireball.png');
 		scene.load.image('darkfireball', 'assets/spells/Fireball2.png');
