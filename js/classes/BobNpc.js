@@ -23,23 +23,23 @@ class BobNpc {
 		this.dialog = this.scene.rexUI.add.dialog({
                 x: width*1/2,
                 y: height*1/2,
-                background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
+                background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0).setDepth(5),
                 title: this.scene.rexUI.add.label({
-                    background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f),
+                    background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f).setDepth(5),
                     text: this.scene.add.text(0, 0, 'Dragon Slaying', {
                         fontSize: '24px'
-                    }),
+                    }).setDepth(5),
                     space: {
                         left: 15,
                         right: 15,
                         top: 10,
                         bottom: 10
                     }
-                }),
+                }).setDepth(5),
 
                 content: this.scene.add.text(0, 0, 'Bob wants you to slay dragon\nin the cave north of town.\n\nWould you like to help him?', {
                     fontSize: '20px'
-                }),
+                }).setDepth(5),
 
                 actions: [
                     this.createButton(this.scene, 'Accept'),
@@ -63,18 +63,7 @@ class BobNpc {
             })
             .layout()
             //.drawBounds(this.scene.add.graphics(), 0xff0000)
-            .setScale(0)
 			.setScrollFactor(0);
-
-        var tween = this.scene.tweens.add({
-            targets: this.dialog,
-            scaleX: 1,
-            scaleY: 1,
-            ease: 'Bounce', // 'Cubic', 'Elastic', 'Bounce', 'Back'
-            duration: 1000,
-            repeat: 0, // -1: infinity
-            yoyo: false
-        });
 
         this.print = this.scene.add.text(0, 0, '');
         this.dialog
@@ -87,30 +76,35 @@ class BobNpc {
             .on('button.out', function (button, groupName, index) {
                 button.getElement('background').setStrokeStyle();
             });
+	
+		this.dialog.visible=false;
 	};
 	
 	update() {
 		var players=this.scene.players;
 		Object.keys(players).forEach(function (id) {
 			var player = players[id];
-			if(Utils.distance(player.playerSprite,this.playerSprite) < 60)
-				console.log('player close');
+			if(Utils.distance(player.playerSprite,this.playerSprite) < 60){
+				this.dialog.visible=true;
+			}else{
+				this.dialog.visible=false;
+			}	
 		},this);
 	}
 	createButton(scene, text) {
-    return scene.rexUI.add.label({
-        background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x5e92f3),
+    	return scene.rexUI.add.label({
+			background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x5e92f3).setDepth(5),
 
-        text: scene.add.text(0, 0, text, {
-            fontSize: '24px'
-        }),
+			text: scene.add.text(0, 0, text, {
+				fontSize: '24px'
+			}).setDepth(5),
 
-        space: {
-            left: 10,
-            right: 10,
-            top: 10,
-            bottom: 10
-        }
-    });
-}
+			space: {
+				left: 10,
+				right: 10,
+				top: 10,
+				bottom: 10
+			}
+    	});
+	}
 }

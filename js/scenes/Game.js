@@ -21,7 +21,7 @@ class Game extends Phaser.Scene {
 		this.enemies = [];
 		this.client = new Client(this);
 		AnimationCreator.createAll(this);
-		this.BobNpc = new BobNpc({ scene: this, x: 428, y: 530, key: "bobnpc" });
+		this.bobNpc = new BobNpc({ scene: this, x: 428, y: 530, key: "bobnpc" });
 		this.connectedPlayersText = this.add.text(10, 10, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
@@ -43,7 +43,7 @@ class Game extends Phaser.Scene {
 				projectille.rotation++;
 			}
 		});
-		this.BobNpc.update();
+		this.bobNpc.update();
 	}
 	addPlayer(id, x, y, randomClass) {
 		this.players[id] = new OtherPlayer({ id: id, scene: this, x: x, y: y, key: randomClass });
