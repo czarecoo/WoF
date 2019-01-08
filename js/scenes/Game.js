@@ -7,6 +7,11 @@ class Game extends Phaser.Scene {
 	}
 	preload() {
 		Loader.loadAll(this);
+		this.load.scenePlugin({
+			key: 'rexuiplugin',
+			url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/plugins/dist/rexuiplugin.min.js',
+			sceneKey: 'rexUI'
+		});
 	};
 
 	create() {
