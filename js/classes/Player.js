@@ -41,10 +41,18 @@ class Player {
 			this.shootTime = 4;
 			this.shootDmg = 15;
 		}
+		this.questLog = this.scene.add.text(700, 10, 'Quests:', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
+		this.questLog.visible = false;
 	};
 	update() {
 		if (this.timer > this.shootTime) {
 			this.timer = this.shootTime;
+		}
+		if (this.scene.bobNpc.currentState.description != null) {
+			this.questLog.visible = true;
+			this.questLog.setText(['Quests:', this.scene.bobNpc.currentState.description]);
+		} else {
+			this.questLog.visible = false;
 		}
 
 		if (!this.scene.isDialogOn) {

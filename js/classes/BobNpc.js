@@ -14,17 +14,17 @@ class BobNpc {
 		this.questionYellow.visible = false;
 
 		this.STATE = {
-			OFFERING: { icon: this.exclamationYellow, dialog: this.createOfferingDialog() },
-			ENCOURAGING: { icon: this.questionGrey, dialog: this.createEncouragingDialog() },
-			FINISHING: { icon: this.questionYellow, dialog: this.createFinishingDialog() },
-			GREETING: { icon: null, dialog: this.createGreetingDialog() }
+			OFFERING: { icon: this.exclamationYellow, dialog: this.createOfferingDialog(), description: null },
+			ENCOURAGING: { icon: this.questionGrey, dialog: this.createEncouragingDialog(), description: "-Kill the dragon on the lowest level\nof the cave north of Bob's house" },
+			FINISHING: { icon: this.questionYellow, dialog: this.createFinishingDialog(), description: "-Go back to Bob to get reward" },
+			GREETING: { icon: null, dialog: this.createGreetingDialog(), description: null }
 		};
 		this.currentState = this.STATE.OFFERING;
 	};
 
 	update() {
 		if (this.scene.mainPlayer != undefined && this.STATE != undefined) {
-			if (Utils.distance(this.scene.mainPlayer.playerSprite, this.playerSprite) < 120) {
+			if (Utils.distance(this.scene.mainPlayer.playerSprite, this.playerSprite) < 100) {
 				this.currentState.dialog.visible = true;
 				this.scene.isDialogOn = true;
 			} else {
@@ -56,7 +56,7 @@ class BobNpc {
 				}).setDepth(5),
 				space: { left: 15, right: 15, top: 10, bottom: 10 }
 			}).setDepth(5),
-			content: this.scene.add.text(0, 0, 'Bob wants you to slay dragon\nin the cave north of town.\n\nWould you like to help him?', {
+			content: this.scene.add.text(0, 0, 'Bob wants you to slay the dragon\ndeep inside the cave north of town.\n\nWould you like to help him?', {
 				fontSize: '20px'
 			}).setDepth(5),
 			actions: [
@@ -130,7 +130,7 @@ class BobNpc {
 				}).setDepth(5),
 				space: { left: 15, right: 15, top: 10, bottom: 10 }
 			}).setDepth(5),
-			content: this.scene.add.text(0, 0, 'Bob is very happy you killed the beast\nHe wants you to have his old sword.', {
+			content: this.scene.add.text(0, 0, 'Bob is very happy you killed the beast\nHe wants you to have his old sword.\n\nWould you accept the reward?', {
 				fontSize: '20px'
 			}).setDepth(5),
 			actions: [
@@ -171,7 +171,7 @@ class BobNpc {
 				}).setDepth(5),
 				space: { left: 15, right: 15, top: 10, bottom: 10 }
 			}).setDepth(5),
-			content: this.scene.add.text(0, 0, 'Bob is happy to see you and\nwishes you good fortune.', {
+			content: this.scene.add.text(0, 0, 'Bob is happy to see you. He wishes\nyou luck on your future adventures.', {
 				fontSize: '20px'
 			}).setDepth(5),
 			space: { title: 25, content: 25, action: 15, left: 20, right: 20, top: 20, bottom: 20, },
