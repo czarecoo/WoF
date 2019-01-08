@@ -47,7 +47,7 @@ class Player {
 			this.timer = this.shootTime;
 		}
 
-		if (!this.scene.bobNpc.dialog.visible) {
+		if (!this.scene.isDialogOn) {
 			if (this.scene.game.device.os.desktop) {
 				if (this.scene.input.mousePointer.isDown && this.joyStick.pointer == undefined) {
 					var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,

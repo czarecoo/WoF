@@ -17,6 +17,9 @@ class Boss {
 	};
 	update() {
 		if (this.hp <= 0) {
+			if (Utils.distance(this.scene.mainPlayer.playerSprite, this.playerSprite) < 500) {
+				this.scene.bobNpc.pushQuestState();
+			}
 			this.playerSprite.visible = false;
 			this.nameText.visible = false;
 			this.healthBar.visible = false;

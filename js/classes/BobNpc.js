@@ -3,8 +3,8 @@ class BobNpc {
 		this.scene = config.scene;
 		this.animationKey = config.key;
 		this.playerSprite = this.scene.add.sprite(config.x, config.y, 'bobnpc');
-		this.playerSprite.x= config.x;
-		this.playerSprite.y= config.y;
+		this.playerSprite.x = config.x;
+		this.playerSprite.y = config.y;
 		this.nameText = this.scene.add.text(config.x, config.y - 27, "Bob", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.exclamationYellow = this.scene.add.sprite(config.x, config.y - 40, 'exclamationYellow').setOrigin(0.5, 0.5);
 		this.questionGrey = this.scene.add.sprite(config.x, config.y - 40, 'questionGrey').setOrigin(0.5, 0.5);
@@ -14,97 +14,186 @@ class BobNpc {
 		this.questionYellow.visible = false;
 
 		this.STATE = {
-			OFFERING : {value: 0}, 
-			ENCOURAGING: {value: 1}, 
-			FINISHING : {value: 2}
+			OFFERING: { icon: this.exclamationYellow, dialog: this.createOfferingDialog() },
+			ENCOURAGING: { icon: this.questionGrey, dialog: this.createEncouragingDialog() },
+			FINISHING: { icon: this.questionYellow, dialog: this.createFinishingDialog() },
+			GREETING: { icon: null, dialog: this.createGreetingDialog() }
 		};
+		this.currentState = this.STATE.OFFERING;
+	};
+
+	update() {
+		if (this.scene.mainPlayer != undefined && this.STATE != undefined) {
+			if (Utils.distance(this.scene.mainPlayer.playerSprite, this.playerSprite) < 120) {
+				this.currentState.dialog.visible = true;
+				this.scene.isDialogOn = true;
+			} else {
+				this.currentState.dialog.visible = false;
+				this.scene.isDialogOn = false;
+			}
+		}
+	}
+	pushQuestState() {
+		if (this.currentState == this.STATE.ENCOURAGING) {
+			this.currentState.icon.visible = false;
+			this.currentState.dialog.visible = false;
+			this.currentState = this.STATE.FINISHING;
+			this.currentState.dialog.visible = true;
+			this.currentState.icon.visible = true;
+		}
+	}
+	createOfferingDialog() {
 		var width = this.scene.game.canvas.width;
 		var height = this.scene.game.canvas.height;
-		this.dialog = this.scene.rexUI.add.dialog({
-                x: width*1/2,
-                y: height*1/2,
-                background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0).setDepth(5),
-                title: this.scene.rexUI.add.label({
-                    background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f).setDepth(5),
-                    text: this.scene.add.text(0, 0, 'Dragon Slaying', {
-                        fontSize: '24px'
-                    }).setDepth(5),
-                    space: {
-                        left: 15,
-                        right: 15,
-                        top: 10,
-                        bottom: 10
-                    }
-                }).setDepth(5),
+		var dialog = this.scene.rexUI.add.dialog({
+			x: width * 1 / 2,
+			y: height * 1 / 2,
+			background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0).setDepth(5),
+			title: this.scene.rexUI.add.label({
+				background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f).setDepth(5),
+				text: this.scene.add.text(0, 0, 'Dragon Slaying Part 1', {
+					fontSize: '24px'
+				}).setDepth(5),
+				space: { left: 15, right: 15, top: 10, bottom: 10 }
+			}).setDepth(5),
+			content: this.scene.add.text(0, 0, 'Bob wants you to slay dragon\nin the cave north of town.\n\nWould you like to help him?', {
+				fontSize: '20px'
+			}).setDepth(5),
+			actions: [
+				this.createButton(this.scene, 'Accept'),
+			],
+			space: { title: 25, content: 25, action: 15, left: 20, right: 20, top: 20, bottom: 20, },
+			align: { actions: 'center' }
+		})
+			.layout()
+			.setScrollFactor(0)
+			.on('button.click', function (button, groupName, index) {
+				this.currentState.icon.visible = false;
+				this.currentState.dialog.visible = false;
+				this.currentState = this.STATE.ENCOURAGING;
+				this.currentState.dialog.visible = true;
+				this.currentState.icon.visible = true;
+			}, this)
+			.on('button.over', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle(1, 0xffffff);
+			})
+			.on('button.out', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle();
+			});
 
-                content: this.scene.add.text(0, 0, 'Bob wants you to slay dragon\nin the cave north of town.\n\nWould you like to help him?', {
-                    fontSize: '20px'
-                }).setDepth(5),
+		dialog.visible = false;
+		return dialog;
+	}
+	createEncouragingDialog() {
+		var width = this.scene.game.canvas.width;
+		var height = this.scene.game.canvas.height;
+		var dialog = this.scene.rexUI.add.dialog({
+			x: width * 1 / 2,
+			y: height * 1 / 2,
+			background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0).setDepth(5),
+			title: this.scene.rexUI.add.label({
+				background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f).setDepth(5),
+				text: this.scene.add.text(0, 0, 'Dragon Slaying Part 2', {
+					fontSize: '24px'
+				}).setDepth(5),
+				space: { left: 15, right: 15, top: 10, bottom: 10 }
+			}).setDepth(5),
+			content: this.scene.add.text(0, 0, 'Bob is glad you decided to help\nhim. Come back for a reward\nwhen you slay the beast.', {
+				fontSize: '20px'
+			}).setDepth(5),
+			space: { title: 25, content: 25, action: 15, left: 20, right: 20, top: 20, bottom: 20, },
+			align: { actions: 'center' }
+		})
+			.layout()
+			.setScrollFactor(0)
+			.on('button.over', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle(1, 0xffffff);
+			})
+			.on('button.out', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle();
+			});
 
-                actions: [
-                    this.createButton(this.scene, 'Accept'),
-                    this.createButton(this.scene, 'Decline')
-                ],
+		dialog.visible = false;
+		return dialog;
+	}
+	createFinishingDialog() {
+		var width = this.scene.game.canvas.width;
+		var height = this.scene.game.canvas.height;
+		var dialog = this.scene.rexUI.add.dialog({
+			x: width * 1 / 2,
+			y: height * 1 / 2,
+			background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0).setDepth(5),
+			title: this.scene.rexUI.add.label({
+				background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f).setDepth(5),
+				text: this.scene.add.text(0, 0, 'Dragon Slaying Part 3', {
+					fontSize: '24px'
+				}).setDepth(5),
+				space: { left: 15, right: 15, top: 10, bottom: 10 }
+			}).setDepth(5),
+			content: this.scene.add.text(0, 0, 'Bob is very happy you killed the beast\nHe wants you to have his old sword.', {
+				fontSize: '20px'
+			}).setDepth(5),
+			actions: [
+				this.createButton(this.scene, 'Accept reward'),
+			],
+			space: { title: 25, content: 25, action: 15, left: 20, right: 20, top: 20, bottom: 20, },
+			align: { actions: 'center' }
+		})
+			.layout()
+			.setScrollFactor(0)
+			.on('button.click', function (button, groupName, index) {
+				this.currentState.icon.visible = false;
+				this.currentState.dialog.visible = false;
+				this.currentState = this.STATE.GREETING;
+				this.currentState.dialog.visible = true;
+			}, this)
+			.on('button.over', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle(1, 0xffffff);
+			})
+			.on('button.out', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle();
+			});
 
-                space: {
-                    title: 25,
-                    content: 25,
-                    action: 15,
+		dialog.visible = false;
+		return dialog;
+	}
+	createGreetingDialog() {
+		var width = this.scene.game.canvas.width;
+		var height = this.scene.game.canvas.height;
+		var dialog = this.scene.rexUI.add.dialog({
+			x: width * 1 / 2,
+			y: height * 1 / 2,
+			background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0).setDepth(5),
+			title: this.scene.rexUI.add.label({
+				background: this.scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f).setDepth(5),
+				text: this.scene.add.text(0, 0, 'Dragon Slaying Finished', {
+					fontSize: '24px'
+				}).setDepth(5),
+				space: { left: 15, right: 15, top: 10, bottom: 10 }
+			}).setDepth(5),
+			content: this.scene.add.text(0, 0, 'Bob is happy to see you and\nwishes you good fortune.', {
+				fontSize: '20px'
+			}).setDepth(5),
+			space: { title: 25, content: 25, action: 15, left: 20, right: 20, top: 20, bottom: 20, },
+			align: { actions: 'center' }
+		})
+			.layout()
+			.setScrollFactor(0)
+			.on('button.over', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle(1, 0xffffff);
+			})
+			.on('button.out', function (button, groupName, index) {
+				button.getElement('background').setStrokeStyle();
+			});
 
-                    left: 20,
-                    right: 20,
-                    top: 20,
-                    bottom: 20,
-                },
-          
-                align: {
-                    actions: 'center', // 'center'|'left'|'right'        
-                }
-            })
-            .layout()
-            //.drawBounds(this.scene.add.graphics(), 0xff0000)
-			.setScrollFactor(0);
-
-        this.print = this.scene.add.text(0, 0, '');
-        this.dialog
-            .on('button.click', function (button, groupName, index) {
-				console.log(index + ': ' + button.text)
-            }, this)
-            .on('button.over', function (button, groupName, index) {
-                button.getElement('background').setStrokeStyle(1, 0xffffff);
-            })
-            .on('button.out', function (button, groupName, index) {
-                button.getElement('background').setStrokeStyle();
-            });
-	
-		this.dialog.visible=false;
-	};
-	
-	update() {
-		var players=this.scene.players;
-		Object.keys(players).forEach(function (id) {
-			var player = players[id];
-			if(Utils.distance(player.playerSprite,this.playerSprite) < 60){
-				this.dialog.visible=true;
-			}else{
-				this.dialog.visible=false;
-			}	
-		},this);
+		dialog.visible = false;
+		return dialog;
 	}
 	createButton(scene, text) {
-    	return scene.rexUI.add.label({
+		return scene.rexUI.add.label({
 			background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x5e92f3).setDepth(5),
-
-			text: scene.add.text(0, 0, text, {
-				fontSize: '24px'
-			}).setDepth(5),
-
-			space: {
-				left: 10,
-				right: 10,
-				top: 10,
-				bottom: 10
-			}
-    	});
+			text: scene.add.text(0, 0, text, { fontSize: '24px' }).setDepth(5),
+			space: { left: 10, right: 10, top: 10, bottom: 10 }
+		});
 	}
 }
