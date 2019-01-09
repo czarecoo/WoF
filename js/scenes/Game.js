@@ -22,7 +22,7 @@ class Game extends Phaser.Scene {
 		this.client = new Client(this);
 		AnimationCreator.createAll(this);
 		this.bobNpc = new BobNpc({ scene: this, x: 430, y: 530, key: "bobnpc" });
-		this.connectedPlayersText = this.add.text(10, 10, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
+		this.connectedPlayersText = this.add.text(10, 10, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0).setDepth(5);
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
 		this.isDialogOn = false;

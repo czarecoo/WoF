@@ -3,6 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 const MapClass = require('./Map.js');
+const EnemyCreator = require('./EnemyCreator.js');
 var Map = new MapClass();
 const util = require('util');
 var port = 8080;
@@ -21,113 +22,42 @@ server.lastProjectilleID = 0;
 server.listen(process.env.PORT || port, function () {
 	console.log('Listening on ' + server.address().port);
 });
-
 var enemies = [
-	{
-		id: server.lastEnemyID++,
-		x: randomInt(93 * Map.tileWidth, 95 * Map.tileWidth),
-		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
-		class: 'brainy',
-		direction: 4,
-		speed: 10,
-		aggresive: true,
-		isBoss: false,
-		maxHp: 50,
-		hp: 50,
-		isAttacking: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: randomInt(93 * Map.tileWidth, 95 * Map.tileWidth),
-		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
-		class: 'skeleton',
-		direction: 4,
-		speed: 5,
-		aggresive: true,
-		isBoss: false,
-		maxHp: 100,
-		hp: 100,
-		isAttacking: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: randomInt(93 * Map.tileWidth, 95 * Map.tileWidth),
-		y: randomInt(12 * Map.tileHeight, 26 * Map.tileHeight),
-		class: 'skeleton',
-		direction: 4,
-		speed: 5,
-		aggresive: true,
-		isBoss: false,
-		maxHp: 100,
-		hp: 100,
-		isAttacking: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: 86 * Map.tileWidth,
-		y: 23 * Map.tileHeight,
-		class: 'zombie',
-		direction: 4,
-		speed: 4,
-		aggresive: true,
-		isBoss: false,
-		maxHp: 200,
-		hp: 200,
-		isAttacking: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: 6 * Map.tileWidth,
-		y: 28 * Map.tileHeight,
-		class: 'white cat',
-		direction: 4,
-		speed: 8,
-		aggresive: false,
-		isBoss: false,
-		maxHp: 1,
-		hp: 1,
-		isAttacking: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: 33 * Map.tileWidth,
-		y: 17 * Map.tileHeight,
-		class: 'dog',
-		direction: 4,
-		speed: 6,
-		aggresive: false,
-		isBoss: false,
-		maxHp: 1,
-		hp: 1,
-		isAttacking: false
-	},
-	{
-		id: server.lastEnemyID++,
-		x: 48 * Map.tileWidth,
-		y: 16 * Map.tileHeight,
-		class: 'black cat',
-		direction: 4,
-		speed: 7.5,
-		aggresive: false,
-		isBoss: false,
-		maxHp: 1,
-		hp: 1,
-		isAttacking: false
-	}
+	EnemyCreator.createMouse(6 * Map.tileWidth, 90 * Map.tileHeight),
+	EnemyCreator.createMouse(7 * Map.tileWidth, 85 * Map.tileHeight),
+	EnemyCreator.createMouse(14 * Map.tileWidth, 75 * Map.tileHeight),
+	EnemyCreator.createMouse(16 * Map.tileWidth, 71 * Map.tileHeight),
+	EnemyCreator.createMouse(32 * Map.tileWidth, 67 * Map.tileHeight),
+	EnemyCreator.createMouse(66 * Map.tileWidth, 68 * Map.tileHeight),
+	EnemyCreator.createMouse(49 * Map.tileWidth, 96 * Map.tileHeight),
+	EnemyCreator.createMouse(86 * Map.tileWidth, 69 * Map.tileHeight),
+	EnemyCreator.createSpider(34 * Map.tileWidth, 83 * Map.tileHeight),
+	EnemyCreator.createSpider(6 * Map.tileWidth, 65 * Map.tileHeight),
+	EnemyCreator.createSpider(75 * Map.tileWidth, 65 * Map.tileHeight),
+	EnemyCreator.createSkeleton(57 * Map.tileWidth, 68 * Map.tileHeight),
+	EnemyCreator.createSkeleton(49 * Map.tileWidth, 72 * Map.tileHeight),
+	EnemyCreator.createSkeleton(86 * Map.tileWidth, 42 * Map.tileHeight),
+	EnemyCreator.createSkeleton(89 * Map.tileWidth, 41 * Map.tileHeight),
+	EnemyCreator.createSkeleton(81 * Map.tileWidth, 56 * Map.tileHeight),
+	EnemyCreator.createSkeleton(93 * Map.tileWidth, 40 * Map.tileHeight),
+	EnemyCreator.createBrainy(139 * Map.tileWidth, 94 * Map.tileHeight),
+	EnemyCreator.createSkeleton(152 * Map.tileWidth, 87 * Map.tileHeight),
+	EnemyCreator.createZombie(73 * Map.tileWidth, 88 * Map.tileHeight),
+	EnemyCreator.createZombie(92 * Map.tileWidth, 86 * Map.tileHeight),
+	EnemyCreator.createZombie(127 * Map.tileWidth, 60 * Map.tileHeight),
+	EnemyCreator.createZombie(109 * Map.tileWidth, 42 * Map.tileHeight),
+	EnemyCreator.createBrainy(96 * Map.tileWidth, 69 * Map.tileHeight),
+	EnemyCreator.createBrainy(93 * Map.tileWidth, 18 * Map.tileHeight),
+	EnemyCreator.createSkeleton(100 * Map.tileWidth, 25 * Map.tileHeight),
+	EnemyCreator.createSkeleton(95 * Map.tileWidth, 24 * Map.tileHeight),
+	EnemyCreator.createSkeleton(95 * Map.tileWidth, 26 * Map.tileHeight),
+	EnemyCreator.createSkeleton(93 * Map.tileWidth, 12 * Map.tileHeight),
+	EnemyCreator.createZombie(86 * Map.tileWidth, 23 * Map.tileHeight),
+	EnemyCreator.createWhiteCat(6 * Map.tileWidth, 28 * Map.tileHeight),
+	EnemyCreator.createDog(33 * Map.tileWidth, 17 * Map.tileHeight),
+	EnemyCreator.createBlackCat(48 * Map.tileWidth, 16 * Map.tileHeight),
 ];
-var boss = {
-	id: server.lastEnemyID++,
-	x: 146 * Map.tileWidth,
-	y: 17 * Map.tileHeight,
-	class: 'dragon',
-	direction: 4,
-	speed: 0,
-	aggresive: true,
-	isBoss: true,
-	maxHp: 1000,
-	hp: 1000,
-	isAttacking: false
-};
+var boss = EnemyCreator.createDragon(146 * Map.tileWidth, 17 * Map.tileHeight);
 enemies.push(boss);
 var players = {};
 var projectilles = [];
@@ -202,12 +132,10 @@ function randomInt(low, high) {
 	return Math.floor(Math.random() * (high - low) + low);
 }
 
-
-
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
-	//console.log(util.inspect(projectilles, false, 3));
+	//console.log(util.inspect(enemies, false, 3));
 	//console.log(projectilles.length);
 	enemies.forEach(function (enemy) {
 		if (enemy.hp <= 0) {
@@ -220,7 +148,7 @@ setInterval(function () {
 			}
 		}
 	});
-}, 500);
+}, 3000);
 setInterval(function () {
 	for (i = 0; i < projectilles.length; i++) {
 		if (!canWalkThere(projectilles[i].x, projectilles[i].y)) {
@@ -330,7 +258,7 @@ function areColliding(a, b, size) {
 setInterval(function () {
 	var currentTime = (new Date()).getTime();
 	for (var i = 0; i < enemies.length; i++) {
-		if (enemies[i].hp <= 0 && currentTime - enemies[i].deathtime > 20000) {
+		if (enemies[i].hp <= 0 && currentTime - enemies[i].deathtime > 60000) {
 			enemies[i].hp = enemies[i].maxHp;
 		}
 	};

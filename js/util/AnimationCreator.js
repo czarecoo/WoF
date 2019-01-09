@@ -7,6 +7,7 @@ class AnimationCreator {
 		AnimationCreator.createEnemies(scene, "skeleton");
 		AnimationCreator.createSpider(scene, "spider");
 		AnimationCreator.createEnemies(scene, "zombie");
+		AnimationCreator.createEnemies(scene, "mouse");
 		AnimationCreator.createEnemies(scene, "dog");
 		AnimationCreator.createEnemies(scene, "white cat");
 		AnimationCreator.createEnemies(scene, "black cat");

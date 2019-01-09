@@ -16,7 +16,8 @@ class Loader {
 		scene.load.spritesheet('skeleton', 'assets/enemy/skeleton.png', { frameWidth: 32, frameHeight: 64 });
 		scene.load.spritesheet('spider', 'assets/enemy/spider.png', { frameWidth: 32, frameHeight: 32 });
 		scene.load.spritesheet('zombie', 'assets/enemy/zombie.png', { frameWidth: 32, frameHeight: 64 });
-		scene.load.spritesheet('dog', 'assets/enemy/dog2.png', { frameWidth: 32, frameHeight: 32 });
+		scene.load.spritesheet('dog', 'assets/enemy/dog.png', { frameWidth: 32, frameHeight: 32 });
+		scene.load.spritesheet('mouse', 'assets/enemy/mouse.png', { frameWidth: 32, frameHeight: 32 });
 		scene.load.spritesheet('white cat', 'assets/enemy/wcat.png', { frameWidth: 32, frameHeight: 32 });
 		scene.load.spritesheet('black cat', 'assets/enemy/bcat.png', { frameWidth: 32, frameHeight: 32 });
 		scene.load.plugin('rexvirtualjoystickplugin', 'js/util/rexvirtualjoystickplugin.min.js', true);
