@@ -162,7 +162,7 @@ setInterval(function () {
 		projectille.y += projectille.speed * Math.sin(projectille.rotation);
 		let id;
 		for (id in players) {
-			if (areColliding(players[id], projectille, projectille.size) && !projectille.isPlayerParent) {
+			if (players[id].hp > 0 && areColliding(players[id], projectille, projectille.size) && !projectille.isPlayerParent) {
 				players[id].hp -= projectille.damage;
 				if (players[id].hp <= 0) {
 					players[id].hp = 0
@@ -175,7 +175,7 @@ setInterval(function () {
 			}
 		}
 		for (var j = 0; j < enemies.length; j++) {
-			if (areColliding(enemies[j], projectille, projectille.size) && projectille.isPlayerParent) {
+			if (enemies[j].hp > 0 && areColliding(enemies[j], projectille, projectille.size) && projectille.isPlayerParent) {
 				enemies[j].hp -= projectille.damage;
 				if (enemies[j].hp <= 0) {
 					enemies[j].hp = 0;

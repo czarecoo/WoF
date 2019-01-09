@@ -28,7 +28,7 @@ class Player {
 		if (this.animationKey == 'warrior') {
 			this.shootSpeed = 18;
 			this.shootClass = 'shuriken'
-			this.shootTime = 6;
+			this.shootTime = 6.5;
 			this.shootDmg = 20;
 		} else if (this.animationKey == 'mage') {
 			this.shootSpeed = 32;
@@ -38,7 +38,7 @@ class Player {
 		} else {
 			this.shootSpeed = 25;
 			this.shootClass = 'arrow';
-			this.shootTime = 4;
+			this.shootTime = 5;
 			this.shootDmg = 15;
 		}
 		this.questLog = this.scene.add.text(700, 10, 'Quests:', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
