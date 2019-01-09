@@ -141,10 +141,8 @@ io.on('connection', function (socket) {
 		socket.playerID = server.lastPlayerID++;
 		var player = {
 			id: socket.playerID,
-			x: randomInt(18 * Map.tileWidth, 24 * Map.tileWidth),
-			y: 30 * Map.tileHeight,
-			//x: 140 * Map.tileWidth,
-			//y: 16 * Map.tileHeight,
+			x: randomInt(20 * Map.tileWidth, 24 * Map.tileWidth),
+			y: randomInt(30 * Map.tileWidth, 32 * Map.tileWidth),
 			class: chosenClass,
 			maxHp: 100,
 			hp: 100,
@@ -159,8 +157,8 @@ io.on('connection', function (socket) {
 				var player = players[socket.playerID];
 				if (player != undefined) {
 					if (isTeleportingToDung(data.x, data.y)) {
-						player.x = 94.5 * Map.tileWidth;
-						player.y = 30 * Map.tileHeight;
+						player.x = 11.5 * Map.tileWidth;
+						player.y = 98 * Map.tileHeight;
 						io.emit('forceMovePlayer', player);
 					} else if (isTeleportingToTown(data.x, data.y)) {
 						player.x = 19.5 * Map.tileWidth;
@@ -309,7 +307,7 @@ function isTeleportingToDung(x, y) {
 	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 2;
 }
 function isTeleportingToTown(x, y) {
-	return Math.floor(x / Map.tileWidth) == 94 && Math.floor(y / Map.tileHeight) == 31;
+	return Math.floor(x / Map.tileWidth) == 11 && Math.floor(y / Map.tileHeight) == 98;
 }
 function isTeleportingToDungLadder(x, y) {
 	return Math.floor(x / Map.tileWidth) == 136 && Math.floor(y / Map.tileHeight) == 7;
