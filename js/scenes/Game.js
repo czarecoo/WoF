@@ -108,7 +108,7 @@ class Game extends Phaser.Scene {
 		this.processProjectilles(projectilles);
 		this.connectedPlayersText.setText(['Use joystick or press W, S, A or D to walk.',
 			'Touch or click to use your skill.', '',
-			'Connected players: ' + players.length + '.', 'Ping: ' + (this.client.socket.ping != undefined ? this.client.socket.ping + ' ms, ' : 'calculating, ') + ' diff: ' + diff + ' ms.']);
+			'Connected players: ' + players.length + '.', 'Ping: ' + (this.client.socket.ping != undefined ? this.client.socket.ping + ' ms, ' : 'calculating, ') + ' diff: ' + diff + ' ms, fps: ' + Math.floor(this.game.loop.actualFps)]);
 	}
 	processProjectilles(projectilles) {
 		var tempProjectillesArray = [];
