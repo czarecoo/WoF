@@ -26,6 +26,7 @@ class Game extends Phaser.Scene {
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
 		this.isDialogOn = false;
+		this.scene.launch('GameUI');
 	};
 	update() {
 		if (this.mainPlayer != undefined && this.mainPlayer.hp <= 0) {
@@ -202,6 +203,7 @@ class Game extends Phaser.Scene {
 	}
 
 	gameOver() {
+		this.scene.stop('GameUI');
 		this.client.disconnect();
 		this.cameras.main.shake(500);
 

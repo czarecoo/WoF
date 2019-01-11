@@ -14,7 +14,7 @@ window.onload = function () {
 			activePointers: 2,
 		},
 		scene: [
-			BootScene, Game, GameOverScene
+			BootScene, Game, GameUI, GameOverScene
 		]
 	};
 

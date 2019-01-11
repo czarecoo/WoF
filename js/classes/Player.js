@@ -9,8 +9,8 @@ class Player {
 		this.playerSprite.MaxSpeed = 150;
 		this.playerSprite.Speed = 150;
 		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
-		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
-		this.cooldownBar = this.scene.physics.add.sprite(config.x, config.y, 'cooldownBar').setOrigin(0, 0.5);
+		this.healthBar = this.scene.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
+		this.cooldownBar = this.scene.add.sprite(config.x, config.y, 'cooldownBar').setOrigin(0, 0.5);
 
 		this.joyStick = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
 			x: 140,
@@ -56,8 +56,9 @@ class Player {
 		}
 
 		if (!this.scene.isDialogOn) {
+			var width = this.scene.game.canvas.width;
 			if (this.scene.game.device.os.desktop) {
-				if (this.scene.input.mousePointer.isDown && this.joyStick.pointer == undefined) {
+				if (this.scene.input.mousePointer.isDown && this.joyStick.pointer == undefined && this.scene.input.mousePointer.x < (width - 200)) {
 					var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 						this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX,
 						this.scene.input.mousePointer.y + this.scene.cameras.main.scrollY);
@@ -74,7 +75,7 @@ class Player {
 						pointer = this.scene.input.pointer2;
 					}
 				}
-				if (pointer.isDown) {
+				if (pointer.isDown && pointer.x < (width - 200)) {
 					var angle = Phaser.Math.Angle.Between(this.playerSprite.x, this.playerSprite.y,
 						pointer.x + this.scene.cameras.main.scrollX,
 						pointer.y + this.scene.cameras.main.scrollY);
