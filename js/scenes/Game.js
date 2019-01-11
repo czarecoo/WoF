@@ -148,11 +148,6 @@ class Game extends Phaser.Scene {
 			i--;
 		}
 		this.projectilles = tempProjectillesArray;
-		/*
-		for (var i = 0; i < projectilles.length; i++) {
-			this.projectilles.push(this.physics.add.sprite(projectilles[i].x, projectilles[i].y, projectilles[i].class));
-			this.projectilles[i].rotation = projectilles[i].rotation;
-		}*/
 	}
 	updatePlayer(playerData) {
 		var player = this.players[playerData.id];

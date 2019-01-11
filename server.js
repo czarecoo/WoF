@@ -4,6 +4,7 @@ var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 const MapClass = require('./Map.js');
 const EnemyCreator = require('./EnemyCreator.js');
+const ProjectilleCreator = require('./ProjectilleCreator.js');
 var Map = new MapClass();
 const util = require('util');
 var port = 8080;
@@ -16,47 +17,11 @@ app.get('/', function (req, res) {
 });
 
 server.lastPlayerID = 0;
-server.lastEnemyID = 0;
-server.lastProjectilleID = 0;
 
 server.listen(process.env.PORT || port, function () {
 	console.log('Listening on ' + server.address().port);
 });
-var enemies = [
-	EnemyCreator.createMouse(6 * Map.tileWidth, 90 * Map.tileHeight),
-	EnemyCreator.createMouse(7 * Map.tileWidth, 85 * Map.tileHeight),
-	EnemyCreator.createMouse(14 * Map.tileWidth, 75 * Map.tileHeight),
-	EnemyCreator.createMouse(16 * Map.tileWidth, 71 * Map.tileHeight),
-	EnemyCreator.createMouse(32 * Map.tileWidth, 67 * Map.tileHeight),
-	EnemyCreator.createMouse(66 * Map.tileWidth, 68 * Map.tileHeight),
-	EnemyCreator.createMouse(49 * Map.tileWidth, 96 * Map.tileHeight),
-	EnemyCreator.createMouse(86 * Map.tileWidth, 69 * Map.tileHeight),
-	EnemyCreator.createSpider(34 * Map.tileWidth, 83 * Map.tileHeight),
-	EnemyCreator.createSpider(6 * Map.tileWidth, 65 * Map.tileHeight),
-	EnemyCreator.createSpider(75 * Map.tileWidth, 65 * Map.tileHeight),
-	EnemyCreator.createSkeleton(57 * Map.tileWidth, 68 * Map.tileHeight),
-	EnemyCreator.createSkeleton(49 * Map.tileWidth, 72 * Map.tileHeight),
-	EnemyCreator.createSkeleton(86 * Map.tileWidth, 42 * Map.tileHeight),
-	EnemyCreator.createSkeleton(89 * Map.tileWidth, 41 * Map.tileHeight),
-	EnemyCreator.createSkeleton(81 * Map.tileWidth, 56 * Map.tileHeight),
-	EnemyCreator.createSkeleton(93 * Map.tileWidth, 40 * Map.tileHeight),
-	EnemyCreator.createBrainy(139 * Map.tileWidth, 94 * Map.tileHeight),
-	EnemyCreator.createSkeleton(152 * Map.tileWidth, 87 * Map.tileHeight),
-	EnemyCreator.createZombie(73 * Map.tileWidth, 88 * Map.tileHeight),
-	EnemyCreator.createZombie(92 * Map.tileWidth, 86 * Map.tileHeight),
-	EnemyCreator.createZombie(127 * Map.tileWidth, 60 * Map.tileHeight),
-	EnemyCreator.createZombie(109 * Map.tileWidth, 42 * Map.tileHeight),
-	EnemyCreator.createBrainy(96 * Map.tileWidth, 69 * Map.tileHeight),
-	EnemyCreator.createBrainy(93 * Map.tileWidth, 18 * Map.tileHeight),
-	EnemyCreator.createSkeleton(100 * Map.tileWidth, 25 * Map.tileHeight),
-	EnemyCreator.createSkeleton(95 * Map.tileWidth, 24 * Map.tileHeight),
-	EnemyCreator.createSkeleton(95 * Map.tileWidth, 26 * Map.tileHeight),
-	EnemyCreator.createSkeleton(93 * Map.tileWidth, 12 * Map.tileHeight),
-	EnemyCreator.createZombie(86 * Map.tileWidth, 23 * Map.tileHeight),
-	EnemyCreator.createWhiteCat(6 * Map.tileWidth, 28 * Map.tileHeight),
-	EnemyCreator.createDog(33 * Map.tileWidth, 17 * Map.tileHeight),
-	EnemyCreator.createBlackCat(48 * Map.tileWidth, 16 * Map.tileHeight),
-];
+var enemies = EnemyCreator.createAll(Map);
 var boss = EnemyCreator.createDragon(146 * Map.tileWidth, 17 * Map.tileHeight);
 enemies.push(boss);
 var players = {};
@@ -111,7 +76,7 @@ io.on('connection', function (socket) {
 			}
 		});
 		socket.on('shoot', function (projectille) {
-			projectille.id = server.lastProjectilleID++;
+			projectille.id = ProjectilleCreator.lastProjectilleID++;
 			projectille.isPlayerParent = true;
 			projectilles.push(projectille);
 		});
@@ -228,6 +193,37 @@ setInterval(function () {
 	lastUpdateTime = currentTime;
 }, 50);
 
+
+setInterval(function () {
+	var currentTime = (new Date()).getTime();
+	for (var i = 0; i < enemies.length; i++) {
+		if (enemies[i].hp <= 0 && currentTime - enemies[i].deathtime > 60000) {
+			enemies[i].hp = enemies[i].maxHp;
+		}
+	};
+}, 1000);
+
+setInterval(function () {
+	if (boss.hp > 0) {
+		var rand = randomInt(0, 360);
+		if (boss.hp > boss.maxHp * 8 / 10) {
+			projectilles = projectilles.concat(ProjectilleCreator.createPhase1Projectilles(rand, Map));
+		} else if (boss.hp > boss.maxHp * 3 / 10) {
+			projectilles = projectilles.concat(ProjectilleCreator.createPhase2Projectilles(rand, Map));
+		} else {
+			projectilles = projectilles.concat(ProjectilleCreator.createPhase3Projectilles(rand, Map));
+		}
+	}
+}, 3000);
+
+function getAllPlayers() {
+	var playersArr = [];
+	Object.keys(players).forEach(function (socketID) {
+		var player = players[socketID];
+		if (player) playersArr.push(player);
+	});
+	return playersArr;
+}
 function canWalkThere(x, y) {
 	return Map.isWalkable(Math.floor(x / Map.tileWidth), Math.floor(y / Map.tileHeight));
 }
@@ -243,256 +239,6 @@ function isTeleportingToDungLadder(x, y) {
 function isTeleportingToBossRoom(x, y) {
 	return Math.floor(x / Map.tileWidth) == 86 && Math.floor(y / Map.tileHeight) == 25;
 }
-function getAllPlayers() {
-	var playersArr = [];
-	Object.keys(players).forEach(function (socketID) {
-		var player = players[socketID];
-		if (player) playersArr.push(player);
-	});
-	return playersArr;
-}
 function areColliding(a, b, size) {
 	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }
-
-setInterval(function () {
-	var currentTime = (new Date()).getTime();
-	for (var i = 0; i < enemies.length; i++) {
-		if (enemies[i].hp <= 0 && currentTime - enemies[i].deathtime > 60000) {
-			enemies[i].hp = enemies[i].maxHp;
-		}
-	};
-}, 1000);
-
-setInterval(function () {
-	if (boss.hp > 0) {
-		var rand = randomInt(0, 360);
-		if (boss.hp > boss.maxHp * 8 / 10) {
-			projectilles.push(
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'fireball',
-					rotation: (0 + rand) * Math.PI / 180,
-					speed: 10,
-					isPlayerParent: false,
-					damage: 35,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'fireball',
-					rotation: (90 + rand) * Math.PI / 180,
-					speed: 10,
-					isPlayerParent: false,
-					damage: 35,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'fireball',
-					rotation: (180 + rand) * Math.PI / 180,
-					speed: 10,
-					isPlayerParent: false,
-					damage: 35,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'fireball',
-					rotation: (270 + rand) * Math.PI / 180,
-					speed: 10,
-					isPlayerParent: false,
-					damage: 35,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'fireball',
-					rotation: (315 + rand) * Math.PI / 180,
-					speed: 10,
-					isPlayerParent: false,
-					damage: 35,
-					size: 20
-				});
-		} else if (boss.hp > boss.maxHp * 3 / 10) {
-			projectilles.push(
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (0 + rand) * Math.PI / 180,
-					speed: 12,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (20 + rand) * Math.PI / 180,
-					speed: 13,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (40 + rand) * Math.PI / 180,
-					speed: 14,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (60 + rand) * Math.PI / 180,
-					speed: 15,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (80 + rand) * Math.PI / 180,
-					speed: 16,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (100 + rand) * Math.PI / 180,
-					speed: 17,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'darkfireball',
-					rotation: (120 + rand) * Math.PI / 180,
-					speed: 18,
-					isPlayerParent: false,
-					damage: 40,
-					size: 20
-				});
-		} else {
-			projectilles.push(
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (0 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (45 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (90 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (135 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (180 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (225 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (270 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				},
-				{
-					id: server.lastProjectilleID++,
-					x: 146 * Map.tileWidth,
-					y: 17 * Map.tileHeight,
-					class: 'bigfireball',
-					rotation: (315 + rand) * Math.PI / 180,
-					speed: 9,
-					isPlayerParent: false,
-					damage: 49,
-					size: 40
-				});
-		}
-	}
-}, 3000);
