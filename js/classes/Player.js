@@ -3,7 +3,7 @@ class Player {
 		this.id = config.id;
 		this.scene = config.scene;
 		this.animationKey = config.key;
-		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown');
+		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown').setDepth(4);
 		this.playerSprite.setCollideWorldBounds(true);
 		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D,ONE');
 		this.playerSprite.MaxSpeed = 150;
@@ -16,8 +16,8 @@ class Player {
 			x: 140,
 			y: 420,
 			radius: 80,
-			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80),
-			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50),
+			base: this.scene.add.graphics().fillStyle(0x888888).fillCircle(0, 0, 80).setDepth(5).setAlpha(0.7),
+			thumb: this.scene.add.graphics().fillStyle(0xcccccc).fillCircle(0, 0, 50).setDepth(5).setAlpha(0.7),
 			// dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
 			forceMin: 15,
 			//enable: !this.scene.game.device.os.desktop

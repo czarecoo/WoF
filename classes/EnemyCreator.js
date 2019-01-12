@@ -48,7 +48,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 1,
 			hp: 1,
-			isAttacking: false
+			isAttacking: false,
+			drops: []
 		}
 	}
 	static createWhiteCat(x, y) {
@@ -63,7 +64,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 1,
 			hp: 1,
-			isAttacking: false
+			isAttacking: false,
+			drops: []
 		}
 	}
 	static createDog(x, y) {
@@ -78,7 +80,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 1,
 			hp: 1,
-			isAttacking: false
+			isAttacking: false,
+			drops: []
 		}
 	}
 	static createMouse(x, y) {
@@ -93,7 +96,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 25,
 			hp: 25,
-			isAttacking: false
+			isAttacking: false,
+			drops: [{ class: 'potion0' }]
 		}
 	}
 	static createSpider(x, y) {
@@ -108,7 +112,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 35,
 			hp: 35,
-			isAttacking: false
+			isAttacking: false,
+			drops: [{ class: 'potion0' }]
 		}
 	}
 	static createBrainy(x, y) {
@@ -123,7 +128,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 50,
 			hp: 50,
-			isAttacking: false
+			isAttacking: false,
+			drops: [{ class: 'armor0' }, { class: 'legs0' }, { class: 'helmet0' }, { class: 'boots0' }]
 		}
 	}
 	static createZombie(x, y) {
@@ -138,7 +144,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 200,
 			hp: 200,
-			isAttacking: false
+			isAttacking: false,
+			drops: [{ class: 'armor0' }, { class: 'legs0' }, { class: 'helmet0' }, { class: 'boots0' }]
 		}
 	}
 	static createSkeleton(x, y) {
@@ -153,7 +160,8 @@ class EnemyCreator {
 			isBoss: false,
 			maxHp: 100,
 			hp: 100,
-			isAttacking: false
+			isAttacking: false,
+			drops: [{ class: 'armor0' }, { class: 'legs0' }, { class: 'helmet0' }, { class: 'boots0' }]
 		}
 	}
 	static createDragon(x, y) {
@@ -168,7 +176,8 @@ class EnemyCreator {
 			isBoss: true,
 			maxHp: 2000,
 			hp: 2000,
-			isAttacking: false
+			isAttacking: false,
+			drops: [{ class: 'sword0' }, { class: 'sword1' }, { class: 'shield0' }, { class: 'xbow0' }]
 		}
 	}
 

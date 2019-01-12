@@ -25,6 +25,7 @@ class Game extends Phaser.Scene {
 		this.connectedPlayersText = this.add.text(10, 10, 'Connected players: ', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0).setDepth(5);
 		AnimationCreator.createDragon(this, "dragon");
 		this.projectilles = [];
+		this.items = [];
 		this.isDialogOn = false;
 		this.scene.launch('GameUI');
 	};
@@ -66,9 +67,9 @@ class Game extends Phaser.Scene {
 			this.enemies.push(newEnemy);
 		}
 	}
-	addItems(items) {
-		for (var i = 0; i < items.length; i++) {
-			this.physics.add.sprite(items[i].x, items[i].y, items[i].class);
+	addBodies(bodies) {
+		for (var i = 0; i < bodies.length; i++) {
+			this.add.sprite(bodies[i].x, bodies[i].y, bodies[i].class).setDepth(1);
 		}
 	}
 	addMainPlayer(id, x, y, randomClass) {
@@ -148,6 +149,29 @@ class Game extends Phaser.Scene {
 			i--;
 		}
 		this.projectilles = tempProjectillesArray;
+	}
+	processUpdateItems(items) {
+		var tempItemsArray = [];
+		for (var i = 0; i < items.length; i++) {
+			var shouldAdd = true;
+			for (var j = 0; j < this.items.length; j++) {
+				if (items[i].id == this.items[j].id) {
+					tempItemsArray.push(this.items.splice(j, 1)[0]);
+					shouldAdd = false;
+					break;
+				}
+			}
+			if (shouldAdd) {
+				tempItemsArray.push(this.add.sprite(items[i].x, items[i].y, items[i].class).setDepth(2));
+				tempItemsArray[tempItemsArray.length - 1].id = items[i].id;
+			}
+		}
+		for (var i = 0; i < this.items.length; i++) {
+			this.items[i].destroy();
+			this.items.splice(i, 1);
+			i--;
+		}
+		this.items = tempItemsArray;
 	}
 	updatePlayer(playerData) {
 		var player = this.players[playerData.id];

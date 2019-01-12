@@ -5,7 +5,7 @@ class Enemy {
 		this.animationKey = config.key;
 		this.deadSprite = this.scene.physics.add.sprite(0, 0, 'deadenemy');
 		this.deadSprite.visible = false;
-		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown');
+		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idleDown').setDepth(3);
 		this.playerSprite.setCollideWorldBounds(true);
 		if (config.aggresive) {
 			this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '12px Arial', fill: 'red' }).setOrigin(0.5, 0.5);

@@ -5,7 +5,7 @@ class Boss {
 		this.animationKey = config.key;
 		this.deadSprite = this.scene.physics.add.sprite(0, 0, 'deadenemy');
 		this.deadSprite.visible = false;
-		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idle');
+		this.playerSprite = this.scene.physics.add.sprite(config.x, config.y, this.animationKey + 'idle').setDepth(3);
 		this.playerSprite.setCollideWorldBounds(true);
 		this.nameText = this.scene.add.text(6, 6, this.animationKey.charAt(0).toUpperCase() + this.animationKey.slice(1), { font: '20px Arial', fill: 'red' }).setOrigin(0.5, 0.5);
 		this.healthBar = this.scene.physics.add.sprite(config.x, config.y, 'redBossBar').setOrigin(0, 0.5);

@@ -18,6 +18,7 @@ app.get('/', function (req, res) {
 });
 
 server.lastPlayerID = 0;
+server.lastitemID = 0;
 
 server.listen(process.env.PORT || port, function () {
 	console.log('Listening on ' + server.address().port);
@@ -28,11 +29,12 @@ enemies.push(boss);
 var players = {};
 var projectilles = [];
 var items = [];
+var bodies = [];
 
 io.on('connection', function (socket) {
 	socket.on('init', function (chosenClass) {
 		console.log("Player with socketid: " + socket.id + " connected.")
-		socket.emit('addItems', items);
+		socket.emit('addBodies', bodies);
 		socket.emit('addPlayers', getAllPlayers());
 		socket.playerID = server.lastPlayerID++;
 		var player = {
@@ -101,7 +103,7 @@ function randomInt(low, high) {
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
-	//console.log(util.inspect(enemies, false, 3));
+	//console.log(util.inspect(items, false, 3));
 	//console.log(projectilles.length);
 	enemies.forEach(function (enemy) {
 		if (enemy.hp <= 0) {
@@ -132,7 +134,7 @@ setInterval(function () {
 				players[id].hp -= projectille.damage;
 				if (players[id].hp <= 0) {
 					players[id].hp = 0
-					items.push({ x: players[id].x, y: players[id].y, class: 'deadplayer' });
+					bodies.push({ x: players[id].x, y: players[id].y, class: 'deadplayer' });
 				} else {
 					projectilles.splice(i, 1);
 					i--;
@@ -146,6 +148,15 @@ setInterval(function () {
 				if (enemies[j].hp <= 0) {
 					enemies[j].hp = 0;
 					enemies[j].deathtime = (new Date()).getTime();
+					if (enemies[j].drops.length > 0) {
+						var rand = randomInt(0, enemies[j].drops.length); // randomInt(0, 2) output: 0 1; randomInt(0, 1) output: 0
+						let item = JSON.parse(JSON.stringify(enemies[j].drops[rand]));
+						item.id = server.lastitemID++;
+						item.x = enemies[j].x;
+						item.y = enemies[j].y;
+						item.creationTime = enemies[j].deathtime;
+						items.push(item);
+					}
 				} else {
 					projectilles.splice(i, 1);
 					i--;
@@ -163,7 +174,7 @@ setInterval(function () {
 				playersArr[i].hp -= 4;
 				if (playersArr[i].hp <= 0) {
 					playersArr[i].hp = 0
-					items.push({ x: playersArr[i].x, y: playersArr[i].y, class: 'deadplayer' });
+					bodies.push({ x: playersArr[i].x, y: playersArr[i].y, class: 'deadplayer' });
 				}
 				enemy.isAttacking = true;
 			} else {
@@ -194,12 +205,23 @@ setInterval(function () {
 	lastUpdateTime = currentTime;
 }, 50);
 
+setInterval(function () {
+	Object.keys(io.sockets.connected).forEach(function (socketId) {
+		io.to(socketId).emit('updateItems', items);
+	});
+}, 250);
 
 setInterval(function () {
 	var currentTime = (new Date()).getTime();
 	for (var i = 0; i < enemies.length; i++) {
 		if (enemies[i].hp <= 0 && currentTime - enemies[i].deathtime > 60000) {
 			enemies[i].hp = enemies[i].maxHp;
+		}
+	};
+	for (var i = 0; i < items.length; i++) {
+		if (currentTime - items[i].creationTime > 60000) {
+			items.splice(i, 1);
+			i--;
 		}
 	};
 }, 1000);
