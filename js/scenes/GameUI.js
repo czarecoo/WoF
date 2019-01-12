@@ -4,13 +4,13 @@ class GameUI extends Phaser.Scene {
 	};
 	preload() {
 		this.load.image('menuBackground', 'assets/ui/menuBackground.png');
-		this.load.image('amuletSlot', 'assets/ui/amuletSlot.png');
+		//this.load.image('amuletSlot', 'assets/ui/amuletSlot.png');
 		this.load.image('armorSlot', 'assets/ui/armorSlot.png');
 		this.load.image('bootsSlot', 'assets/ui/bootsSlot.png');
 		this.load.image('emptySlot', 'assets/ui/emptySlot.png');
 		this.load.image('helmetSlot', 'assets/ui/helmetSlot.png');
 		this.load.image('legsSlot', 'assets/ui/legsSlot.png');
-		this.load.image('ringSlot', 'assets/ui/ringSlot.png');
+		//this.load.image('ringSlot', 'assets/ui/ringSlot.png');
 		this.load.image('shieldSlot', 'assets/ui/shieldSlot.png');
 		this.load.image('weaponSlot', 'assets/ui/weaponSlot.png');
 	}
@@ -65,21 +65,27 @@ class GameUI extends Phaser.Scene {
 				k++;
 			}
 		}
-
-		this.input.on('gameobjectdown', this.onObjectClicked);
-
+		this.input.on('gameobjectdown', this.onObjectClicked, this);
 	}
 	onObjectClicked(pointer, gameObject) {
-		console.log(gameObject.name);
+		let client = this.scene.get('Game').client;
+		if (isNaN(gameObject.name)) { //eq
+			if (this.eq[gameObject.name] != null) {
+				console.log(gameObject.name, this.eq[gameObject.name].name)
+			}
+		} else {
+			if (this.items[gameObject.name] != null) {
+				console.log(gameObject.name, this.items[gameObject.name].name)
+			}
+		}
 	}
 	update() {
 		let mainPlayer = this.scene.get('Game').mainPlayer;
 		if (mainPlayer) {
 			this.health.setText("Health: " + mainPlayer.hp + " / " + mainPlayer.maxHp);
+			this.processItems(mainPlayer.items);
+			this.processEq(mainPlayer.eq);
 		}
-		this.processItems(mainPlayer.items);
-		this.processEq(mainPlayer.eq);
-
 		for (let id in this.eq) {
 			if (this.eq[id] == null) {
 				this.eqSlots[id][0].active = true;
@@ -103,7 +109,7 @@ class GameUI extends Phaser.Scene {
 					}
 				}
 				if (shouldAdd) {
-					tempItemsArray.push(this.add.sprite(28 + this.sidebarX0 + i % 5 * 36, this.sidebarHeight * 9 / 15 + Math.floor(i / 5) * 36, items[i].class).setDepth(2));
+					tempItemsArray.push(this.add.sprite(28 + this.sidebarX0 + i % 5 * 36, this.sidebarHeight * 9 / 15 + Math.floor(i / 5) * 36, items[i].class).setName(items[i].class).setDepth(2));
 					tempItemsArray[tempItemsArray.length - 1].id = items[i].id;
 				}
 			}

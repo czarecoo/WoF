@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
 			class: chosenClass,
 			maxHp: 100,
 			hp: 100,
-			equipment: { 'helmet': null, 'armor': null, 'legs': null, 'boots': null, 'weapon': null, 'shield': null },
+			equipment: { 'helmet': 'helmet0', 'armor': null, 'legs': null, 'boots': null, 'weapon': null, 'shield': null },
 			items: []
 		};
 		players[socket.playerID] = player;
