@@ -32,16 +32,16 @@ class GameUI extends Phaser.Scene {
 		this.shieldSlot = this.add.sprite(this.sidebarX0 + this.sidebarWidth * 81 / 120, this.sidebarHeight * 4 / 15, 'shieldSlot').setName('shield').setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
 
 		//this.amuletSlot = this.add.sprite(this.sidebarX0 + this.sidebarWidth * 39 / 120, this.sidebarHeight * 3 / 15, 'amuletSlot').setName('amulet').setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
-		this.ringSlot1 = this.add.sprite(this.sidebarX0 + this.sidebarWidth * 39 / 120, this.sidebarHeight * 5 / 15, 'ringSlot').setName('ring1').setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
+		//this.ringSlot1 = this.add.sprite(this.sidebarX0 + this.sidebarWidth * 39 / 120, this.sidebarHeight * 5 / 15, 'ringSlot').setName('ring1').setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
 		//this.ringSlot2 = this.add.sprite(this.sidebarX0 + this.sidebarWidth * 81 / 120, this.sidebarHeight * 5 / 15, 'ringSlot').setName('ring2').setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
 
 		this.equipmentText = this.add.text(this.sidebarX0 + this.sidebarWidth * 1 / 2, this.sidebarHeight * 8 / 15, 'Inventory: ', { font: '16px Arial', fill: '#000000' }).setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9);
 
-		this.equipment = [[], [], [], [], []];
+		this.items = [];
 		var k = 0;
 		for (var i = 0; i < 5; i++) {
 			for (var j = 0; j < 5; j++) {
-				this.equipment[i][j] = this.add.sprite(10 + this.sidebarX0 + j * 36, this.sidebarHeight * 9 / 15 + i * 36, 'emptySlot').setName('eq' + k).setOrigin(0, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
+				this.add.sprite(10 + this.sidebarX0 + j * 36, this.sidebarHeight * 9 / 15 + i * 36, 'emptySlot').setName('eq' + k).setOrigin(0, 0.5).setScrollFactor(0).setAlpha(0.9).setInteractive();
 				k++;
 			}
 		}
@@ -53,9 +53,33 @@ class GameUI extends Phaser.Scene {
 		console.log(gameObject.name);
 	}
 	update() {
-		if (this.scene.get('Game').mainPlayer) {
-			this.health.setText("Health: " + this.scene.get('Game').mainPlayer.hp + " / " + this.scene.get('Game').mainPlayer.maxHp);
+		let mainPlayer = this.scene.get('Game').mainPlayer;
+		if (mainPlayer) {
+			this.health.setText("Health: " + mainPlayer.hp + " / " + mainPlayer.maxHp);
 		}
-
+		this.processItems(mainPlayer.items);
+	}
+	processItems(items) {
+		var tempItemsArray = [];
+		for (var i = 0; i < items.length; i++) {
+			var shouldAdd = true;
+			for (var j = 0; j < this.items.length; j++) {
+				if (items[i].id == this.items[j].id) {
+					tempItemsArray.push(this.items.splice(j, 1)[0]);
+					shouldAdd = false;
+					break;
+				}
+			}
+			if (shouldAdd) {
+				tempItemsArray.push(this.add.sprite(28 + this.sidebarX0 + i % 5 * 36, this.sidebarHeight * 9 / 15 + Math.floor(i / 5) * 36, items[i].class).setDepth(2));
+				tempItemsArray[tempItemsArray.length - 1].id = items[i].id;
+			}
+		}
+		for (var i = 0; i < this.items.length; i++) {
+			this.items[i].destroy();
+			this.items.splice(i, 1);
+			i--;
+		}
+		this.items = tempItemsArray;
 	}
 }

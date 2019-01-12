@@ -39,11 +39,14 @@ io.on('connection', function (socket) {
 		socket.playerID = server.lastPlayerID++;
 		var player = {
 			id: socket.playerID,
-			x: randomInt(20 * Map.tileWidth, 24 * Map.tileWidth),
-			y: randomInt(30 * Map.tileWidth, 32 * Map.tileWidth),
+			//x: randomInt(20 * Map.tileWidth, 24 * Map.tileWidth),
+			//y: randomInt(30 * Map.tileWidth, 32 * Map.tileWidth),
+			x: 19 * Map.tileWidth,
+			y: 4 * Map.tileWidth,
 			class: chosenClass,
 			maxHp: 100,
 			hp: 100,
+			items: []
 		};
 		players[socket.playerID] = player;
 		socket.emit('addEnemies', enemies);
@@ -103,6 +106,7 @@ function randomInt(low, high) {
 var counter = 0;
 setInterval(function () {
 	//console.log(counter++);
+	//console.log(util.inspect(players, false, 3));
 	//console.log(util.inspect(items, false, 3));
 	//console.log(projectilles.length);
 	enemies.forEach(function (enemy) {
@@ -166,6 +170,20 @@ setInterval(function () {
 		};
 	}
 }, 100);
+
+setInterval(function () {
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
+		for (let id in players) {
+			if (areColliding(players[id], item, 32) && players[id].items.length < 25) {
+				players[id].items.push(items.splice(i, 1)[0]);
+				i--;
+				break;
+			}
+		}
+	}
+}, 100);
+
 setInterval(function () {
 	var playersArr = getAllPlayers();
 	enemies.forEach(function (enemy) {

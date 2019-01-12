@@ -203,6 +203,8 @@ class Game extends Phaser.Scene {
 					player.playerSprite.y = playerData.y;
 				}
 				player.update();
+			} else {
+				player.items = playerData.items;
 			}
 		}
 	}
