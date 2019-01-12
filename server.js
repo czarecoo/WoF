@@ -46,6 +46,7 @@ io.on('connection', function (socket) {
 			class: chosenClass,
 			maxHp: 100,
 			hp: 100,
+			equipment: { 'helmet': null, 'armor': null, 'legs': null, 'boots': null, 'weapon': null, 'shield': null },
 			items: []
 		};
 		players[socket.playerID] = player;
@@ -225,7 +226,11 @@ setInterval(function () {
 
 setInterval(function () {
 	Object.keys(io.sockets.connected).forEach(function (socketId) {
-		io.to(socketId).emit('updateItems', items);
+		var player = players[io.sockets.connected[socketId].playerID];
+		if (player) {
+			io.to(socketId).emit('updateItems', items, player.equipment);
+		}
+
 	});
 }, 250);
 

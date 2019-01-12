@@ -33,8 +33,9 @@ class Client {
 		this.socket.on('update', function (enemies, players, projectilles, diff) {
 			Game.processUpdate(enemies, players, projectilles, diff);
 		});
-		this.socket.on('updateItems', function (items) {
+		this.socket.on('updateItems', function (items, eq) {
 			Game.processUpdateItems(items);
+			Game.processUpdateEq(eq);
 		});
 		this.socket.on('forceMovePlayer', function (data) {
 			Game.forceMovePlayer(data.id, data.x, data.y);

@@ -173,6 +173,9 @@ class Game extends Phaser.Scene {
 		}
 		this.items = tempItemsArray;
 	}
+	processUpdateEq(eq) {
+		this.mainPlayer.eq = eq;
+	}
 	updatePlayer(playerData) {
 		var player = this.players[playerData.id];
 		if (player != undefined) {
