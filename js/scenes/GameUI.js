@@ -71,11 +71,13 @@ class GameUI extends Phaser.Scene {
 		let client = this.scene.get('Game').client;
 		if (isNaN(gameObject.name)) { //eq
 			if (this.eq[gameObject.name] != null) {
-				console.log(gameObject.name, this.eq[gameObject.name].name)
+				client.unequip(gameObject.name, this.eq[gameObject.name].name);
+				//console.log(gameObject.name, this.eq[gameObject.name].name)
 			}
 		} else {
 			if (this.items[gameObject.name] != null) {
-				console.log(gameObject.name, this.items[gameObject.name].name)
+				client.equip(gameObject.name, this.items[gameObject.name].name);
+				//console.log(gameObject.name, this.items[gameObject.name].name)
 			}
 		}
 	}
@@ -100,15 +102,9 @@ class GameUI extends Phaser.Scene {
 		if (items != undefined) {
 			var tempItemsArray = [];
 			for (var i = 0; i < items.length; i++) {
-				var shouldAdd = true;
-				for (var j = 0; j < this.items.length; j++) {
-					if (items[i].id == this.items[j].id) {
-						tempItemsArray.push(this.items.splice(j, 1)[0]);
-						shouldAdd = false;
-						break;
-					}
-				}
-				if (shouldAdd) {
+				if (this.items[i] != undefined && items[i].name == this.items[i].name) {
+					tempItemsArray.push(this.items[i]);
+				} else {
 					tempItemsArray.push(this.add.sprite(28 + this.sidebarX0 + i % 5 * 36, this.sidebarHeight * 9 / 15 + Math.floor(i / 5) * 36, items[i].class).setName(items[i].class).setDepth(2));
 					tempItemsArray[tempItemsArray.length - 1].id = items[i].id;
 				}

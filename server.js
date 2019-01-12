@@ -90,6 +90,30 @@ io.on('connection', function (socket) {
 		socket.on('pingValue', function (data) {
 			socket.emit('pongValue', data);
 		});
+		socket.on('equip', function (slotId, itemName) {
+			let player = players[socket.playerID];
+			if (itemName != 'potion0') {
+				if (player.equipment[itemName.substring(0, itemName.length - 1)] == null) {
+					player.items.splice(slotId, 1);
+					player.equipment[itemName.substring(0, itemName.length - 1)] = itemName;
+				}
+			} else {
+				//if (player.hp < player.maxHp) {
+				player.items.splice(slotId, 1);
+				player.hp += 20;
+				if (player.hp > player.maxHp) {
+					player.hp = player.maxHp;
+				}
+				//}
+			}
+		});
+		socket.on('unequip', function (slotId, itemName) {
+			let player = players[socket.playerID];
+			if (player.items.length < 25) {
+				player.equipment[slotId] = null;
+				player.items.push({ class: itemName })
+			}
+		});
 		socket.on('disconnect', function () {
 			console.log("Player with socketid: " + socket.id + " disconnected.");
 			if (socket.playerID != undefined) {

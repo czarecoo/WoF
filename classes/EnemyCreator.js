@@ -177,7 +177,7 @@ class EnemyCreator {
 			maxHp: 2000,
 			hp: 2000,
 			isAttacking: false,
-			drops: [{ class: 'sword0' }, { class: 'sword1' }, { class: 'shield0' }, { class: 'xbow0' }]
+			drops: [{ class: 'weapon0' }, { class: 'weapon1' }, { class: 'shield0' }, { class: 'weapon2' }]
 		}
 	}
 

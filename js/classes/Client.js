@@ -54,4 +54,10 @@ class Client {
 	shoot(projectille) {
 		this.socket.emit('shoot', projectille);
 	}
+	equip(slotID, itemName) {
+		this.socket.emit('equip', slotID, itemName);
+	}
+	unequip(slotID, itemName) {
+		this.socket.emit('unequip', slotID, itemName);
+	}
 }

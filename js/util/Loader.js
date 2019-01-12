@@ -43,9 +43,9 @@ class Loader {
 		scene.load.image('helmet0', 'assets/items/helmet0.png');
 		scene.load.image('legs0', 'assets/items/legs0.png');
 		scene.load.image('shield0', 'assets/items/shield0.png');
-		scene.load.image('sword0', 'assets/items/sword0.png');
-		scene.load.image('sword1', 'assets/items/sword1.png');
-		scene.load.image('xbow0', 'assets/items/xbow0.png');
+		scene.load.image('weapon0', 'assets/items/sword0.png');
+		scene.load.image('weapon1', 'assets/items/sword1.png');
+		scene.load.image('weapon2', 'assets/items/xbow0.png');
 		scene.load.image('potion0', 'assets/items/potion0.png');
 	}
 }
