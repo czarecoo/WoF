@@ -21,7 +21,7 @@ class GameUI extends Phaser.Scene {
 		this.sidebary0 = 0;
 		this.sidebarWidth = this.menuBackground.width
 		this.sidebarHeight = this.game.canvas.height;
-		this.health = this.add.text(this.sidebarX0 + this.sidebarWidth * 1 / 2, this.sidebarHeight * 0.5 / 15, 'Health: ', { font: '16px Arial', fill: '#000000' }).setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9);
+		this.health = this.add.text(this.sidebarX0 + this.sidebarWidth * 1 / 2, this.sidebarHeight * 0.5 / 15, 'Health: ', { font: '20px Arial', fill: 'black' }).setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9);
 		this.equipmentText = this.add.text(this.sidebarX0 + this.sidebarWidth * 1 / 2, this.sidebarHeight * 2 / 15, 'Equipment: ', { font: '16px Arial', fill: '#000000' }).setOrigin(0.5, 0.5).setScrollFactor(0).setAlpha(0.9);
 
 		this.eqSlots = {
@@ -65,23 +65,38 @@ class GameUI extends Phaser.Scene {
 				k++;
 			}
 		}
+		this.timer1 = 0;
+		this.unequipTime = 5;
+		this.timer2 = 0;
+		this.equipTime = 5;
+		this.time.addEvent({ delay: 100, loop: true, callback: function () { this.timer1++; this.timer2++ }, callbackScope: this });
 		this.input.on('gameobjectdown', this.onObjectClicked, this);
 	}
 	onObjectClicked(pointer, gameObject) {
 		let client = this.scene.get('Game').client;
 		if (isNaN(gameObject.name)) { //eq
 			if (this.eq[gameObject.name] != null) {
-				client.unequip(gameObject.name, this.eq[gameObject.name].name);
-				//console.log(gameObject.name, this.eq[gameObject.name].name)
+				if (this.timer1 >= this.unequipTime) {
+					this.timer1 = 0;
+					client.unequip(gameObject.name, this.eq[gameObject.name].name);
+				}
 			}
 		} else {
 			if (this.items[gameObject.name] != null) {
-				client.equip(gameObject.name, this.items[gameObject.name].name);
-				//console.log(gameObject.name, this.items[gameObject.name].name)
+				if (this.timer2 >= this.equipTime) {
+					this.timer2 = 0;
+					client.equip(gameObject.name, this.items[gameObject.name].name);
+				}
 			}
 		}
 	}
 	update() {
+		if (this.timer1 > this.unequipTime) {
+			this.timer1 = this.unequipTime;
+		}
+		if (this.timer2 > this.equipTime) {
+			this.timer2 = this.equipTime;
+		}
 		let mainPlayer = this.scene.get('Game').mainPlayer;
 		if (mainPlayer) {
 			this.health.setText("Health: " + mainPlayer.hp + " / " + mainPlayer.maxHp);

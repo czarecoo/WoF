@@ -39,14 +39,12 @@ io.on('connection', function (socket) {
 		socket.playerID = server.lastPlayerID++;
 		var player = {
 			id: socket.playerID,
-			//x: randomInt(20 * Map.tileWidth, 24 * Map.tileWidth),
-			//y: randomInt(30 * Map.tileWidth, 32 * Map.tileWidth),
-			x: 19 * Map.tileWidth,
-			y: 4 * Map.tileWidth,
+			x: randomInt(20 * Map.tileWidth, 24 * Map.tileWidth),
+			y: randomInt(30 * Map.tileWidth, 32 * Map.tileWidth),
 			class: chosenClass,
 			maxHp: 100,
 			hp: 100,
-			equipment: { 'helmet': 'helmet0', 'armor': null, 'legs': null, 'boots': null, 'weapon': null, 'shield': null },
+			equipment: { 'helmet': null, 'armor': null, 'legs': null, 'boots': null, 'weapon': null, 'shield': null },
 			items: []
 		};
 		players[socket.playerID] = player;
@@ -96,11 +94,13 @@ io.on('connection', function (socket) {
 				if (player.equipment[itemName.substring(0, itemName.length - 1)] == null) {
 					player.items.splice(slotId, 1);
 					player.equipment[itemName.substring(0, itemName.length - 1)] = itemName;
+					player.maxHp += 25;
+					player.hp += 25;
 				}
 			} else {
 				//if (player.hp < player.maxHp) {
 				player.items.splice(slotId, 1);
-				player.hp += 20;
+				player.hp += Math.round(player.maxHp * 1 / 4);
 				if (player.hp > player.maxHp) {
 					player.hp = player.maxHp;
 				}
@@ -112,6 +112,13 @@ io.on('connection', function (socket) {
 			if (player.items.length < 25) {
 				player.equipment[slotId] = null;
 				player.items.push({ class: itemName })
+				player.maxHp -= 25;
+				if (player.hp < 25) {
+					player.hp -= 1;
+				} else {
+					player.hp -= 25;
+				}
+
 			}
 		});
 		socket.on('disconnect', function () {
