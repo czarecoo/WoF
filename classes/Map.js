@@ -1,4 +1,4 @@
-var map = require('./assets/map/example_map.json');
+var map = require('../assets/map/example_map.json');
 
 class Map {
 	constructor() {

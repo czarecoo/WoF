@@ -2,15 +2,16 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
-const MapClass = require('./Map.js');
-const EnemyCreator = require('./EnemyCreator.js');
-const ProjectilleCreator = require('./ProjectilleCreator.js');
+const MapClass = require('./classes/Map.js');
+const EnemyCreator = require('./classes/EnemyCreator.js');
+const ProjectilleCreator = require('./classes/ProjectilleCreator.js');
 var Map = new MapClass();
 const util = require('util');
 var port = 8080;
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/assets', express.static(__dirname + '/assets'));
+app.use('/classes', express.static(__dirname + '/classes'));
 
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
