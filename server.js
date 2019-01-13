@@ -58,11 +58,11 @@ io.on('connection', function (socket) {
 				if (player != undefined) {
 					if (isTeleportingToDung(data.x, data.y)) {
 						player.x = 11.5 * Map.tileWidth;
-						player.y = 98 * Map.tileHeight;
+						player.y = 97 * Map.tileHeight;
 						io.emit('forceMovePlayer', player);
 					} else if (isTeleportingToTown(data.x, data.y)) {
 						player.x = 19.5 * Map.tileWidth;
-						player.y = 3 * Map.tileHeight;
+						player.y = 4 * Map.tileHeight;
 						io.emit('forceMovePlayer', player);
 					} else if (isTeleportingToDungLadder(data.x, data.y)) {
 						player.x = 86.5 * Map.tileWidth;
@@ -146,13 +146,24 @@ setInterval(function () {
 			enemy.direction = -1;
 		} else {
 			if (!enemy.isAttacking) {
-				if (randomInt(1, 99) > 50) {
-					enemy.direction = randomInt(0, 4);
+				if (enemy.aggresive) {
+					let player = getClosestPlayer(enemy, 32 * 8);
+					if (player != null) {
+						enemy.direction = Map.findDirectionFromPath(enemy.x, enemy.y, player.x, player.y);
+					} else {
+						if (randomInt(1, 99) > 60) {
+							enemy.direction = randomInt(0, 4);
+						}
+					}
+				} else {
+					if (randomInt(1, 99) > 60) {
+						enemy.direction = randomInt(0, 4);
+					}
 				}
 			}
 		}
 	});
-}, 3000);
+}, 2000);
 setInterval(function () {
 	for (i = 0; i < projectilles.length; i++) {
 		if (!canWalkThere(projectilles[i].x, projectilles[i].y)) {
@@ -220,7 +231,7 @@ setInterval(function () {
 	var playersArr = getAllPlayers();
 	enemies.forEach(function (enemy) {
 		for (var i = 0; i < playersArr.length; i++) {
-			if (areColliding(playersArr[i], enemy, 40) && enemy.aggresive && enemy.hp > 0) {
+			if (areColliding(playersArr[i], enemy, 50) && enemy.aggresive && enemy.hp > 0) {
 				playersArr[i].hp -= 4;
 				if (playersArr[i].hp <= 0) {
 					playersArr[i].hp = 0
@@ -305,7 +316,7 @@ function canWalkThere(x, y) {
 	return Map.isWalkable(Math.floor(x / Map.tileWidth), Math.floor(y / Map.tileHeight));
 }
 function isTeleportingToDung(x, y) {
-	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 2;
+	return Math.floor(x / Map.tileWidth) == 19 && Math.floor(y / Map.tileHeight) == 3;
 }
 function isTeleportingToTown(x, y) {
 	return Math.floor(x / Map.tileWidth) == 11 && Math.floor(y / Map.tileHeight) == 98;
@@ -319,3 +330,11 @@ function isTeleportingToBossRoom(x, y) {
 function areColliding(a, b, size) {
 	return Math.hypot(a.x - b.x, a.y - b.y) < size;
 }
+function getClosestPlayer(enemy, size) {
+	for (id in players) {
+		if (areColliding(players[id], enemy, size)) {
+			return players[id];
+		}
+	}
+	return null;
+};
