@@ -6,6 +6,8 @@ class Loader {
 		scene.load.spritesheet('warrior', 'assets/player/warrior.png', { frameWidth: 32, frameHeight: 36 });
 		scene.load.spritesheet('mage', 'assets/player/mage.png', { frameWidth: 32, frameHeight: 36 });
 		scene.load.spritesheet('ranger', 'assets/player/ranger.png', { frameWidth: 32, frameHeight: 36 });
+		scene.load.spritesheet('npc0', 'assets/player/npc0.png', { frameWidth: 32, frameHeight: 36 });
+		scene.load.spritesheet('npc1', 'assets/player/npc1.png', { frameWidth: 32, frameHeight: 36 });
 		scene.load.image('greenBar', 'assets/ui/greenBar.png');
 		scene.load.image('redBar', 'assets/ui/redBar.png');
 		scene.load.image('grayBar', 'assets/ui/grayBar.png');
@@ -23,7 +25,6 @@ class Loader {
 		scene.load.plugin('rexvirtualjoystickplugin', 'js/util/rexvirtualjoystickplugin.min.js', true);
 		scene.load.spritesheet('dragon', 'assets/enemy/dragon.png', { frameWidth: 200, frameHeight: 192 });
 
-		scene.load.image('bobnpc', 'assets/player/otherPlayer.png');
 		scene.load.image('exclamationYellow', 'assets/ui/exclamationYellow.png');
 		scene.load.image('questionGrey', 'assets/ui/questionGrey.png');
 		scene.load.image('questionYellow', 'assets/ui/questionYellow.png');

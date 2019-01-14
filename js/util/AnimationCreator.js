@@ -3,6 +3,8 @@ class AnimationCreator {
 		AnimationCreator.create(scene, "warrior");
 		AnimationCreator.create(scene, "mage");
 		AnimationCreator.create(scene, "ranger");
+		AnimationCreator.create(scene, "npc0");
+		AnimationCreator.create(scene, "npc1");
 		AnimationCreator.createEnemies(scene, "brainy");
 		AnimationCreator.createEnemies(scene, "skeleton");
 		AnimationCreator.createSpider(scene, "spider");

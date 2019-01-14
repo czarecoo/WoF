@@ -2,9 +2,10 @@ class BobNpc {
 	constructor(config) {
 		this.scene = config.scene;
 		this.animationKey = config.key;
-		this.playerSprite = this.scene.add.sprite(config.x, config.y, 'bobnpc');
+		this.playerSprite = this.scene.add.sprite(config.x, config.y, this.animationKey + 'idleDown');
 		this.playerSprite.x = config.x;
 		this.playerSprite.y = config.y;
+		this.playerSprite.anims.play(this.animationKey + 'idleDown');
 		this.nameText = this.scene.add.text(config.x, config.y - 27, "Bob", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
 		this.exclamationYellow = this.scene.add.sprite(config.x, config.y - 40, 'exclamationYellow').setOrigin(0.5, 0.5);
 		this.questionGrey = this.scene.add.sprite(config.x, config.y - 40, 'questionGrey').setOrigin(0.5, 0.5);
@@ -24,7 +25,7 @@ class BobNpc {
 
 	update() {
 		if (this.scene.mainPlayer != undefined && this.STATE != undefined) {
-			if (Utils.distance(this.scene.mainPlayer.playerSprite, this.playerSprite) < 100) {
+			if (Utils.distance(this.scene.mainPlayer.playerSprite, this.playerSprite) < 90) {
 				this.currentState.dialog.visible = true;
 				this.scene.isDialogOn = true;
 			} else {
