@@ -130,7 +130,7 @@ class BobNpc {
 				}).setDepth(5),
 				space: { left: 15, right: 15, top: 10, bottom: 10 }
 			}).setDepth(5),
-			content: this.scene.add.text(0, 0, 'Bob is very happy you killed the beast\nHe wants you to have his old sword.\n\nWould you accept the reward?', {
+			content: this.scene.add.text(0, 0, 'Bob is very happy you killed the beast\nHe wants you to have his old shield.\n\nWould you accept the reward?', {
 				fontSize: '20px'
 			}).setDepth(5),
 			actions: [
@@ -142,6 +142,7 @@ class BobNpc {
 			.layout()
 			.setScrollFactor(0)
 			.on('button.click', function (button, groupName, index) {
+				this.scene.client.addItem('shield1');
 				this.currentState.icon.visible = false;
 				this.currentState.dialog.visible = false;
 				this.currentState = this.STATE.GREETING;

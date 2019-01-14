@@ -18,7 +18,6 @@ app.get('/', function (req, res) {
 });
 
 server.lastPlayerID = 0;
-server.lastitemID = 0;
 
 server.listen(process.env.PORT || port, function () {
 	console.log('Listening on ' + server.address().port);
@@ -45,7 +44,7 @@ io.on('connection', function (socket) {
 			maxHp: 100,
 			hp: 100,
 			equipment: { 'helmet': null, 'armor': null, 'legs': null, 'boots': null, 'weapon': null, 'shield': null },
-			items: []
+			items: [{ class: 'potion0' }, { class: 'potion0' }, { class: 'potion0' }]
 		};
 		players[socket.playerID] = player;
 		socket.emit('addEnemies', enemies);
@@ -118,7 +117,12 @@ io.on('connection', function (socket) {
 				} else {
 					player.hp -= 25;
 				}
-
+			}
+		});
+		socket.on('addItem', function (itemName) {
+			let player = players[socket.playerID];
+			if (player.items.length < 25) {
+				player.items.push({ class: itemName })
 			}
 		});
 		socket.on('disconnect', function () {
@@ -198,7 +202,6 @@ setInterval(function () {
 					if (enemies[j].drops.length > 0) {
 						var rand = randomInt(0, enemies[j].drops.length); // randomInt(0, 2) output: 0 1; randomInt(0, 1) output: 0
 						let item = JSON.parse(JSON.stringify(enemies[j].drops[rand]));
-						item.id = server.lastitemID++;
 						item.x = enemies[j].x;
 						item.y = enemies[j].y;
 						item.creationTime = enemies[j].deathtime;

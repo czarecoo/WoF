@@ -129,7 +129,7 @@ class EnemyCreator {
 			maxHp: 50,
 			hp: 50,
 			isAttacking: false,
-			drops: [{ class: 'armor0' }, { class: 'legs0' }, { class: 'helmet0' }, { class: 'boots0' }]
+			drops: EnemyCreator.getDrop()
 		}
 	}
 	static createZombie(x, y) {
@@ -145,7 +145,7 @@ class EnemyCreator {
 			maxHp: 200,
 			hp: 200,
 			isAttacking: false,
-			drops: [{ class: 'armor0' }, { class: 'legs0' }, { class: 'helmet0' }, { class: 'boots0' }]
+			drops: EnemyCreator.getDrop()
 		}
 	}
 	static createSkeleton(x, y) {
@@ -161,7 +161,7 @@ class EnemyCreator {
 			maxHp: 100,
 			hp: 100,
 			isAttacking: false,
-			drops: [{ class: 'armor0' }, { class: 'legs0' }, { class: 'helmet0' }, { class: 'boots0' }]
+			drops: EnemyCreator.getDrop()
 		}
 	}
 	static createDragon(x, y) {
@@ -174,11 +174,49 @@ class EnemyCreator {
 			speed: 0,
 			aggresive: true,
 			isBoss: true,
-			maxHp: 2000,
-			hp: 2000,
+			maxHp: 1400,
+			hp: 1400,
 			isAttacking: false,
-			drops: [{ class: 'weapon0' }, { class: 'weapon1' }, { class: 'shield0' }, { class: 'weapon2' }]
+			drops: EnemyCreator.getBossDrop()
 		}
+	}
+	static getBossDrop() {
+		return [
+			{ class: 'weapon0' },
+			{ class: 'weapon1' },
+			{ class: 'weapon2' },
+			{ class: 'weapon3' },
+			{ class: 'weapon4' },
+			{ class: 'weapon5' },
+			{ class: 'shield0' },
+			{ class: 'shield2' },
+			{ class: 'shield3' }
+		];
+	}
+	static getDrop() {
+		return [
+			{ class: 'weapon0' },
+			{ class: 'weapon1' },
+			{ class: 'weapon2' },
+			{ class: 'weapon3' },
+			{ class: 'weapon4' },
+			{ class: 'weapon5' },
+			{ class: 'shield0' },
+			{ class: 'shield2' },
+			{ class: 'shield3' },
+			{ class: 'armor0' },
+			{ class: 'armor1' },
+			{ class: 'armor2' },
+			{ class: 'armor3' },
+			{ class: 'boots0' },
+			{ class: 'boots1' },
+			{ class: 'boots2' },
+			{ class: 'helmet0' },
+			{ class: 'helmet1' },
+			{ class: 'legs0' },
+			{ class: 'legs1' },
+			{ class: 'legs2' }
+		]
 	}
 
 }

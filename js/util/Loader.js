@@ -39,13 +39,27 @@ class Loader {
 		scene.load.image('deadplayer', 'assets/player/deadplayer.png');
 
 		scene.load.image('armor0', 'assets/items/armor0.png');
+		scene.load.image('armor1', 'assets/items/armor1.png');
+		scene.load.image('armor2', 'assets/items/armor2.png');
+		scene.load.image('armor3', 'assets/items/armor3.png');
 		scene.load.image('boots0', 'assets/items/boots0.png');
+		scene.load.image('boots1', 'assets/items/boots1.png');
+		scene.load.image('boots2', 'assets/items/boots2.png');
 		scene.load.image('helmet0', 'assets/items/helmet0.png');
+		scene.load.image('helmet1', 'assets/items/helmet1.png');
 		scene.load.image('legs0', 'assets/items/legs0.png');
-		scene.load.image('shield0', 'assets/items/shield0.png');
-		scene.load.image('weapon0', 'assets/items/sword0.png');
-		scene.load.image('weapon1', 'assets/items/sword1.png');
-		scene.load.image('weapon2', 'assets/items/xbow0.png');
+		scene.load.image('legs1', 'assets/items/legs1.png');
+		scene.load.image('legs2', 'assets/items/legs2.png');
 		scene.load.image('potion0', 'assets/items/potion0.png');
+		scene.load.image('shield0', 'assets/items/shield0.png');
+		scene.load.image('shield1', 'assets/items/shield1.png');
+		scene.load.image('shield2', 'assets/items/shield2.png');
+		scene.load.image('shield3', 'assets/items/shield3.png');
+		scene.load.image('weapon0', 'assets/items/weapon0.png');
+		scene.load.image('weapon1', 'assets/items/weapon1.png');
+		scene.load.image('weapon2', 'assets/items/weapon2.png');
+		scene.load.image('weapon3', 'assets/items/weapon3.png');
+		scene.load.image('weapon4', 'assets/items/weapon4.png');
+		scene.load.image('weapon5', 'assets/items/weapon5.png');
 	}
 }

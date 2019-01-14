@@ -8,9 +8,9 @@ class Player {
 		this.keys = this.scene.input.keyboard.addKeys('W,S,A,D,ONE');
 		this.playerSprite.MaxSpeed = 150;
 		this.playerSprite.Speed = 150;
-		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5);
-		this.healthBar = this.scene.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5);
-		this.cooldownBar = this.scene.add.sprite(config.x, config.y, 'cooldownBar').setOrigin(0, 0.5);
+		this.nameText = this.scene.add.text(6, 6, "You", { font: '12px Arial', fill: 'black' }).setOrigin(0.5, 0.5).setDepth(4);
+		this.healthBar = this.scene.add.sprite(config.x, config.y, 'greenBar').setOrigin(0, 0.5).setDepth(4);
+		this.cooldownBar = this.scene.add.sprite(config.x, config.y, 'cooldownBar').setOrigin(0, 0.5).setDepth(4);
 		this.items = [];
 		this.joyStick = this.scene.plugins.get('rexvirtualjoystickplugin').add(this.scene, {
 			x: 140,
@@ -41,7 +41,7 @@ class Player {
 			this.shootTime = 5;
 			this.shootDmg = 15;
 		}
-		this.questLog = this.scene.add.text(500, 10, 'Quests:', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0);
+		this.questLog = this.scene.add.text(500, 10, 'Quests:', { font: '16px Arial', fill: '#000000', backgroundColor: 'rgba(255,255,255,0.7)' }).setScrollFactor(0).setDepth(4);
 		this.questLog.visible = false;
 	};
 	update() {

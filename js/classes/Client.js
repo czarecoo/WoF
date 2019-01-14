@@ -60,4 +60,7 @@ class Client {
 	unequip(slotID, itemName) {
 		this.socket.emit('unequip', slotID, itemName);
 	}
+	addItem(itemName) {
+		this.socket.emit('addItem', itemName);
+	}
 }
