@@ -1,6 +1,6 @@
 class BootScene extends Phaser.Scene {
 	constructor() {
-		super({ key: 'BootScene', active: true });
+		super({ key: 'BootScene', active: false });
 	};
 	preload() {
 		this.load.image('warriorArt', 'assets/player/art/warrior.png');
